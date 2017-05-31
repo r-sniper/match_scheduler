@@ -37,13 +37,16 @@
         body {
             padding-top: 70px;
         }
+
         .navbar-light .navbar-nav .nav-link {
             color: white;
         }
+
         .navbar-light .navbar-nav .nav-link:hover {
             background-color: #ee0010;
         }
-        .row .myCard:first-child{
+
+        .row .myCard:first-child {
             border: none !important;
         }
     </style>
@@ -79,27 +82,61 @@
 
     {% for i in number_of_days %}
 
-    <div class="card text-center">
-        <div class="card-header">
-            Day {{ i|add:"1" }}
-        </div>
-        <div class="card-block" style="padding-top: 0;padding-bottom: 0;">
+        <div class="card text-center">
+            <div class="card-header">
+                Day {{ i|add:"1" }}
+            </div>
+            <div class="card-block" style="padding-top: 0;padding-bottom: 0;">
 
-            <div class="row">
-                {% for j in matches_per_day_list %}
-                    {% test list1 i j matches_per_day as myFlag %}
-                    {% if myFlag %}
-                <div class="col-sm-{% widthratio 12 matches_per_day 1 %} myCard" style="padding: 20px; border-left: 1px solid #999 ;width:100%;height:inherit;">
-                    <div class="">{% lookup list1 i j matches_per_day %} </div>
-                    <strong>V/s</strong>
-                    <div class="">{% lookup list2 i j matches_per_day %}</div>
+                <div class="row">
+                    {% for j in matches_per_day_list %}
+                        {% test list1 i j matches_per_day as myFlag %}
+                        {% if myFlag %}
+                            <div class="col-sm-{% widthratio 12 matches_per_day 1 %} myCard" data-toggle="modal"
+                                 data-target="#exampleModalLong"
+                                 onclick="contentDecider('{% lookup list1 i j matches_per_day %}','{% lookup list2 i j matches_per_day %}')"
+                                 style="padding: 20px; border-left: 1px solid #999 ;width:100%;height:inherit;">
+                                <div class="">{% lookup list1 i j matches_per_day %} </div>
+                                <strong>V/s</strong>
+                                <div class="">{% lookup list2 i j matches_per_day %}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                    {% endif %}
-                {% endfor %}
             </div>
         </div>
-    </div>
     {% endfor %}
+</div>
+
+<div>
+    Launch demo modal
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Select the winner</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <input id="radioTeamA" type="radio" name="winner">
+                    <label id="opponent1" for="radioTeamA"></label><br>
+                    <strong>V/S</strong><br>
+                    <input id="radioTeamB" type="radio" name="winner">
+                    <label id="opponent2" for="radioTeamB"></label>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Save Winnner"></input>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 </div>
 
@@ -113,6 +150,13 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
         integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
         crossorigin="anonymous"></script>
-
+<script>
+    function contentDecider(teamA, teamB) {
+        var opponent1 = document.getElementById("opponent1");
+        opponent1.innerHTML = teamA;
+        var opponent2 = document.getElementById("opponent2");
+        opponent2.innerHTML = teamB;
+    }
+</script>
 </body>
 </html>
