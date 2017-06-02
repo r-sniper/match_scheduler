@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
           integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
@@ -21,6 +21,7 @@
         .navbar-light .navbar-nav .nav-link {
             color: white;
         }
+
         .navbar-light .navbar-nav .nav-link:hover {
             background-color: #ee0010;
         }
@@ -34,8 +35,7 @@
             aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#"><img src="static/home/images/logo.png" width="90" height="30"></a>
-
+    <a class="navbar-brand" href="#"><img src="{% static 'home/images/logo.png' %}" width="90" height="30"></a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav nav  mr-auto">
             <li class="nav-item">
@@ -57,15 +57,18 @@
     <form action="{% url 'home:schedule' %}" method="get">
         <div class="form-group">
             <label for="numberOfTeam">Number of Team</label>
-            <input type="number" required class="form-control" id="numberOfTeam" name="number_of_teams" placeholder="eg : 8">
+            <input type="number" required class="form-control" id="numberOfTeam" name="number_of_teams"
+                   placeholder="eg : 8">
         </div>
         <div class="form-group">
             <label for="matchesPerDay">Matches per day</label>
-            <input type="number" required class="form-control" id="matchesPerDay" name="matches_per_day" placeholder="eg : 2">
+            <input type="number" required class="form-control" id="matchesPerDay" name="matches_per_day"
+                   placeholder="eg : 2">
         </div>
         <div class="form-group">
             <label for="numberOfDays">Numbers of days available</label>
-            <input type="number" required class="form-control" id="numberOfDays" name="number_of_days" placeholder="eg : 16" >
+            <input type="number" required class="form-control" id="numberOfDays" name="number_of_days"
+                   placeholder="eg : 16">
         </div>
 
 
