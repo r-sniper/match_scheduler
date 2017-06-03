@@ -9,6 +9,11 @@ def lookup(d, key1, key2, matches):
 
 
 @register.simple_tag()
+def lookup_match_id(d, key1):
+    return d[key1]
+
+
+@register.simple_tag()
 def test(d, key1, key2, matches):
     try:
         d[key1 * matches + key2]

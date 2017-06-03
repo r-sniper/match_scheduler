@@ -58,9 +58,6 @@
             background: #ce0010;
         }
 
-
-
-
         .navbar-fixed-side .navbar-toggle {
             float: none;
             margin: 0;
@@ -125,34 +122,36 @@
             padding: 5px 3px;
             font-size: 18px;
             line-height: 20px;
-        </style>
+        }
+    </style>
 {% endblock %}
 {% block body %}
 
-    <nav class="navbar fixed-top navbar-toggleable-md  navbar-light bg-faded">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="#"><img src="{% static 'home/images/logo.png' %}" width="90" height="30"></a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav nav  mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Home </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
+    <form action="" method="get">
+        <nav class="navbar fixed-top navbar-toggleable-md  navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#"><img src="{% static 'home/images/logo.png' %}" width="90" height="30"></a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav nav  mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
 
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-danger" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
-
+                </ul>
+                <p class="pull-right nav-item" style="color: white" form="select_winner" name="user_name"
+                   value="{{ user_name }}">
+                    Welcome {{ user_name }}
+                </p>
+            </div>
+        </nav>
+    </form>
 
     <div class="row">
         <div class="col-sm-2">
@@ -169,7 +168,7 @@
 
                 <div class="card text-center">
                     <div class="card-header">
-                        Day {{ i|add:"1" }}
+                        Day {{ forloop.counter }}
                     </div>
                     <div class="card-block" style="padding-top: 0;padding-bottom: 0;">
 
@@ -179,7 +178,7 @@
                                 {% if myFlag %}
                                     <div class="col-sm-{% widthratio 12 matches_per_day 1 %} myCard" data-toggle="modal"
                                          data-target="#exampleModalLong"
-                                         onclick="contentDecider('{% lookup list1 i j matches_per_day %}','{% lookup list2 i j matches_per_day %}')"
+                                         onclick="contentDecider('{% lookup list1 i j matches_per_day %}','{% lookup list2 i j matches_per_day %}','{% lookup match_id i j matches_per_day %}')"
                                          style="padding: 20px; border-left: 1px solid #999 ;width:100%;height:inherit;">
                                         <div class="">{% lookup list1 i j matches_per_day %} </div>
                                         <strong>V/s</strong>
@@ -199,7 +198,7 @@
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form action="" method="post">
+            <form action="{% url 'home:schedule' %}" method="post">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
@@ -210,13 +209,15 @@
                     </div>
                     <div class="modal-body" style="text-align: center;">
                         <input id="radioTeamA" type="radio" name="winner">
-                        <label id="opponent1" for="radioTeamA"></label><br>
+                        <label id="opponent1" name="opponent1" for="radioTeamA"></label><br>
                         <strong>V/S</strong><br>
                         <input id="radioTeamB" type="radio" name="winner">
-                        <label id="opponent2" for="radioTeamB"></label>
+                        <label id="opponent2" name="opponent2" for="radioTeamB"></label>
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" value="Save Winnner"></input>
+                        <button name="get_user_name" value="{{ user_name }}" onclick="this.form.submit()">Save Winner
+                        </button>
+
                     </div>
                 </div>
             </form>
@@ -227,11 +228,15 @@
 
 
     <script>
-        function contentDecider(teamA, teamB) {
+        function contentDecider(teamA, teamB,matchId) {
             var opponent1 = document.getElementById("opponent1");
-            opponent1.innerHTML = teamA;
+            var opponent1_value = document.getElementById('radioTeamA')
+            opponent1.innerHTML = teamA
+            opponent1_value.value = teamA + ' ' + matchId.toString()
             var opponent2 = document.getElementById("opponent2");
+            var opponent2_value = document.getElementById('radioTeamB')
             opponent2.innerHTML = teamB;
+            opponent2_value.value = teamB +' '+ matchId.toString()
         }
     </script>
 {% endblock %}

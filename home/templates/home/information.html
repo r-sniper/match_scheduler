@@ -28,7 +28,8 @@
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#"><img alt="SpoFit Logo" src="{% static 'home/images/logo.png' %}" width="90" height="30"></a>
+        <a class="navbar-brand" href="#"><img alt="SpoFit Logo" src="{% static 'home/images/logo.png' %}" width="90"
+                                              height="30"></a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav nav  mr-auto">
                 <li class="nav-item">
@@ -39,15 +40,22 @@
                 </li>
 
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-danger" type="submit">Search</button>
-            </form>
         </div>
     </nav>
     <div class="container">
 
-        <form action="{% url 'home:schedule' %}" method="get">
+        <form action="{% url 'home:schedule' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="userName">User Name</label>
+                <input type="text" required class="form-control" id="userName" name="user_name"
+                       placeholder="eg : spofit">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" required class="form-control" id="password" name="password"
+                       placeholder="eg : password">
+            </div>
             <div class="form-group">
                 <label for="numberOfTeam">Number of Team</label>
                 <input type="number" required class="form-control" id="numberOfTeam" name="number_of_teams"
@@ -65,7 +73,7 @@
             </div>
 
 
-            <button type="submit" class="btn btn-primary">Schedule</button>
+            <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
