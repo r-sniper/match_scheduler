@@ -52,13 +52,16 @@ def schedule(request):
             group2.append(group1[int(number_of_teams / 2)])
             group1.remove(group1[int(number_of_teams / 2)])
 
+        all_new_teams= []
         for team in group1:
-            new_team = Point(team=team, login=new_user)
-            new_team.save()
+            all_new_teams.append(Point(team=team, login=new_user))
         for team in group2[:-1]:
-            new_team = Point(team=team, login=new_user)
-            new_team.save()
-
+            all_new_teams.append(Point(team=team, login=new_user))
+        #Using bulk_create instead of saving team every time
+        #It uses only one query to save all teams
+        #Silimarly for all the matches we used save n*(n-1)/2 times but now will use only 1 query
+        #Very much optimized
+        Point.objects.bulk_create(all_new_teams)
         if not odd:
             new_team = Point(team=group2[len(group2) - 1], login=new_user)
             new_team.save()
@@ -85,10 +88,11 @@ def schedule(request):
         # print(matches_per_day)
         # print(list1)
         # print(list2)
-
+        new_matches = []
         for i in range(len(list1)):
-            new_match = Match(team1=list1[i], team2=list2[i], login=new_user)
-            new_match.save()
+            new_matches.append(Match(team1=list1[i], team2=list2[i], login=new_user))
+
+        Match.objects.bulk_create(new_matches)
         match_id_list = list(Match.objects.filter(login=new_user).values_list('id', flat=True))
         print(match_id_list)
         return render(request, 'home/schedule.html',
@@ -123,7 +127,7 @@ def schedule(request):
         match_obj.save()
         matches_per_day = user_obj.matches_per_day
         number_of_teams = user_obj.number_of_team
-        number_of_days = int((number_of_teams * (number_of_teams - 1)) / 2)
+        number_of_days = int(((number_of_teams * (number_of_teams - 1)) / 2) / number_of_matches)
         list1 = list(match_obj_rows.values_list('team1', flat=True))
         list2 = list(match_obj_rows.values_list('team2', flat=True))
         match_id_list = match_obj_rows.values_list('id', flat=True)
