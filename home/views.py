@@ -127,7 +127,7 @@ def schedule(request):
         match_obj.save()
         matches_per_day = user_obj.matches_per_day
         number_of_teams = user_obj.number_of_team
-        number_of_days = int(((number_of_teams * (number_of_teams - 1)) / 2) / number_of_matches)
+        number_of_days = int(((number_of_teams * (number_of_teams - 1)) / 2) / matches_per_day)
         list1 = list(match_obj_rows.values_list('team1', flat=True))
         list2 = list(match_obj_rows.values_list('team2', flat=True))
         match_id_list = match_obj_rows.values_list('id', flat=True)
