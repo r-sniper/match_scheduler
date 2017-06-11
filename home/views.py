@@ -127,7 +127,7 @@ def schedule(request):
             # Set user id for this session
             # Acess using (user_id = request.session['user_id'])
             request.session['user_id'] = user_id
-            return HttpResponseRedirect('/success/')
+            return HttpResponseRedirect('/schedule/')
 
         else:
             return HttpResponse("Something went wrong")
