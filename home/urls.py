@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'test_send_email/$', views.test_send_email, name='test_send_email'),
     # /points_table - Gets the points table
     url(r'points_table/$', views.points_table, name='points_table'),
-    # /points_table - Gets the points table
-    url(r'success/$', views.load_schedule, name='load_schedule')
+
 
 ]

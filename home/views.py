@@ -8,34 +8,37 @@ from django.core.mail import send_mail
 
 # Create your views here.
 
-
+# Basic home page(information about spofit)
 def get_information(request):
     return render(request, 'home/information.html')
 
 
-def load_schedule(request):
-    user_id = request.session['user_id']
-    user_obj = LoginCredential.objects.get(id=user_id)
-    number_of_teams = user_obj.number_of_team
-    number_of_matches = (number_of_teams * (number_of_teams - 1) / 2)
-    matches_per_day = user_obj.matches_per_day
-    minimum_days = int(math.ceil(number_of_matches / matches_per_day))
-    match_obj_rows = user_obj.match_set
-    list1 = list(match_obj_rows.values_list('team1', flat=True))
-    list2 = list(match_obj_rows.values_list('team2', flat=True))
-    match_id_list = match_obj_rows.values_list('id', flat=True)
-    user_name = user_obj.user_name
-    return render(request, 'home/schedule.html',
-                  {
-                      'number_of_days': range(minimum_days),
-                      'matches_per_day_list': range(matches_per_day), 'list1': list1, 'list2': list2,
-                      'match_id': match_id_list,
-                      'matches_per_day': matches_per_day, 'user_name': user_name, 'user_id': user_id,
-                  })
-
-
 def schedule(request):
-    if request.method == 'POST':
+    if (request.is_ajax()):
+        print('here')
+        text = request.POST.get('winner_name').split(' ')
+        match_id = text[1]
+        winner = text[0]
+        user_id = request.session['user_id']
+        user_obj = LoginCredential.objects.get(id=user_id)
+        print(winner)
+        print(user_id)
+        if request.is_ajax:
+            match_obj_rows = user_obj.match_set
+            match_obj = match_obj_rows.get(id=match_id)
+            if match_obj.winner == '0':
+                point_obj = Point.objects.get(login=user_obj, team=winner)
+                point_obj.wins += 2
+                point_obj.save()
+            if match_obj.team1 == winner:
+                match_obj.winner = '1'
+            else:
+                match_obj.winner = '2'
+            match_obj.save()
+            return HttpResponse("Yipeee done(AJAX)" + str(match_id) + str(winner))
+        else:
+            return HttpResponse("Not Ajax")
+    elif request.method == 'POST':
         if request.POST.get('submit'):
             # print("submit")
             group1 = []
@@ -126,43 +129,34 @@ def schedule(request):
             request.session['user_id'] = user_id
             return HttpResponseRedirect('/success/')
 
-        elif request.POST.get('winner'):
-            # print('Winner Selection')
-            user_name = request.POST.get('get_user_name')
-            # print(user_name)
-            winner_text = request.POST.get('winner').split(' ')
-            winner = winner_text[0]
-
-            # print(winner)
-            # user id not used yet but will(maybe) in future for optimizations
-            user_obj = LoginCredential.objects.get(user_name=user_name)
-            user_id = user_obj.id
-            match_id = int(winner_text[1])
-            # print(match_id)
-            match_obj_rows = user_obj.match_set
-            match_obj = match_obj_rows.get(id=match_id)
-            if match_obj.winner == '0':
-                point_obj = Point.objects.get(login=user_obj, team=winner)
-                point_obj.wins += 2
-                point_obj.save()
-            if match_obj.team1 == winner:
-                match_obj.winner = '1'
-            else:
-                match_obj.winner = '2'
-            match_obj.save()
-            matches_per_day = user_obj.matches_per_day
-            number_of_teams = user_obj.number_of_team
-            number_of_days = int(((number_of_teams * (number_of_teams - 1)) / 2) / matches_per_day)
-            list1 = list(match_obj_rows.values_list('team1', flat=True))
-            list2 = list(match_obj_rows.values_list('team2', flat=True))
-            match_id_list = match_obj_rows.values_list('id', flat=True)
-            if winner:
-                return HttpResponseRedirect('/success/')
-            else:
-                return HttpResponse("Error")
-
         else:
             return HttpResponse("Something went wrong")
+    else:
+        user_id = request.session['user_id']
+        user_obj = LoginCredential.objects.get(id=user_id)
+        number_of_teams = user_obj.number_of_team
+        number_of_matches = (number_of_teams * (number_of_teams - 1) / 2)
+        matches_per_day = user_obj.matches_per_day
+        minimum_days = int(math.ceil(number_of_matches / matches_per_day))
+        match_obj_rows = user_obj.match_set
+        list1 = list(match_obj_rows.values_list('team1', flat=True))
+        list2 = list(match_obj_rows.values_list('team2', flat=True))
+        match_id_list = match_obj_rows.values_list('id', flat=True)
+        user_name = user_obj.user_name
+        return render(request, 'home/schedule.html',
+                      {
+                          'number_of_days': range(minimum_days),
+                          'matches_per_day_list': range(matches_per_day), 'list1': list1, 'list2': list2,
+                          'match_id': match_id_list,
+                          'matches_per_day': matches_per_day, 'user_name': user_name, 'user_id': user_id,
+                      })
+
+
+#
+# return HttpResponse(
+#     "Something seriously went wrong."
+#     "Please mail at 'rshahshah2890@gmail.com when you get this error,"
+#     "also explain the situation when you got this error'")
 
 
 def test_send_email(request):

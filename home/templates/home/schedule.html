@@ -126,7 +126,7 @@
         <div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="{% url 'home:load_schedule' %}">Schedule</a></li>
+                    <li class="active"><a href="{% url 'home:schedule' %}">Schedule</a></li>
                     <li><a href="{% url 'home:points_table' %}">Points Table</a></li>
                     <li><a href="#">Result</a></li>
                     <li><a href="#">Section</a></li>
@@ -136,6 +136,9 @@
             </div>
         </div>
         <div id="main">
+            <div id="refresh_winner">
+                hello
+            </div>
             <div class="col-md-12">
                 <p class="visible-xs">
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas">
@@ -181,30 +184,29 @@
              aria-labelledby="exampleModalLongTitle"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="{% url 'home:schedule' %}" method="post">
-                    {% csrf_token %}
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Select the winner</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" style="text-align: center;">
-                            <input id="radioTeamA" type="radio" name="winner">
-                            <label id="opponent1" name="opponent1" for="radioTeamA"></label><br>
-                            <strong>V/S</strong><br>
-                            <input id="radioTeamB" type="radio" name="winner">
-                            <label id="opponent2" name="opponent2" for="radioTeamB"></label>
-                        </div>
-                        <div class="modal-footer">
-                            <button name="get_user_name" value="{{ user_name }}" onclick="this.form.submit()">Save
-                                Winner
-                            </button>
-
-                        </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Select the winner</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </form>
+                    <div class="modal-body" style="text-align: center;">
+                        <input id="radioTeamA" type="radio" name="winner">
+                        <label id="opponent1" name="opponent1" for="radioTeamA"></label><br>
+                        <strong>V/S</strong><br>
+                        <input id="radioTeamB" type="radio" name="winner">
+                        <label id="opponent2" name="opponent2" for="radioTeamB"></label>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="set-winner" name="get_user_name" data-dismiss="modal" value="{{ user_name }}">
+                            Save
+                            Winner
+                        </button>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -231,5 +233,55 @@
             opponent2.innerHTML = teamB;
             opponent2_value.value = teamB + ' ' + matchId.toString();
         }
+    </script>
+
+    {#    <script>#}
+    {#        function setWinner() {#}
+    {#            //alert("out");#}
+    {#            var url = '/test_ajax/';#}
+    {#            window.csrftoken="{% csrf_token %}";#}
+    {#            var xhttp = new XMLHttpRequest();#}
+    {#            xhttp.onreadystatechange = function () {#}
+    {#                if (this.readyState == 4 && this.status == 200) {#}
+    {#                    //alert("hi");#}
+    {#                    document.getElementById("refresh_winner").innerHTML =#}
+    {#                        this.responseText;#}
+    {#                }#}
+    {#            };#}
+    {#            xhttp.open("GET", url, true);#}
+    {#            xhttp.send();#}
+    {#        }#}
+    {#    </script>#}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#set-winner").click(function () {
+                //alert("inside");
+                var match_id = document.getElementById('radioTeamA').value;
+                //alert(match_id);
+                if (document.getElementById('radioTeamA').checked) {
+                    winnerName = document.getElementById('radioTeamA').value;
+                }
+                else {
+                    winnerName = document.getElementById('radioTeamB').value;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/schedule/',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'winner_name': winnerName,
+                        'match_id': match_id
+                    },
+                    success: function (data) {
+                        // grab the inner html of the returned div
+                        // so you don't nest a new div#refresh-this-div on every call
+                        //var html = $(data).filter('#refresh-this-div').html();
+                        $('#refresh_winner').html(data);
+                    }
+                });
+            });
+        });
     </script>
 {% endblock %}
