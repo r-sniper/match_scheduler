@@ -143,54 +143,53 @@
                 </p>
 
 
+                <form action="{% url 'home:schedule' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="userName">User Name</label>
+                        <input type="text" required class="form-control" id="userName" name="user_name"
+                               placeholder="eg : spofit">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" required class="form-control" id="password" name="password"
+                               placeholder="eg : password">
+                    </div>
+                    <div class="form-group">
+                        <label for="numberOfTeam">Number of Team</label>
+                        <input type="number" required class="form-control" id="numberOfTeam" name="number_of_teams"
+                               placeholder="eg : 8">
+                    </div>
+                    <div class="form-group">
+                        <label for="matchesPerDay">Matches per day</label>
+                        <input type="number" required class="form-control" id="matchesPerDay" name="matches_per_day"
+                               placeholder="eg : 2">
+                    </div>
+                    <div class="form-group">
+                        <label for="numberOfDays">Numbers of days available</label>
+                        <input type="number" required class="form-control" id="numberOfDays" name="number_of_days"
+                               placeholder="eg : 16">
+                    </div>
 
-                    <form action="{% url 'home:schedule' %}" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="userName">User Name</label>
-                            <input type="text" required class="form-control" id="userName" name="user_name"
-                                   placeholder="eg : spofit">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" required class="form-control" id="password" name="password"
-                                   placeholder="eg : password">
-                        </div>
-                        <div class="form-group">
-                            <label for="numberOfTeam">Number of Team</label>
-                            <input type="number" required class="form-control" id="numberOfTeam" name="number_of_teams"
-                                   placeholder="eg : 8">
-                        </div>
-                        <div class="form-group">
-                            <label for="matchesPerDay">Matches per day</label>
-                            <input type="number" required class="form-control" id="matchesPerDay" name="matches_per_day"
-                                   placeholder="eg : 2">
-                        </div>
-                        <div class="form-group">
-                            <label for="numberOfDays">Numbers of days available</label>
-                            <input type="number" required class="form-control" id="numberOfDays" name="number_of_days"
-                                   placeholder="eg : 16">
-                        </div>
 
-
-                        <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
-                    </form>
-                </div>
-
+                    <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
+                </form>
             </div>
+
         </div>
+    </div>
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function () {
-        $('[data-toggle=offcanvas]').click(function () {
-            $('.row-offcanvas').toggleClass('active');
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle=offcanvas]').click(function () {
+                $('.row-offcanvas').toggleClass('active');
+            });
         });
-    });
-</script>
+    </script>
 
 {% endblock %}

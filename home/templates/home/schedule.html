@@ -62,6 +62,11 @@
             font-weight: bolder;
         }
 
+        .selected {
+            background: #b3000f;
+            color: #FFFFFF !important;
+        }
+
         .wrap {
             background: #fff;
             margin-bottom: 20px;
@@ -117,12 +122,6 @@
 {% endblock %}
 {% block body %}
 
-    {% block navbar_right %}
-        <p class="pull-right nav-item" style="color: white" name="user_name"
-           value="{{ user_name }}">
-            Welcome {{ user_name }}
-        </p>
-    {% endblock %}
     <div class="row-offcanvas row-offcanvas-left">
         <div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
@@ -139,8 +138,9 @@
         <div id="main">
             <div class="col-md-12">
                 <p class="visible-xs">
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas"><i
-                            class="glyphicon glyphicon-chevron-left"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </button>
                 </p>
                 <h2>Tournament Schedule</h2>
                 {% for i in number_of_days %}
