@@ -1,13 +1,9 @@
 import math
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.urls import reverse
-
 from .models import LoginCredential, Point, Match
 from django.shortcuts import render, HttpResponse, redirect, render_to_response
 from django.core.mail import send_mail
-from sendsms.message import SmsMessage
-from sendsms import api
 
 
 # Create your views here.
