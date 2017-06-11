@@ -1,0 +1,161 @@
+{% extends 'home/bootstrap.html' %}
+{% block style %}
+    .thead-inverse{
+    background:#b3000f;
+    color:#fff;
+    }body, html, .row-offcanvas {
+    height: 100%;
+    }
+
+    body {
+    padding-top: 50px;
+    background: #f5f5f5;
+    }
+
+    #sidebar {
+    width: inherit;
+    min-width: 220px;
+    max-width: 220px;
+    background-color: #f5f5f5;
+    float: left;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    }
+
+    #main {
+    height: 100%;
+    overflow: auto;
+    }
+
+    .navbar {
+    background: #ce0010;
+    }
+
+    .navbar-inverse .navbar-nav > li > a:hover {
+    background: #b3000f;
+    }
+
+    .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+    color: #ffffff;
+    }
+
+    .navbar-inverse {
+    border: #ffffff;
+    }
+
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover {
+    background: #b3000f;
+    }
+
+    .nav-pills > li.active > a, .nav-pills > li.active > a:hover {
+    background: #b3000f;
+    }
+
+    .nav-pills > li > a {
+    color: #000000;
+    }
+
+    .bolder {
+    font-weight: bolder;
+    }
+
+    .wrap {
+    background: #fff;
+    margin-bottom: 20px;
+    }
+
+    .left-border {
+    padding: 5px;
+    border-left: 3px solid #ce0010;
+    }
+
+    .white {
+    background: #FFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    margin-top: 10px
+    }
+
+    .back {
+    background: #ffffff;
+    height: 100%;
+    }
+
+    .nav-stacked {
+    padding-top: 5px;
+    }
+
+    /*
+    * off Canvas sidebar
+    * --------------------------------------------------
+    */
+    @media screen and (max-width: 768px) {
+    .row-offcanvas {
+    position: relative;
+    -webkit-transition: all 0.25s ease-out;
+    -moz-transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
+    width: calc(100% + 220px);
+    }
+
+    .row-offcanvas-left {
+    left: -220px;
+    }
+
+    .row-offcanvas-left.active {
+    left: 0;
+    }
+
+    .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    }
+    }
+{% endblock %}
+{% block body %}
+    <div class="row-offcanvas row-offcanvas-left">
+        <div id="sidebar" class="sidebar-offcanvas">
+            <div class="col-md-12 back">
+                <form action="{% url 'home:schedule' %}" method="get">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active"><a href="{% url 'home:load_schedule' %}">Schedule</a></li>
+                        <li><a href="{% url 'home:points_table' %}">Points Table</a></li>
+                        <li><a href="#">Result</a></li>
+                        <li><a href="#">Section</a></li>
+                        <li><a href="#">F.A.Q</a></li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+
+        <div id="main">
+            <div class="col-md-12">
+                <p class="visible-xs">
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas"><i
+                            class="glyphicon glyphicon-chevron-left"></i></button>
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-bordered white">
+                        <thead class="thead-inverse">
+                        <tr>
+
+                            <th>Team</th>
+                            <th>Points</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for team in full_table %}
+
+                            <tr>
+                                <td>{{ team.team }}</td>
+                                <td>{{ team.wins }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
