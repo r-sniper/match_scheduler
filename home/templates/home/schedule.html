@@ -92,6 +92,12 @@
             padding-top: 5px;
         }
 
+        @media screen and (max-width: 991px) {
+            .left-border {
+                border-left: none;
+            }
+        }
+
         /*
          * off Canvas sidebar
          * --------------------------------------------------
@@ -118,6 +124,80 @@
                 top: 0;
             }
         }
+
+        /*Snackbar style*/
+
+        /* The snackbar - position it at the bottom and in the middle of the screen */
+        #snackbar {
+            visibility: hidden; /* Hidden by default. Visible on click */
+            min-width: 250px; /* Set a default minimum width */
+            margin-left: -125px; /* Divide value of min-width by 2 */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded borders */
+            padding: 16px; /* Padding */
+            position: fixed; /* Sit on top of the screen */
+            z-index: 1; /* Add a z-index if needed */
+            left: 50%; /* Center the snackbar */
+            bottom: 30px; /* 30px from the bottom */
+            color: #fff;
+            background-color: #4CAF50;
+            border-color: #d6e9c6;
+        }
+
+        /* Show the snackbar when clicking on a button (class added with JavaScript) */
+        #snackbar.show {
+            visibility: visible; /* Show the snackbar */
+
+            /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+            However, delay the fade out process for 2.5 seconds */
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        /* Animations to fade the snackbar in and out */
+        @-webkit-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
     </style>
 {% endblock %}
 {% block body %}
@@ -136,9 +216,6 @@
             </div>
         </div>
         <div id="main">
-            <div id="refresh_winner">
-                hello
-            </div>
             <div class="col-md-12">
                 <p class="visible-xs">
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas">
@@ -199,7 +276,8 @@
                         <label id="opponent2" name="opponent2" for="radioTeamB"></label>
                     </div>
                     <div class="modal-footer">
-                        <button id="set-winner" name="get_user_name" data-dismiss="modal" value="{{ user_name }}">
+                        <button id="set-winner" onclick="snackbar_show()" name="get_user_name" data-dismiss="modal"
+                                value="{{ user_name }}">
                             Save
                             Winner
                         </button>
@@ -209,19 +287,9 @@
 
             </div>
         </div>
+        <!-- The actual snackbar -->
+        <div id="snackbar" class="label label-success">Winner Saved</div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
-    <script>
-        $(document).ready(function () {
-            $('[data-toggle=offcanvas]').click(function () {
-                $('.row-offcanvas').toggleClass('active');
-            });
-        });
-    </script>
-
     <script>
         function contentDecider(teamA, teamB, matchId) {
             var opponent1 = document.getElementById("opponent1");
@@ -283,5 +351,20 @@
                 });
             });
         });
+    </script>
+    {#    Scipt for snacbar#}
+    <script>
+        function snackbar_show() {
+            // Get the snackbar DIV
+            var x = document.getElementById("snackbar")
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () {
+                x.className = x.className.replace("show", "");
+            }, 2000);
+        }
     </script>
 {% endblock %}
