@@ -276,7 +276,7 @@
                         <label id="opponent2" name="opponent2" for="radioTeamB"></label>
                     </div>
                     <div class="modal-footer">
-                        <button id="set-winner" onclick="snackbar_show()" name="get_user_name" data-dismiss="modal"
+                        <button id="set-winner" name="get_user_name" data-dismiss="modal"
                                 value="{{ user_name }}">
                             Save
                             Winner
@@ -289,6 +289,7 @@
         </div>
         <!-- The actual snackbar -->
         <div id="snackbar" class="label label-success">Winner Saved</div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     </div>
     <script>
         function contentDecider(teamA, teamB, matchId) {
@@ -325,7 +326,7 @@
         $(document).ready(function () {
 
             $("#set-winner").click(function () {
-                //alert("inside");
+                //("inside");
                 var match_id = document.getElementById('radioTeamA').value;
                 //alert(match_id);
                 if (document.getElementById('radioTeamA').checked) {
@@ -346,7 +347,7 @@
                         // grab the inner html of the returned div
                         // so you don't nest a new div#refresh-this-div on every call
                         //var html = $(data).filter('#refresh-this-div').html();
-                        $('#refresh_winner').html(data);
+                        //$('#refresh_winner').html(data);
                     }
                 });
             });
