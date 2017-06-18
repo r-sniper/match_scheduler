@@ -206,8 +206,11 @@
         <div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
                 <ul class="nav nav-pills nav-stacked">
+                    {% if pool_number %}
+                    <li><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
+                    {% endif %}
                     <li class="active"><a href="{% url 'home:schedule' %}">Schedule</a></li>
-                    <li><a href="{% url 'home:points_table' %}">Points Table</a></li>
+                    <li><a href="{% url 'home:points_table' pool_number %}">Points Table</a></li>
                     <li><a href="#">Result</a></li>
                     <li><a href="#">Section</a></li>
                     <li><a href="#">F.A.Q</a></li>
@@ -303,25 +306,6 @@
             opponent2_value.value = teamB + ' ' + matchId.toString();
         }
     </script>
-
-    {#    <script>#}
-    {#        function setWinner() {#}
-    {#            //alert("out");#}
-    {#            var url = '/test_ajax/';#}
-    {#            window.csrftoken="{% csrf_token %}";#}
-    {#            var xhttp = new XMLHttpRequest();#}
-    {#            xhttp.onreadystatechange = function () {#}
-    {#                if (this.readyState == 4 && this.status == 200) {#}
-    {#                    //alert("hi");#}
-    {#                    document.getElementById("refresh_winner").innerHTML =#}
-    {#                        this.responseText;#}
-    {#                }#}
-    {#            };#}
-    {#            xhttp.open("GET", url, true);#}
-    {#            xhttp.send();#}
-    {#        }#}
-    {#    </script>#}
-
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -337,7 +321,7 @@
                 }
                 $.ajax({
                     type: "POST",
-                    url: '/schedule/',
+                    url: '/schedule/' + {{ pool_number }} + '/',
                     data: {
                         'csrfmiddlewaretoken': '{{ csrf_token }}',
                         'winner_name': winnerName,
@@ -348,6 +332,7 @@
                         // so you don't nest a new div#refresh-this-div on every call
                         //var html = $(data).filter('#refresh-this-div').html();
                         //$('#refresh_winner').html(data);
+                        snackbar_show(data)
                     }
                 });
             });
@@ -355,11 +340,12 @@
     </script>
     {#    Scipt for snacbar#}
     <script>
-        function snackbar_show() {
+        function snackbar_show(data) {
             // Get the snackbar DIV
             var x = document.getElementById("snackbar")
-
+            //alert(data)
             // Add the "show" class to DIV
+            //x.innerHTML(data)
             x.className = "show";
 
             // After 3 seconds, remove the show class from DIV

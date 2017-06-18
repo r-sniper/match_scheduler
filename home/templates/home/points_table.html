@@ -119,8 +119,11 @@
             <div class="col-md-12 back">
                 <form action="{% url 'home:schedule' %}" method="get">
                     <ul class="nav nav-pills nav-stacked">
-                        <li class="active"><a href="{% url 'home:schedule' %}">Schedule</a></li>
-                        <li><a href="{% url 'home:points_table' %}">Points Table</a></li>
+                        {% if pool_number %}
+                            <li><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
+                        {% endif %}
+                        <li class="active"><a href="{% url 'home:pool_schedule' pool_number %}">Schedule</a></li>
+                        <li><a href="{% url 'home:points_table' pool_number %}">Points Table</a></li>
                         <li><a href="#">Result</a></li>
                         <li><a href="#">Section</a></li>
                         <li><a href="#">F.A.Q</a></li>
