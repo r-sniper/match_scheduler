@@ -3,77 +3,87 @@
 {% block style %}
 
 
-        /*Extra style for main contents div*/
-        .col-lg-8, .col-lg-4, .col-lg-2, .col-lg-6 {
-            height: 250px;
-        }
+    /*Extra style for main contents div*/
+    .col-lg-8, .col-lg-4, .col-lg-2, .col-lg-6 {
+    height: 250px;
+    }
 
-        .content {
-            background: #FFFFFF;
-            height: 100%;
-            padding: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-            transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-        }
+    .content {
+    background: #FFFFFF;
+    height: 100%;
+    padding: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    }
 
-        .row {
-            padding: 1.2%;
-        }
+    .row {
+    padding: 1.2%;
+    }
 
 
 
-        .login-button {
-            padding: 2px 4px;
-            margin: 0;
-            vertical-align: baseline;
-            background: #b3000f;
+    .login-button {
+    padding: 2px 4px;
+    margin: 0;
+    vertical-align: baseline;
+    background: #b3000f;
 
-        }
+    }
 
-        .login-button:hover {
-            background: #ee1110;
-            color: #FFFFFF;
-        }
+    .login-button:hover {
+    background: #ee1110;
+    color: #FFFFFF;
+    }
 
-        .navbar-form {
-            padding: 0;
-        }
+    .navbar-form {
+    padding: 0;
+    }
 
-        .login-input {
-            color: black;
-            padding: 2px;
-        }
+    .login-input {
+    color: black;
+    padding: 2px;
+    }
+
+{% endblock %}
+{% block navbar_right %}
+    <div style="margin-top: 7px;margin-right: 5px;float: right">
+        <label style="color: #FFFFFF"><b></b></label>
+        <input type="text" placeholder=" Username" name="uname" required>
+        <label style="color: #FFFFFF"><b></b></label>
+        <input type="password" placeholder=" Password" name="pass" required>
+        <button type="submit">Login</button>
+    </div>
 
 {% endblock %}
 {% block body %}
 
 
-<!--Body with side navbar and main content-->
-<!--Main content-->
-<div id="main">
-    <div class="col-md-12">
+    <!--Body with side navbar and main content-->
+    <!--Main content-->
+    <div id="main">
+        <div class="col-md-12">
 
-        <h2>Some Title</h2>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="content">Section 1</div>
+            <h2>Some Title</h2>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="content">Section 1</div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="content">Section 2</div>
+                </div>
             </div>
-            <div class="col-lg-4">
-                <div class="content">Section 2</div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="content">Section 3</div>
-            </div>
-            <div class="col-lg-4">
-                <div class="content">Section 4</div>
-            </div>
-            <div class="col-lg-6">
-                <div class="content">Section 5</div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="content">Section 3</div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="content">Section 4</div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="content">Section 5</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
