@@ -1,0 +1,340 @@
+{% extends 'home/bootstrap.html' %}
+{% load static %}
+{% load extra %}
+{% block head %}
+    <link rel="stylesheet" href={% static "home/css/treant.css" %}>
+    <link rel="stylesheet" href={% static  "home/css/tree.css" %}>
+
+    <title>SpoFit</title>
+    <style>
+        body, html, .row-offcanvas {
+            height: 100%;
+        }
+
+        body {
+            padding-top: 50px;
+            background: #f5f5f5;
+        }
+
+        #sidebar {
+            width: inherit;
+            min-width: 220px;
+            max-width: 220px;
+            background-color: #f5f5f5;
+            float: left;
+            height: 100%;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #main {
+            height: 100%;
+            overflow: auto;
+        }
+
+        .navbar {
+            background: #ce0010;
+        }
+
+        .navbar-inverse .navbar-nav > li > a:hover {
+            background: #b3000f;
+        }
+
+        .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+            color: #ffffff;
+        }
+
+        .navbar-inverse {
+            border: #ffffff;
+        }
+
+        .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover {
+            background: #b3000f;
+        }
+
+        .nav-pills > li.active > a, .nav-pills > li.active > a:hover {
+            background: #b3000f;
+        }
+
+        .nav-pills > li > a {
+            color: #000000;
+        }
+
+        .bolder {
+            font-weight: bolder;
+        }
+
+        .selected {
+            background: #b3000f;
+            color: #FFFFFF !important;
+        }
+
+        .wrap {
+            background: #fff;
+            margin-bottom: 20px;
+        }
+
+        .left-border {
+            padding: 5px;
+            border-left: 3px solid #ce0010;
+        }
+
+        .white {
+            background: #FFF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            margin-top: 10px
+        }
+
+        .back {
+            background: #ffffff;
+            height: 100%;
+        }
+
+        .nav-stacked {
+            padding-top: 5px;
+        }
+
+        @media screen and (max-width: 991px) {
+            .left-border {
+                border-left: none;
+            }
+        }
+
+        /*
+         * off Canvas sidebar
+         * --------------------------------------------------
+         */
+        @media screen and (max-width: 768px) {
+            .row-offcanvas {
+                position: relative;
+                -webkit-transition: all 0.25s ease-out;
+                -moz-transition: all 0.25s ease-out;
+                transition: all 0.25s ease-out;
+                width: calc(100% + 220px);
+            }
+
+            .row-offcanvas-left {
+                left: -220px;
+            }
+
+            .row-offcanvas-left.active {
+                left: 0;
+            }
+
+            .sidebar-offcanvas {
+                position: absolute;
+                top: 0;
+            }
+        }
+
+        /*Snackbar style*/
+
+        /* The snackbar - position it at the bottom and in the middle of the screen */
+        #snackbar {
+            visibility: hidden; /* Hidden by default. Visible on click */
+            min-width: 250px; /* Set a default minimum width */
+            margin-left: -125px; /* Divide value of min-width by 2 */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded borders */
+            padding: 16px; /* Padding */
+            position: fixed; /* Sit on top of the screen */
+            z-index: 1; /* Add a z-index if needed */
+            left: 50%; /* Center the snackbar */
+            bottom: 30px; /* 30px from the bottom */
+            color: #fff;
+            background-color: #4CAF50;
+            border-color: #d6e9c6;
+        }
+
+        /* Show the snackbar when clicking on a button (class added with JavaScript) */
+        #snackbar.show {
+            visibility: visible; /* Show the snackbar */
+
+            /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+            However, delay the fade out process for 2.5 seconds */
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        /* Animations to fade the snackbar in and out */
+        @-webkit-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+{% endblock %}
+{% block body %}
+
+    <div class="row-offcanvas row-offcanvas-left">
+        <div id="sidebar" class="sidebar-offcanvas">
+            <div class="col-md-12 back">
+                <ul class="nav nav-pills nav-stacked">
+                    {% if pool_number %}
+                        <li><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'home:schedule' %}">Schedule</a></li>
+                    <li><a href="{% url 'home:points_table' pool_number %}">Points Table</a></li>
+                    <li class="active"><a href="#">Result</a></li>
+                    <li><a href="#">Section</a></li>
+                    <li><a href="#">F.A.Q</a></li>
+                </ul>
+
+            </div>
+        </div>
+        <div id="main">
+            <div class="col-md-12">
+                <p class="visible-xs">
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </button>
+                </p>
+                <h2>Tournament Schedule</h2>
+                <div class="chart" id="basic-example"></div>
+
+
+
+            </div>
+        </div><!--/row-offcanvas -->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Select the winner</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;">
+                        <input id="radioTeamA" type="radio" name="winner">
+                        <label id="opponent1" name="opponent1" for="radioTeamA"></label><br>
+                        <strong>V/S</strong><br>
+                        <input id="radioTeamB" type="radio" name="winner">
+                        <label id="opponent2" name="opponent2" for="radioTeamB"></label>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="set-winner" name="get_user_name" data-dismiss="modal"
+                                value="{{ user_name }}">
+                            Save
+                            Winner
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- The actual snackbar -->
+        <div id="snackbar" class="label label-success">Winner Saved</div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    </div>
+    <script>
+        function contentDecider(teamA, teamB, matchId) {
+            var opponent1 = document.getElementById("opponent1");
+            var opponent1_value = document.getElementById('radioTeamA');
+            opponent1.innerHTML = teamA;
+            opponent1_value.value = teamA + ' ' + matchId.toString();
+            var opponent2 = document.getElementById("opponent2");
+            var opponent2_value = document.getElementById('radioTeamB');
+            opponent2.innerHTML = teamB;
+            opponent2_value.value = teamB + ' ' + matchId.toString();
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#set-winner").click(function () {
+                //("inside");
+                var match_id = document.getElementById('radioTeamA').value;
+                //alert(match_id);
+                if (document.getElementById('radioTeamA').checked) {
+                    winnerName = document.getElementById('radioTeamA').value;
+                }
+                else {
+                    winnerName = document.getElementById('radioTeamB').value;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/schedule/' + {{ pool_number }} +'/',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'winner_name': winnerName,
+                        'match_id': match_id
+                    },
+                    success: function (data) {
+                        // grab the inner html of the returned div
+                        // so you don't nest a new div#refresh-this-div on every call
+                        //var html = $(data).filter('#refresh-this-div').html();
+                        //$('#refresh_winner').html(data);
+                        snackbar_show(data)
+                    }
+                });
+            });
+        });
+    </script>
+    {#    Scipt for snacbar#}
+    <script>
+        function snackbar_show(data) {
+            // Get the snackbar DIV
+            var x = document.getElementById("snackbar")
+            //alert(data)
+            // Add the "show" class to DIV
+            //x.innerHTML(data)
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function () {
+                x.className = x.className.replace("show", "");
+            }, 2000);
+        }
+    </script>
+    <script src={% static "home/javascript/raphael.js" %}></script>
+                <script src={% static "home/javascript/treant.js" %}></script>
+
+                <script src={% static "home/javascript/tree.js" %}></script>
+                <script>
+                    new Treant(chart_config);
+                </script>
+{% endblock %}
