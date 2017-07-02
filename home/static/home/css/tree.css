@@ -3,26 +3,28 @@ table { border-collapse:collapse; border-spacing:0; }
 fieldset,img { border:0; }
 address,caption,cite,code,dfn,em,strong,th,var { font-style:normal; font-weight:normal; }
 caption,th { text-align:left; }
-h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal; }
+h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal;text-align:center; }
 q:before,q:after { content:''; }
 abbr,acronym { border:0; }
 
 body { background: #fff; }
 /* optional Container STYLES */
-.chart { height: 600px;width: 100%;margin-left: 5%;margin-right: 10%}
+.chart { height: 100%;width:100%;margin-left: 5%;margin-right: 10%;margin-top: 10%}
 .Treant > .node {  }
-.Treant > p { font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; font-weight: bold; font-size: 12px; }
-.node-name { font-weight: bold;}
+.Treant > p { font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; font-weight: bold; font-size: 25px; }
+.node-name { font-weight: bold;text-align: center;font-size: 0.7em}
 
 .nodeExample1 {
     padding: 2px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-    border-radius: 3px;
+
     background-color: #ffffff;
     border: 1px solid #000;
     width: 200px;
-    font-size: 12px;
+    font-size: 25px;
     height: 60px;
+    
+    border-radius: 4px;
     
 }

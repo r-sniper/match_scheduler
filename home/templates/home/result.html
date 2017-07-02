@@ -4,6 +4,7 @@
 {% block head %}
     <link rel="stylesheet" href={% static "home/css/treant.css" %}>
     <link rel="stylesheet" href={% static  "home/css/tree.css" %}>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>SpoFit</title>
     <style>
@@ -11,6 +12,10 @@
             height: 100%;
         }
 
+        path{
+            stroke: #ff0000;
+            stroke-width: 2px;
+        }
         body {
             padding-top: 50px;
             background: #f5f5f5;
@@ -98,6 +103,12 @@
         @media screen and (max-width: 991px) {
             .left-border {
                 border-left: none;
+
+            }
+        }
+        @media (max-device-width: 1200px) {
+            div#basic-example{
+                width: 750px;
             }
         }
 
@@ -222,13 +233,13 @@
             </div>
         </div>
         <div id="main">
-            <div class="col-md-12">
+            <div class="col-md-12" style="overflow-x: hidden;">
                 <p class="visible-xs">
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas">
                         <i class="glyphicon glyphicon-chevron-left"></i>
                     </button>
                 </p>
-                <h2>Tournament Schedule</h2>
+                <h2> Schedule</h2>
                 <div class="chart" id="basic-example"></div>
 
 
