@@ -1,28 +1,27 @@
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.db import models
 
 
 # Create your models here.
+class UserWrapper(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
 
-class LoginCredential(models.Model):
-    user_name = models.CharField(max_length=20)
-    password = models.CharField(max_length=50)
+
+class Tournament(models.Model):
+    login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE)
     matches_per_day = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
     number_of_team = models.IntegerField(validators=[MaxValueValidator(50)])
     number_of_pool = models.IntegerField(default=1)
     type = models.IntegerField()
-
-    def __str__(self):
-        return self.user_name
-
-
-class Pool(models.Model):
-    login = models.ForeignKey(LoginCredential, on_delete=models.CASCADE)
-    pool_number = models.IntegerField(default=0)
-
+    available_days = models.IntegerField()
     def __str__(self):
         return str(self.id) + ' ' + str(self.pool_number)
 
+class Pool(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    pool_number = models.IntegerField(default=0)
+    number_of_teams = models.IntegerField()
 
 class Point(models.Model):
     pool = models.ForeignKey(Pool, on_delete=models.CASCADE, default=None)

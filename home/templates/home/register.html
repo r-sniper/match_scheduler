@@ -74,7 +74,7 @@
 
     <div class="row-offcanvas row-offcanvas-left">
         <!--Sidebar navigation-->
-        <div id="sidebar" class="sidebar-offcanvas">
+        <!--<div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
                 <ul class="nav nav-pills nav-stacked">
                     <li><a class="selected" href="#">Schedule</a></li>
@@ -84,7 +84,7 @@
                     <li><a href="#">F.A.Q</a></li>
                 </ul>
             </div>
-        </div>
+        </div>-->
         <!--Main content-->
         <div id="main">
             <div class="col-md-8">
@@ -96,19 +96,18 @@
                 </p>
 
 
-                <form action="{% url 'home:get_information' %}" method="post">
+                <form action="{% url 'home:register' %}" method="post">
                     {% csrf_token %}
-
-{#                    {{ form.as_p }}#}
 
                     {% for field in form %}
                          <div class="form-group">
                          {{ field.label_tag }}
-                         {{ field| add_class:"form-control"}}
+                         {{ field| add_class:"form-control" | attr:"required:true"}}
                          </div>
                     {% endfor %}
 
-                    <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
+
+                    <button type="submit" class="btn btn-primary" name="submit" value="submit">Register</button>
                 </form>
             </div>
 
