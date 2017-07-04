@@ -36,7 +36,7 @@
         }
 
         .selected {
-            background: #b3000f ;
+            background: #b3000f;
             color: #FFFFFF !important;
         }
 
@@ -81,8 +81,17 @@
         <ul class="nav navbar-nav">
             <li><a class="selected" href="#">Home</a></li>
             <li><a href="#">Contact Info</a></li>
-            <li><a href="{% url 'home:register' %}">Registration</a></li>
-            <li><a href="{% url 'home:get_information' %}">Add</a></li>
+            {#            {% block navbar_left %}#}
+            {% if logged_in %}
+
+                <li><a href="{% url 'home:get_information' %}">Add</a></li>
+            {% else %}
+                <li><a href="{% url 'home:register' %}">Registration</a></li>
+            {% endif %}
+
+            {#            {% endblock %}#}
+            {% block navbar_left %}
+            {% endblock %}
         </ul>
         {% block navbar_right %}
         {% endblock %}

@@ -206,8 +206,9 @@
         <div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
                 <ul class="nav nav-pills nav-stacked">
-                    {% if pool_number %}
-                    <li><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
+                    <li><a href="{% url 'home:dashboard' %}">Dashboard</a></li>
+                    {% if pool_number > 1 %}
+                        <li><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
                     {% endif %}
                     <li class="active"><a href="{% url 'home:schedule' %}">Schedule</a></li>
                     <li><a href="{% url 'home:points_table' pool_number %}">Points Table</a></li>
@@ -321,7 +322,7 @@
                 }
                 $.ajax({
                     type: "POST",
-                    url: '/schedule/' + {{ pool_number }} + '/',
+                    url: '/schedule/' + {{ pool_number }} +'/',
                     data: {
                         'csrfmiddlewaretoken': '{{ csrf_token }}',
                         'winner_name': winnerName,

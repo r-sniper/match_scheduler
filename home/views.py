@@ -167,7 +167,7 @@ def get_information(request):
                                 new_pool += [
                                     Pool(tournament=tournament, pool_number=i + 1,
                                          number_of_teams=team_per_pool
-                                )]
+                                         )]
                                 # print(new_pool[i].pk)
                             Pool.objects.bulk_create(new_pool)
 
@@ -214,16 +214,23 @@ def get_information(request):
             form = TournamentForm()
         return render(request, 'home/information.html', {
             'form': form,
+            'logged_in': True
         })
     else:
-        return render(request, 'home/home_page.html')
+        return render(request, 'home/home_page.html', {
+            'logged_in': False
+        })
 
 
 def dashboard(request):
     if user_logged_in(request):
-        return render(request, 'home/dashboard.html')
+        return render(request, 'home/dashboard.html', {
+            'logged_in': True
+        })
     else:
-        return render(request,'home/home_page.html')
+        return render(request, 'home/home_page.html', {
+            'logged_in': False
+        })
 
 
 def register(request):
@@ -246,6 +253,7 @@ def register(request):
         form = UserForm()
     return render(request, 'home/register.html', {
         'form': form,
+        'logged_in': False
     })
 
 
@@ -322,6 +330,7 @@ def schedule(request, pool_number=1):
                               'match_id': match_id_list,
                               'matches_per_day': matches_per_day, 'user_name': user_name, 'user_id': user_id,
                               'pool_number': pool_number,
+                              'logged_in': True
                           })
         else:
             rows = int(math.floor(number_of_pool / 2))
@@ -339,6 +348,7 @@ def schedule(request, pool_number=1):
                 'all_teams': all_teams,
                 'team_per_pool': range(team_per_pool),
                 'extra': extra,
+                'logged_in': True
             })
 
 
@@ -384,23 +394,36 @@ def home_page(request):
         user_id = request.session.get('user_id', 0)
         print(request.session.get_expiry_age())
         if not user_id:
-            return render(request, "home/home_page.html")
+            return render(request, "home/home_page.html", {
+                'logged_in': False
+            })
         else:
-            return render(request, 'home/dashboard.html')
+            return render(request, 'home/dashboard.html', {
+                'logged_in': False
+            })
 
 
 def points_table(request, pool_number):
     user_id = request.session['user_id']
-    user_obj = Pool.objects.get(id=user_id)
-    # print(user_id)
-    pool_obj = user_obj.pool_set.get(pool_number=pool_number)
+    if user_id:
+        user_obj = User.objects.get(pk = user_id)
+        # print(user_id)
+        user_wrapper = user_obj.userwrapper
+        tournament_obj = user_wrapper.tournament_set.all()
+        current_tournament = tournament_obj[0]
+        pool_obj = current_tournament.pool_set.get(pool_number=pool_number)
+        full_table = pool_obj.point_set.order_by('-wins').all
+        print(full_table)
+        return render(request, 'home/points_table.html', {
+            'full_table': full_table,
+            'pool_number': pool_number,
+            'logged_in': True
+        })
+    else:
+        return render(request, 'home/home_page.html', {
+            'logged_in': False
+        })
 
-    full_table = pool_obj.point_set.order_by('-wins').all
-    print(full_table)
-    return render(request, 'home/points_table.html', {
-        'full_table': full_table,
-        'pool_number': pool_number,
-    })
 
 def logout(request):
     if request.POST.get('logout'):
