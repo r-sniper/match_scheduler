@@ -69,7 +69,7 @@
 {% endblock %}
 {% block navbar_right %}
     <form action="{% url 'home:logout' %}" method="post">
-    {% csrf_token %}
+        {% csrf_token %}
         <div style="margin-top: 7px;margin-right: 5px;float: right">
             <button type="submit" name="logout" value="logout">Logout</button>
         </div>
@@ -87,8 +87,14 @@
             <div class="col-md-12 back">
                 <ul class="nav nav-pills nav-stacked">
                     <li><a class="selected" href="#">Dashboard</a></li>
-                    <li><a href="{% url 'home:schedule' %}">Schedule</a></li>
-                    <li><a href="#">Points Table</a></li>
+
+                    {% if number_of_pool > 1 %}
+                        <li><a href="{% url 'home:pool_schedule' pool_number=0 %}">Pool</a></li>
+                    {% else %}
+                        <li><a href="{% url 'home:schedule' %}">Schedule</a></li>
+                        <li><a href="#">Points Table</a></li>
+                    {% endif %}
+
                     <li><a href="#">Result</a></li>
                     <li><a href="#">Section</a></li>
                     <li><a href="#">F.A.Q</a></li>

@@ -46,6 +46,7 @@ def get_information(request):
                 number_of_teams = tournament.number_of_team
                 number_of_days = tournament.available_days
                 matches_per_day = tournament.matches_per_day
+                number_of_pool = tournament.number_of_pool
                 # Our conventions
                 # 1. League matches
                 # 2. Pool System
@@ -91,7 +92,7 @@ def get_information(request):
                         group1.remove(group1[int(number_of_teams / 2)])
 
                     all_new_teams = []
-                    pool = Pool(tournament=tournament, number_of_teams=number_of_teams)
+                    pool = Pool(tournament=tournament, number_of_teams=number_of_teams, pool_number=1)
                     pool.save()
                     for team in group1:
                         all_new_teams.append(Point(pool=pool, team=team))
@@ -145,19 +146,19 @@ def get_information(request):
                     return HttpResponseRedirect('/schedule/')
                 # Pool system
                 elif type == 2:
-                    if (number_of_teams >= 8):
-                        if (number_of_teams % 3 == 0 or number_of_teams % 4 == 0 or number_of_teams % 5 == 0):
+                    if number_of_teams >= 8:
+                        if number_of_teams % 3 == 0 or number_of_teams % 4 == 0 or number_of_teams % 5 == 0:
 
-                            team_per_pool = 0
-                            if number_of_teams % 6 == 0:
-                                team_per_pool = 6
-                            elif number_of_teams % 5 == 0:
-                                team_per_pool = 5
-                            elif number_of_teams % 4 == 0:
-                                team_per_pool = 4
-                            elif number_of_teams % 3 == 0:
-                                team_per_pool = 3
-                            number_of_pool = int(number_of_teams / team_per_pool)
+                            team_per_pool = int(number_of_teams / number_of_pool)
+                            # if number_of_teams % 6 == 0:
+                            #     team_per_pool = 6
+                            # elif number_of_teams % 5 == 0:
+                            #     team_per_pool = 5
+                            # elif number_of_teams % 4 == 0:
+                            #     team_per_pool = 4
+                            # elif number_of_teams % 3 == 0:
+                            #     team_per_pool = 3
+                            # number_of_pool = int(number_of_teams / team_per_pool)
 
                             number_of_matches = int(
                                 (team_per_pool * (team_per_pool - 1)) / 2) * number_of_pool
@@ -170,7 +171,7 @@ def get_information(request):
                                          )]
                                 # print(new_pool[i].pk)
                             Pool.objects.bulk_create(new_pool)
-
+                            print(new_pool)
                             all_teams = []
                             for i in range(1, number_of_teams + 1):
                                 all_teams.append("Team" + str(i))
@@ -183,6 +184,7 @@ def get_information(request):
                                     new_points_table += [Point(pool=all_pool[i], team=all_teams[i * team_per_pool + j])]
                                     # print(str(i) + ' ' + all_teams[i * team_per_pool + j])
                             Point.objects.bulk_create(new_points_table)
+
                             new_matches = []
                             list1 = []
                             list2 = []
@@ -201,7 +203,7 @@ def get_information(request):
                             if number_of_pool % 2 == 1:
                                 extra = number_of_pool - 1
 
-                            return HttpResponseRedirect('/schedule/')
+                            return HttpResponseRedirect('/schedule/0')
 
                         else:
                             return HttpResponse("Number of teams should be multiple of 3 or 4 or 5")
@@ -223,9 +225,18 @@ def get_information(request):
 
 
 def dashboard(request):
-    if user_logged_in(request):
+    user_id = user_logged_in(request)
+    if user_id:
+        user = User.objects.get(pk=user_id)
+        user_wrapper = user.userwrapper
+        tournament = user_wrapper.tournament_set.all()
+        number_of_pool = 0
+        if tournament:
+            current_tournament = tournament[0]
+            number_of_pool = current_tournament.number_of_pool
         return render(request, 'home/dashboard.html', {
-            'logged_in': True
+            'logged_in': True,
+            'number_of_pool': number_of_pool
         })
     else:
         return render(request, 'home/home_page.html', {
@@ -266,11 +277,14 @@ def schedule(request, pool_number=1):
         winner = text[0]
         user_id = request.session['user_id']
         user_obj = User.objects.get(id=user_id)
+        user_wrapper = user_obj.userwrapper
         print(winner)
         print(user_id)
         if request.is_ajax:
-            pool_obj = user_obj.pool_set.get(pool_number=pool_number)
-            match_obj_rows = pool_obj.match_set
+            tournament = user_wrapper.tournament_set.all()
+            current_tournament = tournament[0]
+            pool_obj = current_tournament.pool_set.get(pool_number=pool_number)
+            match_obj_rows = pool_obj.match_set.all()
             match_obj = match_obj_rows.get(id=match_id)
             if match_obj.winner == '0':
                 point_obj = Point.objects.get(pool=pool_obj, team=winner)
@@ -329,11 +343,15 @@ def schedule(request, pool_number=1):
                               'matches_per_day_list': range(matches_per_day), 'list1': list1, 'list2': list2,
                               'match_id': match_id_list,
                               'matches_per_day': matches_per_day, 'user_name': user_name, 'user_id': user_id,
+                              'number_of_pool': number_of_pool,
                               'pool_number': pool_number,
                               'logged_in': True
                           })
         else:
             rows = int(math.floor(number_of_pool / 2))
+            print("Number of teams(Points table):" + str(number_of_teams))
+            print("Number of pool(Points table):" + str(number_of_pool))
+            print("Number of teams(Points table):" + str(pool_obj[0].number_of_teams))
             team_per_pool = int(number_of_teams / number_of_pool)
             all_teams = []
             for pool in pool_obj:
@@ -387,7 +405,7 @@ def home_page(request):
             request.session['user_id'] = user_obj.id
             return HttpResponseRedirect('/dashboard/')
         else:
-            print("Doesn't e")
+            print("Doesn'te")
             return HttpResponse('<h1>First Sign Up for this service</h1>')
     else:
         print(request.session.get_expiry_age())
@@ -404,20 +422,25 @@ def home_page(request):
 
 
 def points_table(request, pool_number):
+    pool_number = int(pool_number)
     user_id = request.session['user_id']
     if user_id:
-        user_obj = User.objects.get(pk = user_id)
+        user_obj = User.objects.get(pk=user_id)
         # print(user_id)
         user_wrapper = user_obj.userwrapper
         tournament_obj = user_wrapper.tournament_set.all()
         current_tournament = tournament_obj[0]
         pool_obj = current_tournament.pool_set.get(pool_number=pool_number)
+        print("Hello")
+        print(pool_obj.pool_number)
+        number_of_pool = current_tournament.number_of_pool
         full_table = pool_obj.point_set.order_by('-wins').all
         print(full_table)
         return render(request, 'home/points_table.html', {
             'full_table': full_table,
             'pool_number': pool_number,
-            'logged_in': True
+            'logged_in': True,
+            'number_of_pool':number_of_pool,
         })
     else:
         return render(request, 'home/home_page.html', {

@@ -93,8 +93,9 @@
             <div class="col-md-12 back">
                 <form action="{% url 'home:schedule' %}" method="get">
                     <ul class="nav nav-pills nav-stacked">
+                        <li><a href="{% url 'home:dashboard' %}"> Dashboard</a></li>
                         <li class="active"><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
-                        <li disabled="disabled"><a href="{% url 'home:points_table' 0 %}">Points Table</a></li>
+{#                        <li disabled="disabled"><a href="{% url 'home:points_table' 0 %}">Points Table</a></li>#}
                         <li><a href="#">Result</a></li>
                         <li><a href="#">Section</a></li>
                         <li><a href="#">F.A.Q</a></li>

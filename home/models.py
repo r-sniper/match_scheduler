@@ -15,13 +15,16 @@ class Tournament(models.Model):
     number_of_pool = models.IntegerField(default=1)
     type = models.IntegerField()
     available_days = models.IntegerField()
+
     def __str__(self):
-        return str(self.id) + ' ' + str(self.pool_number)
+        return str(self.id) + ' ' + str(self.type)
+
 
 class Pool(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    pool_number = models.IntegerField(default=0)
+    pool_number = models.IntegerField(default=1)
     number_of_teams = models.IntegerField()
+
 
 class Point(models.Model):
     pool = models.ForeignKey(Pool, on_delete=models.CASCADE, default=None)

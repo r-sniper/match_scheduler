@@ -119,7 +119,8 @@
             <div class="col-md-12 back">
                 <form action="{% url 'home:schedule' %}" method="get">
                     <ul class="nav nav-pills nav-stacked">
-                        {% if pool_number %}
+                        <li><a href="{% url 'home:dashboard' %}">Dashboard</a></li>
+                        {% if number_of_pool > 1 %}
                             <li><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
                         {% endif %}
                         <li class="active"><a href="{% url 'home:pool_schedule' pool_number %}">Schedule</a></li>
