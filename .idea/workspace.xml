@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e8f00fe1-80ce-474e-94a6-dc420f91bb1e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/home/migrations/0002_pool_number_of_teams.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/home/migrations/0003_auto_20170704_1525.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/admin.py" afterPath="$PROJECT_DIR$/home/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/home/migrations/0001_initial.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/models.py" afterPath="$PROJECT_DIR$/home/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/templates/home/dashboard.html" afterPath="$PROJECT_DIR$/home/templates/home/dashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/templates/home/points_table.html" afterPath="$PROJECT_DIR$/home/templates/home/points_table.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/templates/home/pool.html" afterPath="$PROJECT_DIR$/home/templates/home/pool.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/templates/home/schedule.html" afterPath="$PROJECT_DIR$/home/templates/home/schedule.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/views.py" afterPath="$PROJECT_DIR$/home/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/templates/home/information.html" afterPath="$PROJECT_DIR$/home/templates/home/information.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,11 +34,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="information.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="information.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/home/templates/home/information.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-479">
-              <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="13" />
+            <state relative-caret-position="126">
+              <caret line="79" column="70" lean-forward="false" selection-start-line="79" selection-start-column="70" selection-end-line="79" selection-end-column="70" />
               <folding />
             </state>
           </provider>
@@ -123,7 +113,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="schedule.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="schedule.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/home/templates/home/schedule.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="256">
@@ -214,7 +204,6 @@
         <option value="$PROJECT_DIR$/match_scheduler/forms.py" />
         <option value="$PROJECT_DIR$/home/templates/home/register.html" />
         <option value="$PROJECT_DIR$/match_scheduler/settings.py" />
-        <option value="$PROJECT_DIR$/home/templates/home/information.html" />
         <option value="$PROJECT_DIR$/home/forms.py" />
         <option value="$PROJECT_DIR$/home/urls.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
@@ -227,6 +216,7 @@
         <option value="$PROJECT_DIR$/home/views.py" />
         <option value="$PROJECT_DIR$/home/templates/home/points_table.html" />
         <option value="$PROJECT_DIR$/home/templates/home/schedule.html" />
+        <option value="$PROJECT_DIR$/home/templates/home/information.html" />
       </list>
     </option>
   </component>
@@ -679,8 +669,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35130972" sideWeight="0.5027668" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32819724" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3498452" sideWeight="0.4972332" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39164087" sideWeight="0.4972332" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3498452" sideWeight="0.4972332" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39164087" sideWeight="0.4972332" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21593626" sideWeight="0.4946071" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988048" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32973805" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1068,14 +1058,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/home/templates/home/information.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-479">
-          <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/home/templates/home/pool.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="123">
@@ -1129,6 +1111,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="256">
           <caret line="306" column="44" lean-forward="false" selection-start-line="306" selection-start-column="44" selection-end-line="306" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/home/templates/home/information.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="79" column="70" lean-forward="false" selection-start-line="79" selection-start-column="70" selection-end-line="79" selection-end-column="70" />
           <folding />
         </state>
       </provider>
