@@ -268,7 +268,7 @@ def register(request):
                 request.session.set_expiry(10 * 60)
                 request.session['user_id'] = new_user.id
 
-                print("git pullsuccess")
+                print("Success")
                 return HttpResponseRedirect('/dashboard/')
 
                 print(User.objects.get(pk=new_user.pk).first_name)
