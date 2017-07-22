@@ -7,6 +7,9 @@ from django.db import models
 class UserWrapper(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
 
+    def __str__(self):
+        return self.user.first_name + "-" + self.user.email
+
 
 class Tournament(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE)

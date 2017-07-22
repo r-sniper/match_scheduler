@@ -259,7 +259,7 @@ def register(request):
             print(User.objects.get(pk=new_user.pk).first_name)
             return HttpResponseRedirect('/dashboard/')
         else:
-            return HttpResponse(form.errors)
+            print("Form was not valid because of" + str(form.errors))
     else:
         form = UserForm()
     return render(request, 'home/register.html', {
