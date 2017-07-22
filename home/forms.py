@@ -7,7 +7,6 @@ from .models import Tournament
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
-
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
@@ -37,13 +36,22 @@ class UserForm(forms.ModelForm):
 class TournamentForm(forms.ModelForm):
     match_type = forms.ChoiceField(
         choices=[('League Match', 'League Match'), (('Pool Match', 'Pool Match'))])  # , 'Knockout Match'])
+    available_hrs = forms.IntegerField()
+    match_duration = forms.IntegerField()
+    break_duration = forms.IntegerField()
 
     class Meta:
         model = Tournament
-        fields = ['matches_per_day', 'number_of_team', 'number_of_pool', 'available_days']
+        fields = ['available_hrs', 'match_duration', 'break_duration', 'number_of_team', 'number_of_pool',
+                  'available_days']
         labels = {
-            'matches_per_day': _('Time per match'),
+
+            'available_hrs': _('Available hours in a day'),
+            'match_duration': _('Match Duration'),
+            'break_duration': _('Break Duration'),
             'number_of_team': _('Number of Teams'),
-            'number_of_pool': _('Number of pools'),
-            'available_days': _('Available days'),
+            'number_of_pool': _('Number of Pools'),
+            'available_days': _('Available Days')
         }
+
+
