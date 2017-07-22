@@ -221,6 +221,8 @@ def get_information(request):
                 # print(Pool.objects.filter(login=user_wrapper))
                 # print(user_wrapper.pool_set.all()   )
                 return HttpResponseRedirect('/schedule/0')
+            else:
+                print("else " + str(form.errors))
         else:
             form = TournamentForm()
         return render(request, 'home/information.html', {
@@ -259,15 +261,6 @@ def register(request):
         print("register")
         form = UserForm(data=request.POST)
         if form.is_valid():
-            # reCaptcha validation
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            data = {
-                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-                'response': recaptcha_response
-            }
-            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-            result = r.json()
-            if result['success']:
                 new_user = form.save()
                 new_user.set_password(new_user.password)
                 new_user.save()
@@ -275,7 +268,6 @@ def register(request):
                 new_user_wrapper.save()
                 request.session.set_expiry(10 * 60)
                 request.session['user_id'] = new_user.id
-                print("Success")
                 print(User.objects.get(pk=new_user.pk).first_name)
                 return HttpResponseRedirect('/dashboard/')
         else:
