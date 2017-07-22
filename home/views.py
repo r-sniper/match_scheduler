@@ -291,7 +291,7 @@ def register(request):
 
 
         else:
-            return HttpResponse(form.errors)
+            print("Form was not valid because of" + str(form.errors))
     else:
         form = UserForm()
     return render(request, 'home/register.html', {

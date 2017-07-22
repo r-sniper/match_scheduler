@@ -6,7 +6,6 @@ from .models import Tournament
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
-
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
@@ -17,6 +16,20 @@ class UserForm(forms.ModelForm):
             'first_name': _('First Name'),
             'last_name': _('Last Name')
         }
+
+    def clean_email(self):
+        # Get the email
+        email = self.cleaned_data.get('email')
+
+        # Check to see if any users already exist with this email as a username.
+        try:
+            match = User.objects.get(email=email)
+        except User.DoesNotExist:
+            # Unable to find a user, this is fine
+            return email
+
+        # A user was found with this as a username, raise an error.
+        raise forms.ValidationError('This email address is already in use.')
 
 
 class TournamentForm(forms.ModelForm):
@@ -39,3 +52,5 @@ class TournamentForm(forms.ModelForm):
             'number_of_pool': _('Number of Pools'),
             'available_days': _('Available Days')
         }
+
+

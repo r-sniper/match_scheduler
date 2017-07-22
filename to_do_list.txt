@@ -1,0 +1,8 @@
+Add more tournament
+Google and facebook
+UI bugs
+change password
+2 way verification
+Points table
+Dashboard
+Register(Add more fields)
