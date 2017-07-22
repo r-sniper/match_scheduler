@@ -91,12 +91,12 @@
     <div class="row-offcanvas row-offcanvas-left">
         <div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
-                <form action="{% url 'home:schedule' %}" method="get">
+                <form action="{% url 'home:schedule' tournament_number %}" method="get">
                     <ul class="nav nav-pills nav-stacked">
                         <li><a href="{% url 'home:dashboard' %}"> Dashboard</a></li>
-                        <li class="active"><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
+                        <li class="active"><a href="{% url 'home:pool_schedule' tournament_number 0 %}">Pool</a></li>
                         {#                        <li disabled="disabled"><a href="{% url 'home:points_table' 0 %}">Points Table</a></li>#}
-                        <li><a href="#">Result</a></li>
+                        <li><a href="#">Rsult</a></li>
                         <li><a href="#">Section</a></li>
                         <li><a href="#">F.A.Q</a></li>
                     </ul>
@@ -110,7 +110,7 @@
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas"><i
                             class="glyphicon glyphicon-chevron-left"></i></button>
                 </p>
-                <form action="{% url 'home:schedule' %}" method="post">
+                <form action="{% url 'home:schedule' tournament_number %}" method="post">
                     {% csrf_token %}
                     {% for i in rows %}
                         <div class="row">

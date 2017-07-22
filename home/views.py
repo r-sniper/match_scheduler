@@ -152,7 +152,7 @@ def get_information(request):
                     match_obj_rows = pool.match_set
                     match_id_list = match_obj_rows.values_list('id', flat=True)
                     print(list1)
-                    return HttpResponseRedirect('/schedule/')
+                    return HttpResponseRedirect('/dashboard/')
                 # Pool system
                 elif type == 2:
                     if number_of_teams >= 8:
@@ -212,7 +212,7 @@ def get_information(request):
                             if number_of_pool % 2 == 1:
                                 extra = number_of_pool - 1
 
-                            return HttpResponseRedirect('/schedule/0')
+                            return HttpResponseRedirect('/dashboard/')
 
                         else:
                             return HttpResponse("Number of teams should be multiple of 3 or 4 or 5")
@@ -242,12 +242,12 @@ def dashboard(request):
         user_wrapper = user.userwrapper
         tournament = user_wrapper.tournament_set.all()
         number_of_pool = 0
+
         if tournament:
-            current_tournament = tournament[0]
-            number_of_pool = current_tournament.number_of_pool
+            print(tournament[0])
+            print("Tournament exists")
         return render(request, 'home/dashboard.html', {
             'logged_in': True,
-            'number_of_pool': number_of_pool,
             'tournament': tournament
         })
     else:
@@ -281,8 +281,14 @@ def register(request):
 
 
 # Works perfectly(Do not touch)
-def schedule(request, pool_number=1):
+# Convention for pool_number
+# 0- To show all available for this tuornament
+# 1- To show 1st pool
+# 2- To show 2nd pool
+# n- to show nth pool
+def schedule(request,tournament_number, pool_number=1):
     pool_number = int(pool_number)
+    tournament_number = int(tournament_number)
     # For when winner is selected
     if request.is_ajax():
         print('HeLlO')
@@ -297,7 +303,8 @@ def schedule(request, pool_number=1):
         # if not needed(will review it later)
         if request.is_ajax:
             tournament = user_wrapper.tournament_set.all()
-            current_tournament = tournament[0]
+            current_tournament = tournament[tournament_number]
+            print('pool number' + str(pool_number))
             pool_obj = current_tournament.pool_set.get(pool_number=pool_number)
             match_obj_rows = pool_obj.match_set.all()
             match_obj = match_obj_rows.get(id=match_id)
@@ -309,6 +316,7 @@ def schedule(request, pool_number=1):
                 match_obj.winner = '1'
             else:
                 match_obj.winner = '2'
+            print('Saving now')
             match_obj.save()
             return HttpResponse("Yipeee done(AJAX)" + str(match_id) + str(winner))
         else:
@@ -318,7 +326,7 @@ def schedule(request, pool_number=1):
 
         if request.POST.get('Pool'):
             pool_number = request.POST.get('Pool')
-            return HttpResponseRedirect('/schedule/' + str(pool_number))
+            return HttpResponseRedirect('/schedule/' +str(tournament_number)+'/' +  str(pool_number))
 
         else:
             return HttpResponse("Something went wrong")
@@ -327,20 +335,26 @@ def schedule(request, pool_number=1):
         type = 0
         user_id = user_logged_in(request)
         if not user_id:
-            return HttpResponse("Something went wrong.")
+            return HttpResponseRedirect('/')
         user_obj = User.objects.get(id=user_id)
         user_wrapper = user_obj.userwrapper
         tournament_obj = user_wrapper.tournament_set.all()
-
+        print(tournament_obj)
+        print('tournament' + str(tournament_number))
         print('pool' + str(pool_number))
 
         user_name = user_obj.username
-        number_of_pool = tournament_obj[0].number_of_pool
-        number_of_teams = tournament_obj[0].number_of_team
-        pool_obj = tournament_obj[0].pool_set.all()
-        current_tournament = tournament_obj[0]
+        current_tournament = tournament_obj[tournament_number]
+        number_of_pool = current_tournament.number_of_pool
+        number_of_teams = current_tournament.number_of_team
+        pool_obj = current_tournament.pool_set.all()
+
         # show schedule for that pool
         if number_of_pool == 1 or pool_number:
+            if pool_number ==0:
+                print("pool number was zero")
+                print("Setting it ot one")
+                pool_number = 1
             current_pool = pool_obj[pool_number - 1]
 
             number_of_teams = current_pool.number_of_teams
@@ -362,6 +376,7 @@ def schedule(request, pool_number=1):
                               'matches_per_day': matches_per_day, 'user_name': user_name, 'user_id': user_id,
                               'number_of_pool': number_of_pool,
                               'pool_number': pool_number,
+                              'tournament_number':tournament_number,
                               'logged_in': True
                           })
         # Show all pools
@@ -384,6 +399,7 @@ def schedule(request, pool_number=1):
                 'all_teams': all_teams,
                 'team_per_pool': range(team_per_pool),
                 'extra': extra,
+                'tournament_number':tournament_number,
                 'logged_in': True
             })
 
@@ -440,15 +456,16 @@ def home_page(request):
             })
 
 
-def points_table(request, pool_number):
+def points_table(request,tournament_number, pool_number):
     pool_number = int(pool_number)
+    tournament_number = int(tournament_number)
     user_id = request.session['user_id']
     if user_id:
         user_obj = User.objects.get(pk=user_id)
         # print(user_id)
         user_wrapper = user_obj.userwrapper
         tournament_obj = user_wrapper.tournament_set.all()
-        current_tournament = tournament_obj[0]
+        current_tournament = tournament_obj[tournament_number]
         pool_obj = current_tournament.pool_set.get(pool_number=pool_number)
         print("Hello")
         print(pool_obj.pool_number)
@@ -460,6 +477,7 @@ def points_table(request, pool_number):
             'pool_number': pool_number,
             'logged_in': True,
             'number_of_pool': number_of_pool,
+            'tournament_number':tournament_number
         })
     else:
         return render(request, 'home/home_page.html', {
