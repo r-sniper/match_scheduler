@@ -1,5 +1,6 @@
 import math
 
+import requests
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -249,15 +250,33 @@ def register(request):
         print("register")
         form = UserForm(data=request.POST)
         if form.is_valid():
-            new_user = form.save()
-            new_user.set_password(new_user.password)
-            new_user.save()
-            new_user_wrapper = UserWrapper(user=new_user)
-            new_user_wrapper.save()
-            request.session.set_expiry(10 * 60)
-            request.session['user_id'] = new_user.id
-            print(User.objects.get(pk=new_user.pk).first_name)
-            return HttpResponseRedirect('/dashboard/')
+
+            # reCaptcha validation
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            data = {
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+            result = r.json()
+            if result['success']:
+                new_user = form.save()
+                new_user.set_password(new_user.password)
+                new_user.save()
+                new_user_wrapper = UserWrapper(user=new_user)
+                new_user_wrapper.save()
+                request.session.set_expiry(10 * 60)
+                request.session['user_id'] = new_user.id
+
+                print("Success")
+                return HttpResponseRedirect('/dashboard/')
+
+                print(User.objects.get(pk=new_user.pk).first_name)
+            else:
+                return HttpResponse("Invalid reCAPTCHA. Please try again.")
+
+
+
         else:
             return HttpResponse(form.errors)
     else:

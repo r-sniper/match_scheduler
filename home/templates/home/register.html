@@ -66,49 +66,51 @@
         }
 
     </style>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 {% block body %}
 
 
     <!--Body with side navbar and main content-->
 
-{#    <div class="row-offcanvas row-offcanvas-left">#}
-        <!--Sidebar navigation-->
-        <!--<div id="sidebar" class="sidebar-offcanvas">
-            <div class="col-md-12 back">
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a class="selected" href="#">Schedule</a></li>
-                    <li><a href="#">Points Table</a></li>
-                    <li><a href="#">Result</a></li>
-                    <li><a href="#">Section</a></li>
-                    <li><a href="#">F.A.Q</a></li>
-                </ul>
-            </div>
-        </div>-->
-        <!--Main content-->
-        <div id="main">
-            <div class="col-md-8">
-                <!--Toggle for sidebar nav-->
-
-
-
-                <form action="{% url 'home:register' %}" method="post">
-                    {% csrf_token %}
-
-                    {% for field in form %}
-                        <div class="form-group">
-                            {{ field.label_tag }}
-                            {{ field| add_class:"form-control" | attr:"required:true" }}
-                        </div>
-                    {% endfor %}
-
-
-                    <button type="submit" class="btn btn-primary" name="submit" value="submit">Register</button>
-                </form>
-            </div>
-
+    {#    <div class="row-offcanvas row-offcanvas-left">#}
+    <!--Sidebar navigation-->
+    <!--<div id="sidebar" class="sidebar-offcanvas">
+        <div class="col-md-12 back">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a class="selected" href="#">Schedule</a></li>
+                <li><a href="#">Points Table</a></li>
+                <li><a href="#">Result</a></li>
+                <li><a href="#">Section</a></li>
+                <li><a href="#">F.A.Q</a></li>
+            </ul>
         </div>
-{#    </div>#}
+    </div>-->
+    <!--Main content-->
+    <div id="main">
+        <div class="col-md-8">
+            <!--Toggle for sidebar nav-->
+
+
+            <form action="{% url 'home:register' %}" method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field| add_class:"form-control" | attr:"required:true" }}
+                    </div>
+                {% endfor %}
+
+                <div class="g-recaptcha" data-sitekey="6LfZjCkUAAAAALhxb7Jg80EDXCriyrn0fMdG3EAc"></div>
+
+
+                <button type="submit" class="btn btn-primary" name="submit" value="submit">Register</button>
+            </form>
+        </div>
+
+    </div>
+    {#    </div>#}
 
 
 {% endblock %}
