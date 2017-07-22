@@ -33,6 +33,14 @@ def get_information(request):
                 tournament.login = user_wrapper
                 print(user_wrapper.user.username)
                 type_of_match = form.cleaned_data.get('match_type')
+                avalaible_hrs = form.cleaned_data.get("available_hrs")
+                match_duration = form.cleaned_data.get("match_duration")
+                break_duration = form.cleaned_data.get("break_duration")
+
+                tournament.matches_per_day = (int)(avalaible_hrs/(match_duration + break_duration))
+                print("mathes per day"+str(tournament.matches_per_day))
+
+
                 type = 1
                 if type_of_match == 'Pool Match':
                     type = 2
@@ -43,6 +51,11 @@ def get_information(request):
                 list1 = []
                 list2 = []
                 user_name = user_obj.username
+
+
+
+
+
 
                 number_of_teams = tournament.number_of_team
                 number_of_days = tournament.available_days
