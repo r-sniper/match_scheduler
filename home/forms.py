@@ -7,6 +7,7 @@ from .models import Tournament
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
@@ -53,5 +54,3 @@ class TournamentForm(forms.ModelForm):
             'number_of_pool': _('Number of Pools'),
             'available_days': _('Available Days')
         }
-
-

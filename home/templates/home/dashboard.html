@@ -107,7 +107,7 @@
                 <!--Toggle for sidebar nav-->
                 {% if tournament %}
                     {% for each in tournament %}
-                        <a href="{% url 'home:pool_schedule' forloop.counter0 0%}">Tournament {{ forloop.counter }}</a>
+                        <a href="{% url 'home:pool_schedule' forloop.counter0 0 %}">Tournament {{ forloop.counter }}</a>
                     {% endfor %}
                 {% endif %}
                 <p class="visible-xs">

@@ -294,7 +294,7 @@ def register(request):
 # 1- To show 1st pool
 # 2- To show 2nd pool
 # n- to show nth pool
-def schedule(request,tournament_number, pool_number=1):
+def schedule(request, tournament_number, pool_number=1):
     pool_number = int(pool_number)
     tournament_number = int(tournament_number)
     # For when winner is selected
@@ -320,6 +320,20 @@ def schedule(request,tournament_number, pool_number=1):
                 point_obj = Point.objects.get(pool=pool_obj, team=winner)
                 point_obj.wins += 2
                 point_obj.save()
+            elif match_obj.winner == '1' and match_obj.team2 == winner:
+                point_obj = Point.objects.get(pool=pool_obj, team=match_obj.team1)
+                point_obj.wins -= 2
+                point_obj.save()
+                point_obj = Point.objects.get(pool=pool_obj, team=winner)
+                point_obj.wins += 2
+                point_obj.save()
+            elif match_obj.winner == '2' and match_obj.team1 == winner:
+                point_obj = Point.objects.get(pool=pool_obj, team=match_obj.team2)
+                point_obj.wins -= 2
+                point_obj.save()
+                point_obj = Point.objects.get(pool=pool_obj, team=winner)
+                point_obj.wins += 2
+                point_obj.save()
             if match_obj.team1 == winner:
                 match_obj.winner = '1'
             else:
@@ -334,7 +348,7 @@ def schedule(request,tournament_number, pool_number=1):
 
         if request.POST.get('Pool'):
             pool_number = request.POST.get('Pool')
-            return HttpResponseRedirect('/schedule/' +str(tournament_number)+'/' +  str(pool_number))
+            return HttpResponseRedirect('/schedule/' + str(tournament_number) + '/' + str(pool_number))
 
         else:
             return HttpResponse("Something went wrong")
@@ -359,7 +373,7 @@ def schedule(request,tournament_number, pool_number=1):
 
         # show schedule for that pool
         if number_of_pool == 1 or pool_number:
-            if pool_number ==0:
+            if pool_number == 0:
                 print("pool number was zero")
                 print("Setting it ot one")
                 pool_number = 1
@@ -384,7 +398,7 @@ def schedule(request,tournament_number, pool_number=1):
                               'matches_per_day': matches_per_day, 'user_name': user_name, 'user_id': user_id,
                               'number_of_pool': number_of_pool,
                               'pool_number': pool_number,
-                              'tournament_number':tournament_number,
+                              'tournament_number': tournament_number,
                               'logged_in': True
                           })
         # Show all pools
@@ -407,7 +421,7 @@ def schedule(request,tournament_number, pool_number=1):
                 'all_teams': all_teams,
                 'team_per_pool': range(team_per_pool),
                 'extra': extra,
-                'tournament_number':tournament_number,
+                'tournament_number': tournament_number,
                 'logged_in': True
             })
 
@@ -464,7 +478,7 @@ def home_page(request):
             })
 
 
-def points_table(request,tournament_number, pool_number):
+def points_table(request, tournament_number, pool_number):
     pool_number = int(pool_number)
     tournament_number = int(tournament_number)
     user_id = request.session['user_id']
@@ -485,7 +499,7 @@ def points_table(request,tournament_number, pool_number):
             'pool_number': pool_number,
             'logged_in': True,
             'number_of_pool': number_of_pool,
-            'tournament_number':tournament_number
+            'tournament_number': tournament_number
         })
     else:
         return render(request, 'home/home_page.html', {
