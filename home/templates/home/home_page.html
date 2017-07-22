@@ -49,9 +49,8 @@
     <form action="{% url 'home:home_page' %}" method="post">
         {% csrf_token %}
         <div style="margin-top: 7px;margin-right: 5px;float: right">
-            <label style="color: #FFFFFF"><b></b></label>
+            <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="g-signin2" data-onsuccess="onSignIn"></div></a>
             <input type="text" placeholder=" Username" name="uname" required>
-            <label style="color: #FFFFFF"><b></b></label>
             <input type="password" placeholder=" Password" name="pass" required>
             <button type="submit" name="login" value="login">Login</button>
         </div>
