@@ -97,13 +97,14 @@
                 </p>
 
 
-                <form action="{% url 'home:get_information' %}" method="post" onsubmit="return changeValue()">
+                <form action="{% url 'home:get_information' %}" method="post">
                     {% csrf_token %}
 
                     {#                    {{ form.as_p }}#}
 
                     {% for field in form %}
                         <div class="form-group">
+                            {{ field.errors }}
                             {{ field.label_tag }}
                             {{ field| add_class:"form-control" }}
                         </div>
@@ -117,18 +118,7 @@
     </div>
 
     </div>
-    <script>
-        function changeValue() {
-            {#            alert("hello");#}
-            var time_per_matches = document.getElementById("id_matches_per_day");
-            var value = parseInt(time_per_matches.value);
-            {#            alert(value+30);#}
-            value = Math.floor(600.0 / (value + 30));
-            {#            alert(value);#}
-            time_per_matches.value = value;
-            return true;
-        }
-    </script>
+
 
 {% endblock %}
 
