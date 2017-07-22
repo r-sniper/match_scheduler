@@ -88,12 +88,12 @@
                 <ul class="nav nav-pills nav-stacked">
                     <li><a class="selected" href="#">Dashboard</a></li>
 
-                    {% if number_of_pool > 1 %}
-                        <li><a href="{% url 'home:pool_schedule' pool_number=0 %}">Pool</a></li>
-                    {% else %}
-                        <li><a href="{% url 'home:schedule' %}">Schedule</a></li>
-                        <li><a href="#">Points Table</a></li>
-                    {% endif %}
+                    {#                    {% if number_of_pool > 1 %}#}
+                    {#                        <li><a href="{% url 'home:pool_schedule' pool_number=0 %}">Pool</a></li>#}
+                    {#                    {% else %}#}
+                    {#                        <li><a href="{% url 'home:schedule' %}">Schedule</a></li>#}
+                    {#                        <li><a href="#">Points Table</a></li>#}
+                    {#                    {% endif %}#}
 
                     <li><a href="#">Result</a></li>
                     <li><a href="#">Section</a></li>
@@ -117,6 +117,12 @@
         </div>
     </div>
 
+    <div>
+        {% if tournament %}
+            {% for each in tournament %}
+                {{ each }}
+            {% endfor %}
+        {% endif %}
     </div>
 
 {% endblock %}

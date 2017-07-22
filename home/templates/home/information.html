@@ -119,12 +119,12 @@
     </div>
     <script>
         function changeValue() {
-{#            alert("hello");#}
+            {#            alert("hello");#}
             var time_per_matches = document.getElementById("id_matches_per_day");
             var value = parseInt(time_per_matches.value);
-{#            alert(value+30);#}
+            {#            alert(value+30);#}
             value = Math.floor(600.0 / (value + 30));
-{#            alert(value);#}
+            {#            alert(value);#}
             time_per_matches.value = value;
             return true;
         }

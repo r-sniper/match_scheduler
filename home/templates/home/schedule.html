@@ -322,7 +322,7 @@
                 else {
                     winnerName = document.getElementById('radioTeamB').value;
                 }
-{#                alert({{ number_of_pool }});#}
+                {#                alert({{ number_of_pool }});#}
                 $.ajax({
                     type: "POST",
                     url: '/schedule/' + {{ pool_number }} +'/',

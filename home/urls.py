@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'points_table/(?P<pool_number>[0-9]+)/$', views.points_table, name='points_table'),
     # /schedule/(pool_number)
     url(r'schedule/(?P<pool_number>[0-9]+)/$', views.schedule, name="pool_schedule"),
-    #/logout
+    # /logout
     url(r'logout/$', views.logout, name="logout")
 
 ]

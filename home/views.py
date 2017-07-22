@@ -20,9 +20,10 @@ def user_logged_in(request):
         return user_id
 
 
-# Basic home page(information about spofit)
+# Add a tournament
 def get_information(request):
     user_id = user_logged_in(request)
+    # If user exists then he can add tournament
     if user_id:
         if request.method == "POST":
             form = TournamentForm(request.POST)
@@ -237,7 +238,8 @@ def dashboard(request):
             number_of_pool = current_tournament.number_of_pool
         return render(request, 'home/dashboard.html', {
             'logged_in': True,
-            'number_of_pool': number_of_pool
+            'number_of_pool': number_of_pool,
+            'tournament': tournament
         })
     else:
         return render(request, 'home/home_page.html', {
@@ -250,7 +252,6 @@ def register(request):
         print("register")
         form = UserForm(data=request.POST)
         if form.is_valid():
-
             # reCaptcha validation
             recaptcha_response = request.POST.get('g-recaptcha-response')
             data = {
@@ -267,16 +268,9 @@ def register(request):
                 new_user_wrapper.save()
                 request.session.set_expiry(10 * 60)
                 request.session['user_id'] = new_user.id
-
                 print("Success")
-                return HttpResponseRedirect('/dashboard/')
-
                 print(User.objects.get(pk=new_user.pk).first_name)
-            else:
-                return HttpResponse("Invalid reCAPTCHA. Please try again.")
-
-
-
+                return HttpResponseRedirect('/dashboard/')
         else:
             print("Form was not valid because of" + str(form.errors))
     else:
@@ -287,8 +281,10 @@ def register(request):
     })
 
 
+# Works perfectly(Do not touch)
 def schedule(request, pool_number=1):
     pool_number = int(pool_number)
+    # For when winner is selected
     if request.is_ajax():
         print('HeLlO')
         text = request.POST.get('winner_name').split(' ')
@@ -299,6 +295,7 @@ def schedule(request, pool_number=1):
         user_wrapper = user_obj.userwrapper
         print(winner)
         print(user_id)
+        # if not needed(will review it later)
         if request.is_ajax:
             tournament = user_wrapper.tournament_set.all()
             current_tournament = tournament[0]
@@ -317,6 +314,7 @@ def schedule(request, pool_number=1):
             return HttpResponse("Yipeee done(AJAX)" + str(match_id) + str(winner))
         else:
             return HttpResponse("Not Ajax")
+    # For when a pool is selected
     elif request.method == 'POST':
 
         if request.POST.get('Pool'):
@@ -342,6 +340,7 @@ def schedule(request, pool_number=1):
         number_of_teams = tournament_obj[0].number_of_team
         pool_obj = tournament_obj[0].pool_set.all()
         current_tournament = tournament_obj[0]
+        # show schedule for that pool
         if number_of_pool == 1 or pool_number:
             current_pool = pool_obj[pool_number - 1]
 
@@ -366,6 +365,7 @@ def schedule(request, pool_number=1):
                               'pool_number': pool_number,
                               'logged_in': True
                           })
+        # Show all pools
         else:
             rows = int(math.floor(number_of_pool / 2))
             print("Number of teams(Points table):" + str(number_of_teams))
@@ -412,6 +412,7 @@ def test_send_email(request):
     return HttpResponse("Successfully send")
 
 
+# Basic home page(information about spofit)
 def home_page(request):
     # print(request.session.get_expiry_age())
     if request.method == "POST":
@@ -424,7 +425,7 @@ def home_page(request):
             request.session['user_id'] = user_obj.id
             return HttpResponseRedirect('/dashboard/')
         else:
-            print("Doesn'te")
+            print("Doesn't")
             return HttpResponse('<h1>First Sign Up for this service</h1>')
     else:
         print(request.session.get_expiry_age())
@@ -436,7 +437,7 @@ def home_page(request):
             })
         else:
             return render(request, 'home/dashboard.html', {
-                'logged_in': False
+                'logged_in': True
             })
 
 
@@ -459,7 +460,7 @@ def points_table(request, pool_number):
             'full_table': full_table,
             'pool_number': pool_number,
             'logged_in': True,
-            'number_of_pool':number_of_pool,
+            'number_of_pool': number_of_pool,
         })
     else:
         return render(request, 'home/home_page.html', {

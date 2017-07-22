@@ -6,3 +6,5 @@ change password
 Points table
 Dashboard
 Register(Add more fields)
+Show winner is selected
+Validations in forms.py
