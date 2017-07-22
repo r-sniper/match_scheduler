@@ -208,10 +208,10 @@
                 <ul class="nav nav-pills nav-stacked">
                     <li><a href="{% url 'home:dashboard' %}">Dashboard</a></li>
                     {% if number_of_pool > 1 %}
-                        <li><a href="{% url 'home:pool_schedule' 0 %}">Pool</a></li>
+                        <li><a href="{% url 'home:pool_schedule' tournament_number 0 %}">Pool</a></li>
                     {% endif %}
-                    <li class="active"><a href="{% url 'home:schedule' %}">Schedule</a></li>
-                    <li><a href="{% url 'home:points_table' pool_number %}">Points Table</a></li>
+                    <li class="active"><a href="{% url 'home:schedule' tournament_number %}">Schedule</a></li>
+                    <li><a href="{% url 'home:points_table' tournament_number pool_number %}">Points Table</a></li>
                     <li><a href="#">Result</a></li>
                     <li><a href="#">Section</a></li>
                     <li><a href="#">F.A.Q</a></li>
@@ -325,7 +325,7 @@
                 {#                alert({{ number_of_pool }});#}
                 $.ajax({
                     type: "POST",
-                    url: '/schedule/' + {{ pool_number }} +'/',
+                    url: '/schedule/' +{{ tournament_number }} + '/' +  {{ pool_number }} +'/',
                     data: {
                         'csrfmiddlewaretoken': '{{ csrf_token }}',
                         'winner_name': winnerName,
