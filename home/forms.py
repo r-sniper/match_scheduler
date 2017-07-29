@@ -68,22 +68,22 @@ class TournamentForm(forms.ModelForm):
             # 'available_days': _('Available Days')
         }
 
-    # def clean(self):
-    #     cleaned_data = super(TournamentForm, self).clean()
-    #     hrs = cleaned_data.get('available_hrs')
-    #     md = cleaned_data.get('match_duration')
-    #     bd = cleaned_data.get('break_duration')
-    #
-    #     if 0 > hrs or hrs > 24:
-    #         msg = 'Available hours should be in between 0 and 24.'
-    #         self._errors['available_hrs'] = self.error_class([msg])
-    #         del cleaned_data['available_hrs']
-    #     if md > hrs:
-    #         msg = 'Match duration should be less than available hours.'
-    #         self._errors['match_duration'] = self.error_class([msg])
-    #         del cleaned_data['match_duration']
-    #
-    #     if bd > hrs:
-    #         msg = 'Break duration should be less than available hours.'
-    #         self._errors['break_duration'] = self.error_class([msg])
-    #         del cleaned_data['break_duration']
+    def clean(self):
+        cleaned_data = super(TournamentForm, self).clean()
+        hrs = cleaned_data.get('available_hrs')
+        md = cleaned_data.get('match_duration')
+        bd = cleaned_data.get('break_duration')
+
+        if 0 > hrs or hrs > 24:
+            msg = 'Available hours should be in between 0 and 24.'
+            self._errors['available_hrs'] = self.error_class([msg])
+            del cleaned_data['available_hrs']
+        if md > hrs:
+            msg = 'Match duration should be less than available hours.'
+            self._errors['match_duration'] = self.error_class([msg])
+            del cleaned_data['match_duration']
+
+        if bd > hrs:
+            msg = 'Break duration should be less than available hours.'
+            self._errors['break_duration'] = self.error_class([msg])
+            del cleaned_data['break_duration']
