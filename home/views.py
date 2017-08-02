@@ -339,6 +339,20 @@ def schedule(request, tournament_number, pool_number=1):
                 point_obj = Point.objects.get(pool=pool_obj, team=winner)
                 point_obj.wins += 2
                 point_obj.save()
+            elif match_obj.winner == '1' and match_obj.team2 == winner:
+                point_obj = Point.objects.get(pool=pool_obj, team=match_obj.team1)
+                point_obj.wins -= 2
+                point_obj.save()
+                point_obj = Point.objects.get(pool=pool_obj, team=winner)
+                point_obj.wins += 2
+                point_obj.save()
+            elif match_obj.winner == '2' and match_obj.team1 == winner:
+                point_obj = Point.objects.get(pool=pool_obj, team=match_obj.team2)
+                point_obj.wins -= 2
+                point_obj.save()
+                point_obj = Point.objects.get(pool=pool_obj, team=winner)
+                point_obj.wins += 2
+                point_obj.save()
             if match_obj.team1 == winner:
                 match_obj.winner = '1'
             else:
