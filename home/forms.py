@@ -1,4 +1,6 @@
+import requests
 from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,19 +21,18 @@ class UserForm(forms.ModelForm):
             'last_name': _('Last Name')
         }
 
-    # def clean(self):
-    #     recaptcha_response = self.request.POST.get('g-recaptcha-response')
-    #     data = {
-    #         'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-    #         'response': recaptcha_response
-    #     }
-    #     r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-    #     result = r.json()
-    #     if result['success']:
-    #         return True
-    #     else:
-    #         raise forms.ValidationError('Invalid reCaptcha.')
-
+    def clean(self):
+        recaptcha_response = self.data.get('g-recaptcha-response')
+        data = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+        if not result['success']:
+            msg = 'Invalid reCaptcha.'
+            self._errors['available_hrs'] = self.error_class([msg])
+            raise forms.ValidationError('Invalid reCaptcha.')
 
     def clean_email(self):
         # Get the email
@@ -68,22 +69,22 @@ class TournamentForm(forms.ModelForm):
             # 'available_days': _('Available Days')
         }
 
-    # def clean(self):
-    #     cleaned_data = super(TournamentForm, self).clean()
-    #     hrs = cleaned_data.get('available_hrs')
-    #     md = cleaned_data.get('match_duration')
-    #     bd = cleaned_data.get('break_duration')
-    #
-    #     if 0 > hrs or hrs > 24:
-    #         msg = 'Available hours should be in between 0 and 24.'
-    #         self._errors['available_hrs'] = self.error_class([msg])
-    #         del cleaned_data['available_hrs']
-    #     if md > hrs:
-    #         msg = 'Match duration should be less than available hours.'
-    #         self._errors['match_duration'] = self.error_class([msg])
-    #         del cleaned_data['match_duration']
-    #
-    #     if bd > hrs:
-    #         msg = 'Break duration should be less than available hours.'
-    #         self._errors['break_duration'] = self.error_class([msg])
-    #         del cleaned_data['break_duration']
+    def clean(self):
+        cleaned_data = super(TournamentForm, self).clean()
+        hrs = cleaned_data.get('available_hrs')
+        md = cleaned_data.get('match_duration')
+        bd = cleaned_data.get('break_duration')
+
+        if 0 > hrs or hrs > 24:
+            msg = 'Available hours should be in between 0 and 24.'
+            self._errors['available_hrs'] = self.error_class([msg])
+            del cleaned_data['available_hrs']
+        if md > hrs:
+            msg = 'Match duration should be less than available hours.'
+            self._errors['match_duration'] = self.error_class([msg])
+            del cleaned_data['match_duration']
+
+        if bd > hrs:
+            msg = 'Break duration should be less than available hours.'
+            self._errors['break_duration'] = self.error_class([msg])
+            del cleaned_data['break_duration']

@@ -1,6 +1,7 @@
-from django.conf.urls import url
-
+from django.conf.urls import url, include
+from django.contrib.auth import views as auth_views
 from . import views
+from .views import register as home
 
 app_name = 'home'
 
@@ -24,6 +25,11 @@ urlpatterns = [
     # /schedule/(tournament number)/(pool_number)
     url(r'schedule/(?P<tournament_number>[0-9]+)/(?P<pool_number>[0-9]+)/$', views.schedule, name="pool_schedule"),
     # /logout
-    url(r'logout/$', views.logout, name="logout")
+    url(r'logout/$', views.logout, name="logout"),
+
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
+
 
 ]

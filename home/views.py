@@ -1,19 +1,20 @@
 import math
-
-import requests
+import urllib
+import json
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse
-
+from urllib.request import urlopen
+from match_scheduler.settings import SOCIAL_AUTH_FACEBOOK_SCOPE, SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS
 from .forms import TournamentForm, UserForm
 from .models import Match, Point, Pool, UserWrapper
 
 
 def user_logged_in(request):
-    user_id = request.session.get('user_id', 0)
+    user_id = request.session.get('user', 0)
     if not user_id:
         return 0
     else:
@@ -237,6 +238,7 @@ def get_information(request):
 
 def dashboard(request):
     user_id = user_logged_in(request)
+
     if user_id:
         user = User.objects.get(pk=user_id)
         user_wrapper = user.userwrapper
@@ -251,6 +253,31 @@ def dashboard(request):
             'tournament': tournament
         })
     else:
+        social_user = request.user.social_auth.filter(
+            provider='facebook',
+        ).first()
+        print(social_user)
+        if social_user:
+            # url = "http://graph.facebook.com/" + social_user.uid + "/picture?type=large" % response['id']
+            url = u'https://graph.facebook.com/{0}/' \
+                  u'?fields=id,name,location,picture' \
+                  u'&access_token={1}'.format(
+                social_user.uid,
+                social_user.extra_data['access_token'],
+            )
+            # response = urlopen(url)
+            # print(social_user.uid)
+            # print(social_user.extra_data['access_token'])
+            # print(response)
+            # print(social_user.extra_data)
+            response = urllib.request.Request(url)
+            user = str(urlopen(response).read(),'utf-8')
+            user_to_json = json.loads(user)
+            name = user_to_json['name']
+            email = user_to_json['name']
+            name = user_to_json['name']
+            id = user_to_json['id']
+            return HttpResponse("here")
         return render(request, 'home/home_page.html', {
             'logged_in': False
         })
@@ -261,15 +288,15 @@ def register(request):
         print("register")
         form = UserForm(data=request.POST)
         if form.is_valid():
-                new_user = form.save()
-                new_user.set_password(new_user.password)
-                new_user.save()
-                new_user_wrapper = UserWrapper(user=new_user)
-                new_user_wrapper.save()
-                request.session.set_expiry(10 * 60)
-                request.session['user_id'] = new_user.id
-                print(User.objects.get(pk=new_user.pk).first_name)
-                return HttpResponseRedirect('/dashboard/')
+            new_user = form.save()
+            new_user.set_password(new_user.password)
+            new_user.save()
+            new_user_wrapper = UserWrapper(user=new_user)
+            new_user_wrapper.save()
+            request.session.set_expiry(10 * 60)
+            request.session['user_id'] = new_user.id
+            print(User.objects.get(pk=new_user.pk).first_name)
+            return HttpResponseRedirect('/dashboard/')
         else:
             print("Form was not valid because of" + str(form.errors))
     else:
@@ -286,7 +313,7 @@ def register(request):
 # 1- To show 1st pool
 # 2- To show 2nd pool
 # n- to show nth pool
-def schedule(request,tournament_number, pool_number=1):
+def schedule(request, tournament_number, pool_number=1):
     pool_number = int(pool_number)
     tournament_number = int(tournament_number)
     # For when winner is selected
@@ -326,7 +353,7 @@ def schedule(request,tournament_number, pool_number=1):
 
         if request.POST.get('Pool'):
             pool_number = request.POST.get('Pool')
-            return HttpResponseRedirect('/schedule/' +str(tournament_number)+'/' +  str(pool_number))
+            return HttpResponseRedirect('/schedule/' + str(tournament_number) + '/' + str(pool_number))
 
         else:
             return HttpResponse("Something went wrong")
@@ -351,7 +378,7 @@ def schedule(request,tournament_number, pool_number=1):
 
         # show schedule for that pool
         if number_of_pool == 1 or pool_number:
-            if pool_number ==0:
+            if pool_number == 0:
                 print("pool number was zero")
                 print("Setting it ot one")
                 pool_number = 1
@@ -376,7 +403,7 @@ def schedule(request,tournament_number, pool_number=1):
                               'matches_per_day': matches_per_day, 'user_name': user_name, 'user_id': user_id,
                               'number_of_pool': number_of_pool,
                               'pool_number': pool_number,
-                              'tournament_number':tournament_number,
+                              'tournament_number': tournament_number,
                               'logged_in': True
                           })
         # Show all pools
@@ -399,7 +426,7 @@ def schedule(request,tournament_number, pool_number=1):
                 'all_teams': all_teams,
                 'team_per_pool': range(team_per_pool),
                 'extra': extra,
-                'tournament_number':tournament_number,
+                'tournament_number': tournament_number,
                 'logged_in': True
             })
 
@@ -456,7 +483,7 @@ def home_page(request):
             })
 
 
-def points_table(request,tournament_number, pool_number):
+def points_table(request, tournament_number, pool_number):
     pool_number = int(pool_number)
     tournament_number = int(tournament_number)
     user_id = request.session['user_id']
@@ -477,7 +504,7 @@ def points_table(request,tournament_number, pool_number):
             'pool_number': pool_number,
             'logged_in': True,
             'number_of_pool': number_of_pool,
-            'tournament_number':tournament_number
+            'tournament_number': tournament_number
         })
     else:
         return render(request, 'home/home_page.html', {
