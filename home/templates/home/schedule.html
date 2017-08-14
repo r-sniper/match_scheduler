@@ -325,7 +325,7 @@
                 {#                alert({{ number_of_pool }});#}
                 $.ajax({
                     type: "POST",
-                    url: '/schedule/' +{{ tournament_number }} + '/' +  {{ pool_number }} +'/',
+                    url: '/schedule/' + {{ tournament_number }} +'/' + {{ pool_number }} +'/',
                     data: {
                         'csrfmiddlewaretoken': '{{ csrf_token }}',
                         'winner_name': winnerName,

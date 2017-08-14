@@ -24,6 +24,8 @@ urlpatterns = [
     # /schedule/(tournament number)/(pool_number)
     url(r'schedule/(?P<tournament_number>[0-9]+)/(?P<pool_number>[0-9]+)/$', views.schedule, name="pool_schedule"),
     # /logout
-    url(r'logout/$', views.logout, name="logout")
+    url(r'logout/$', views.logout, name="logout"),
+    # /google_sign_in
+    url(r'^google_sign_in/$', views.google_sign_in, name='google_sign_in')
 
 ]

@@ -66,12 +66,27 @@
         }
 
     </style>
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+
+        function onLoad() {
+            gapi.load('auth2', function () {
+                gapi.auth2.init();
+            });
+        }
+    </script>
 {% endblock %}
 {% block navbar_right %}
     <form action="{% url 'home:logout' %}" method="post">
         {% csrf_token %}
         <div style="margin-top: 7px;margin-right: 5px;float: right">
-            <button type="submit" name="logout" value="logout">Logout</button>
+            <button type="submit" name="logout" value="logout" onclick="signOut()">Logout</button>
         </div>
     </form>
 
@@ -107,7 +122,7 @@
                 <!--Toggle for sidebar nav-->
                 {% if tournament %}
                     {% for each in tournament %}
-                        <a href="{% url 'home:pool_schedule' forloop.counter0 0%}">Tournament {{ forloop.counter }}</a>
+                        <a href="{% url 'home:pool_schedule' forloop.counter0 0 %}">Tournament {{ forloop.counter }}</a>
                     {% endfor %}
                 {% endif %}
                 <p class="visible-xs">

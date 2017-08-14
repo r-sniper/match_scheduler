@@ -46,3 +46,9 @@ class Match(models.Model):
 
     def __str__(self):
         return str(self.pk) + self.team1 + "V/S" + self.team2 + "->" + self.winner
+
+
+class GoogleUser(models.Model):
+    user_wrapper = models.ForeignKey(UserWrapper)
+    google_id = models.CharField(max_length=100)
+    image_url = models.CharField(max_length=200)

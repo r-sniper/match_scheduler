@@ -22,10 +22,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_ya1q#cy0*b7w+efh9%o3$=#$6yb!m%61@fjf6lszb)lf_z09y'
 GOOGLE_RECAPTCHA_SECRET_KEY = '6LfZjCkUAAAAAKWzeuc1dcnJEdE9I5nXMXzgs7RX'
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1022111364140-frkat5sgrnmo10k6uv3867p7t5k53asm.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'G7vXan0PgA0glooTLOjnrc0V'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1369639759757936'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '56224fdfe22ae5009ec70af0849748de'  # akzarma fb key
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email','user_friends']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'siddheshkand.pythonanywhere.com', '192.168.1.6']
+ALLOWED_HOSTS = ['127.0.0.1', 'siddheshkand.pythonanywhere.com', '192.168.1.6', 'localhost']
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'siddheshkand123@gmail.com'
@@ -54,22 +60,25 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'social_django.middleware.SocialAuthExceptionMiddleware',
+
 ]
 
 ROOT_URLCONF = 'match_scheduler.urls'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-   'django.contrib.auth.context_processors.auth',
-   'django.core.context_processors.debug',
-   'django.core.context_processors.i18n',
-   'django.core.context_processors.media',
-   'django.core.context_processors.static',
-   'django.core.context_processors.tz',
-   'django.contrib.messages.context_processors.messages',
-   'social_django.context_processors.backends',
-   'social_django.context_processors.login_redirect',
-)
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#     'django.contrib.auth.context_processors.auth',
+#     'django.core.context_processors.debug',
+#     'django.core.context_processors.i18n',
+#     'django.core.context_processors.media',
+#     'django.core.context_processors.static',
+#     'django.core.context_processors.tz',
+#     'django.contrib.messages.context_processors.messages',
+#     'social_django.context_processors.backends',
+#     'social_django.context_processors.login_redirect',
+#     'social_auth'
+# )
 
 TEMPLATES = [
     {
@@ -83,6 +92,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
             ],
         },
@@ -90,8 +101,9 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-   'social_core.backends.google.GoogleOAuth2',
-   'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 WSGI_APPLICATION = 'match_scheduler.wsgi.application'
@@ -145,8 +157,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = '/dashboard/'
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '561843150629-s0uvjn6ht1q37kira75vvlv3a1g67enf.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'UQvdJqRdVXESvU8PPgNvjR65'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home:dashboard'
