@@ -27,7 +27,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'G7vXan0PgA0glooTLOjnrc0V'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1369639759757936'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '56224fdfe22ae5009ec70af0849748de'  # akzarma fb key
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email','user_friends']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email',
 }
@@ -69,19 +69,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'match_scheduler.urls'
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-    'social_django.context_processors.backends',
-    'social_django.context_processors.login_redirect',
-    'social_auth'
-)
 
 TEMPLATES = [
     {

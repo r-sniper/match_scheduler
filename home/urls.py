@@ -31,5 +31,6 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
 
+    url(r'dashboard/$', views.view_all_tournaments, name='view_all_tournaments'),
 
 ]

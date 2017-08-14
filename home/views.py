@@ -53,7 +53,7 @@ def get_information(request):
                 list2 = []
                 user_name = user_obj.username
 
-                number_of_teams = tournament.number_of_team
+                # number_of_teams = tournament.number_of_team
                 number_of_days = tournament.available_days
                 matches_per_day = tournament.matches_per_day
                 number_of_pool = tournament.number_of_pool
@@ -269,7 +269,7 @@ def dashboard(request):
             # print(social_user.uid)
             # print(social_user.extra_data['access_token'])
             # print(response)
-            # print(social_user.extra_data)
+            print(social_user.extra_data)
             response = urllib.request.Request(url)
             user = str(urlopen(response).read(),'utf-8')
             user_to_json = json.loads(user)
@@ -576,3 +576,6 @@ def round_robin(all_teams):
     list3 = list(zip(list1, list2))
     # print(list3)
     return list3
+
+
+def view_all_tournaments(request):
