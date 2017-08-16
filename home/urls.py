@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'dashboard/$', views.dashboard, name='dashboard'),
     # /-Sends to home page
     url(r'^$', views.home_page, name="home_page"),
+
     # /schedule - Get Information from user
     url(r'schedule/(?P<tournament_number>[0-9]+)/$', views.schedule, name="schedule"),
     # /test_send_email
@@ -32,5 +33,6 @@ urlpatterns = [
 
     url(r'register/tournament/$', views.register_tournament, name='register_tournament'),
 
+    # url(r'register/tournament/success$', views.registered_tournament, name='registered_tournament')
 
 ]

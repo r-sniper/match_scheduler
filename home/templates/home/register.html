@@ -67,6 +67,19 @@
 
     </style>
     <script src='https://www.google.com/recaptcha/api.js'></script>
+
+{% endblock %}
+{% block navbar_right %}
+    <form action="{% url 'home:home_page' %}" method="post">
+
+        {% csrf_token %}
+        <div style="margin-top: 7px;margin-right: 5px;float: right">
+            <input type="text" placeholder=" Username" name="uname" required>
+            <input type="password" placeholder=" Password" name="pass" required>
+            <button type="submit" name="login" value="login">Login</button>
+        </div>
+    </form>
+
 {% endblock %}
 {% block body %}
 

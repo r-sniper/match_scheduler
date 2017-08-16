@@ -5,6 +5,7 @@
     {% load staticfiles %}
     <form action="{% url 'home:register_tournament' %}" method="POST">
         {% csrf_token %}
+
         <div class="container-fluid main-form">
 
             {% if all_tournaments %}
@@ -22,6 +23,7 @@
                         <th>Venue</th>
                         <th>Type</th>
                         <th>Register</th>
+                    <input name="ref" value="view_tournament" hidden>
                         {% for tournament in all_tournaments %}
                             <tr data-toggle="modal" data-target="#mymodal" class="tournament"
                                 style="cursor:pointer">
@@ -37,7 +39,7 @@
                                     <td>Pool Match</td>
                                 {% endif %}
                                 <td>
-                                    <input value="{{ tournament.id }}" type="submit" name="tournament_id">Register</input>
+                                    <BUTTON value="{{ tournament.id }}" type="submit" name="tournament_id">Register</BUTTON>
                                 </td>
                             </tr>
 
