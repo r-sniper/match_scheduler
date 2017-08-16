@@ -13,7 +13,7 @@ class UserWrapper(models.Model):
 
 class Tournament(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE)
-    matches_per_day = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
+    matches_per_day = models.PosihelptiveIntegerField(validators=[MaxValueValidator(100)])
     number_of_team = models.IntegerField(validators=[MaxValueValidator(50)],default=0)
     number_of_pool = models.IntegerField(default=1)
     type = models.IntegerField()
