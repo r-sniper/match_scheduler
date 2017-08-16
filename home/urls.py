@@ -26,6 +26,11 @@ urlpatterns = [
     # /logout
     url(r'logout/$', views.logout, name="logout"),
     # /google_sign_in
-    url(r'^google_sign_in/$', views.google_sign_in, name='google_sign_in')
+    url(r'^google_sign_in/$', views.google_sign_in, name='google_sign_in'),
+
+    url(r'view/$', views.view_all_tournament, name='view_all_tournament'),
+
+    url(r'register/tournament/$', views.register_tournament, name='register_tournament'),
+
 
 ]

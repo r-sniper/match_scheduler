@@ -55,3 +55,9 @@ class GoogleUser(models.Model):
     user_wrapper = models.ForeignKey(UserWrapper)
     google_id = models.CharField(max_length=100)
     image_url = models.CharField(max_length=200)
+
+
+class Team(models.Model):
+    login = models.OneToOneField(UserWrapper, on_delete=models.CASCADE)
+    tournament = models.OneToOneField(Tournament, on_delete=models.CASCADE)
+    team_name = models.CharField(max_length=100)

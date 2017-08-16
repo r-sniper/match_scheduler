@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Tournament
+from .models import Tournament, Team
 
 
 class UserForm(forms.ModelForm):
@@ -97,3 +97,10 @@ class TournamentForm(forms.ModelForm):
             msg = 'Break duration should be less than available hours.'
             self._errors['break_duration'] = self.error_class([msg])
             del cleaned_data['break_duration']
+
+
+class TeamForm(forms.ModelForm):
+
+    class Meta:
+        model = Team
+        fields = '__all__'

@@ -1,0 +1,84 @@
+{% extends 'home/bootstrap.html' %}
+
+{% block details_active %}active{% endblock %}
+{% block body %}
+    {% load staticfiles %}
+    <form action="{% url 'home:register_tournament' %}" method="POST">
+        {% csrf_token %}
+        <div class="container-fluid main-form">
+
+            {% if all_tournaments %}
+                <div class="panel panel-default">
+
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">List of Tournaments</div>
+
+                    <!-- Table -->
+                    <table class="table">
+                        <th>Tournaments</th>
+                        <th>Tournament Date</th>
+                        <th>Registration Closing Date</th>
+                        <th>Sports</th>
+                        <th>Venue</th>
+                        <th>Type</th>
+                        <th>Register</th>
+                        {% for tournament in all_tournaments %}
+                            <tr data-toggle="modal" data-target="#mymodal" class="tournament"
+                                style="cursor:pointer">
+                                <td>Tournament {{ forloop.counter }}</td>
+                                <td>{{ tournament.starting_date }}</td>
+                                <td>{{ tournament.registration_ending }}</td>
+                                <td>{{ tournament.sport }}</td>
+                                <td>{{ tournament.venue }}</td>
+
+                                {% if tournament.type == 0 %}
+                                    <td>League Match</td>
+                                {% elif tournament.type == 1 %}
+                                    <td>Pool Match</td>
+                                {% endif %}
+                                <td>
+                                    <input value="{{ tournament.id }}" type="submit" name="tournament_id">Register</input>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    </table>
+                </div>
+                <!-- Modal -->
+
+                <div id="mymodal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Tournament </h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>{{ tournament.id }}</p>
+                                <p>Matches per day: {{ tournament.matches_per_day }}</p>
+                                <p>Number of Teams: {{ tournament.number_of_team }}</p>
+                                <p>Number of Pool : {{ tournament.number_of_pool }}</p>
+                                <p>Type : {{ tournament.type }}</p>
+                                <p>Available days : {{ tournament.available_days }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+
+            {% endif %}
+
+
+        </div>
+    </form>
+
+{% endblock body %}
