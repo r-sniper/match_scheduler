@@ -2,6 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block head %}
+
     <style>
         body, html, .row-offcanvas {
             height: 100%;
@@ -66,6 +67,23 @@
         }
 
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-50:+0"
+                // You can put more options here.
+
+            });
+        });
+    </script>
+
 {% endblock %}
 {% block body %}
 
@@ -77,10 +95,10 @@
         <div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
                 <ul class="nav nav-pills nav-stacked">
-                    <li><a href="{% url 'home:dashboard' %}">Dashboard</a></li>
-                    <li><a href="#">Result</a></li>
-                    <li><a href="#">Section</a></li>
-                    <li><a href="#">F.A.Q</a></li>
+                    <li><a href="{% url 'home:dashboard' %}"> Dashboard </a></li>
+                    <li><a href="#"> Result </a></li>
+                    <li><a href="#"> Section </a></li>
+                    <li><a href="#"> F.A.Q </a></li>
 
                 </ul>
             </div>
@@ -91,7 +109,7 @@
                 <!--Toggle for sidebar nav-->
                 <p class="visible-xs">
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        <i class="glyphicon glyphicon-chevron-left"> </i>
                     </button>
                 </p>
 
@@ -109,7 +127,7 @@
                         </div>
                     {% endfor %}
 
-                    <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
+                    <button type="submit" class="btn btn-primary" name="submit" value="submit"> Schedule</button>
                 </form>
             </div>
 
