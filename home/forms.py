@@ -55,11 +55,20 @@ class TournamentForm(forms.ModelForm):
     available_hrs = forms.IntegerField(label='Available Hours')
     match_duration = forms.IntegerField()
     break_duration = forms.IntegerField()
+    sport = forms.ChoiceField(choices=[('Cricket', 'Cricket'),
+                                       ('Football', 'Football'),
+                                       ('BasketBall', 'BasketBall'),
+                                       ('Tennis', 'Tennis'),
+                                       ('Lawn Tennis', 'Lawn Tennis')])
+    widgets = {
+        'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
+        'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})
+    }
 
     class Meta:
         model = Tournament
-        fields = ['available_hrs', 'match_duration', 'break_duration', 'number_of_team', 'number_of_pool',
-                  'available_days']
+        fields = ['available_hrs', 'match_duration', 'break_duration', 'number_of_pool',
+                  'available_days', 'sport', 'starting_date', 'registration_ending']
         labels = {
             # 'available_hrs': _('Available hours in a day'),
             'match_duration': _('Match Duration'),

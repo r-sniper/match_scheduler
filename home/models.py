@@ -14,10 +14,13 @@ class UserWrapper(models.Model):
 class Tournament(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE)
     matches_per_day = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
-    number_of_team = models.IntegerField(validators=[MaxValueValidator(50)])
+    number_of_team = models.IntegerField(validators=[MaxValueValidator(50)],default=0)
     number_of_pool = models.IntegerField(default=1)
     type = models.IntegerField()
     available_days = models.IntegerField()
+    registration_ending = models.DateField()
+    starting_date = models.DateField()
+    sport = models.CharField(max_length=30)
 
     def __str__(self):
         return str(self.id) + ' ' + str(self.type)
