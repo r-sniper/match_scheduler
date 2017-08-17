@@ -5,6 +5,7 @@
     {% load staticfiles %}
     <form action="{% url 'home:register_tournament' %}" method="POST">
         {% csrf_token %}
+    <input name="ref" value="/register/tournament/" hidden>
 
         <div class="container-fluid main-form">
 

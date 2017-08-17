@@ -71,7 +71,8 @@
 {% endblock %}
 {% block navbar_right %}
     <form action="{% url 'home:home_page' %}" method="post">
-
+        <input value="{{ ref }}" name="ref" hidden>
+        <input value="{{ tournament_id }}" name="tournament_id" hidden>
         {% csrf_token %}
         <div style="margin-top: 7px;margin-right: 5px;float: right">
             <input type="text" placeholder=" Username" name="uname" required>

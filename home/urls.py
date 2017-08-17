@@ -33,6 +33,6 @@ urlpatterns = [
 
     url(r'register/tournament/$', views.register_tournament, name='register_tournament'),
 
-    # url(r'register/tournament/success$', views.registered_tournament, name='registered_tournament')
+ # url(r'register/tournament/success$', views.registered_tournament, name='registered_tournament')
 
 ]

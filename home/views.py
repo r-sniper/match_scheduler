@@ -122,7 +122,7 @@ def dashboard(request):
             print(social_user.extra_data)
             response = urllib.request.Request(url)
             print(response)
-            user = str(urlopen(response).read(), 'utf-8')
+            user = str(urllib.urlopen(response).read(), 'utf-8')
             print(user)
             user_to_json = json.loads(user)
             name = user_to_json['name']
@@ -322,10 +322,12 @@ def test_send_email(request):
 
 
 # Basic home page(information about spofit)
-def home_page(request, ref='/dashboard/'):
+def home_page(request):
+    ref = '/dashboard/'
     print(request.method)
     # print(request.session.get_expiry_age())
-    if request.method == "POST" and ref == '/dashboard/':
+    if request.method == "POST":
+
         user_name = request.POST.get('uname')
         password = request.POST.get('pass')
         user = authenticate(username=user_name, password=password)
@@ -333,13 +335,15 @@ def home_page(request, ref='/dashboard/'):
             user_obj = User.objects.get(username=user)
             request.session.set_expiry(10 * 60)
             request.session['user_id'] = user_obj.id
-            return HttpResponseRedirect(ref)
+            if not request.POST.get('ref') == '':
+                ref = request.POST.get('ref')
+                return register_tournament(request, request.POST.get('tournament_id'))
+            else:
+                return HttpResponseRedirect(ref)
 
         else:
             print("Doesn't")
             return HttpResponse('<h1>First Sign Up for this service</h1>')
-    elif ref == '/register/tournament/':
-        return HttpResponseRedirect(ref)
 
     else:
         print(request.session.get_expiry_age())
@@ -624,13 +628,17 @@ def view_all_tournament(request):
     })
 
 
-def register_tournament(request):
+def register_tournament(request, tournament_id=-1):
     user = user_logged_in(request)
     print("Method123:"+request.method)
 
+
+
     # return HttpResponse("Here")
     if user:
-        tournament_id = request.POST.get('tournament_id')
+        if not request.POST.get('tournament_id') == '':
+            tournament_id = request.POST.get('tournament_id')
+
         tournament = get_object_or_404(Tournament, pk=tournament_id)
         user_obj = User.objects.get(pk=user)
         user_wrapper = user_obj.userwrapper
@@ -643,6 +651,4 @@ def register_tournament(request):
         return render(request, 'home/register_tournament.html', {'team_form': team_form})
     else:
         print('not logged in: register_tournament:else user')
-        return home_page(request, '/register/tournament/')
-
-
+        return render(request, 'home/register.html', {'ref': '/register/tournament/', 'tournament_id': request.POST.get('tournament_id')})
