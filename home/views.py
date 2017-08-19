@@ -8,7 +8,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
 
 from .forms import TournamentForm, UserForm, TeamForm
 from .models import Tournament, Point, Pool, UserWrapper, GoogleUser, Team
@@ -134,10 +135,11 @@ def dashboard(request):
         })
 
 
-def register(request):
+def register(request, ref='/dashboard/', context={'ref': '/dashboard/'}):
+    print('register function', request.method, ref, context)
     if user_logged_in(request):
-        return HttpResponseRedirect('/dashboard/')
-    if request.method == "POST":
+        return HttpResponseRedirect(ref)
+    if request.method == "POST" and context == {'ref': '/dashboard/'}:
         print("register")
         form = UserForm(data=request.POST)
         if form.is_valid():
@@ -149,15 +151,14 @@ def register(request):
             request.session.set_expiry(10 * 60)
             request.session['user_id'] = new_user.id
             print(User.objects.get(pk=new_user.pk).first_name)
-            return HttpResponseRedirect('/dashboard/')
+            return redirect('home:register_tournament')
         else:
             print("Form was not valid because of" + str(form.errors))
     else:
         form = UserForm()
-    return render(request, 'home/register.html', {
-        'form': form,
-        'logged_in': False
-    })
+        context['form'] = form
+        print(context)
+    return render(request, 'home/register.html', context)
 
 
 # Works perfectly(Do not touch)
@@ -630,9 +631,7 @@ def view_all_tournament(request):
 
 def register_tournament(request, tournament_id=-1):
     user = user_logged_in(request)
-    print("Method123:"+request.method)
-
-
+    print("Method123:" + request.method)
 
     # return HttpResponse("Here")
     if user:
@@ -651,4 +650,7 @@ def register_tournament(request, tournament_id=-1):
         return render(request, 'home/register_tournament.html', {'team_form': team_form})
     else:
         print('not logged in: register_tournament:else user')
-        return render(request, 'home/register.html', {'ref': '/register/tournament/', 'tournament_id': request.POST.get('tournament_id')})
+        tournament_id = request.POST.get('tournament_id')
+        # return render(request, 'home/register.html', {'ref': '/register/tournament/', 'tournament_id': request.POST.get('tournament_id')})
+        return register(request, 'home:register_tournament ' + str(tournament_id),
+                        {'ref': 'home:register_tournament ' + str(tournament_id), 'tournament_id': tournament_id})

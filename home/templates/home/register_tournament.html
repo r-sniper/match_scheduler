@@ -1,6 +1,6 @@
 {% extends 'home/bootstrap.html' %}
 {% block body %}
-    <form action="{% url 'home:register_tournament' %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'home:register_tournament' 0%}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="container-fluid">
 
@@ -13,11 +13,11 @@
                         </div>
                         <div class="row form-element">
                             <label class="control-label col-md-4">{{ team_form.tournament.label_tag }}</label>
-                            <div class="col-md-8">{{ team_form.tournament.value }}</div>
+                            <div class="col-md-8">{{ team_form.tournament }}</div>
                         </div>
                         <div class="row form-element">
                             <label class="control-label col-md-4">{{ team_form.login.label_tag }}</label>
-                            <div class="col-md-8">{{ team_form.login.value }}</div>
+                            <div class="col-md-8">{{ team_form.login }}</div>
                         </div>
 
                         <input type="submit" name="register_team" value="Register Team">
