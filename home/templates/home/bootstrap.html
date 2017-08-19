@@ -97,7 +97,7 @@
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
             <li><a class="selected" href="{% url 'home:home_page' %}">Home</a></li>
-            <li><a href="#">Contact Info</a></li>
+            <li><a href="{% url 'home:register_tournament' 1%}">Contact Info</a></li>
             {#            {% block navbar_left %}#}
             {% if logged_in %}
 
