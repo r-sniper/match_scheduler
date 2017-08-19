@@ -646,19 +646,15 @@ def register_tournament(request, tournament_id=-1):
         team = Team(login=user_wrapper, tournament=tournament)
 
         if request.POST.get('register_team', 0):
-            # team.team_name = "hjkl"
-            # team.save()
             team_form = TeamForm(request.POST)
-            # print(team_form.data['team_name'])
-            # print(team_form.data['login'])
-            # print(team_form.data,['tournament'])
             if team_form.is_valid():
-                a = team_form.save(commit=False)
-                a.login = user_wrapper
-                a.tournament = tournament
-                a.save()
-
-                print(a)
+                team_obj = team_form.save(commit=False)
+                team_obj.login = user_wrapper
+                team_obj.tournament = tournament
+                team_obj.save()
+                tournament.number_of_team += 1
+                tournament.save()
+                print(team_obj)
                 return HttpResponse('Saved')
             else:
                 print(team_form.errors)
