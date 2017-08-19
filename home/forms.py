@@ -100,6 +100,8 @@ class TournamentForm(forms.ModelForm):
 
 
 class TeamForm(forms.ModelForm):
+    # tournament = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    # login = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
 
     class Meta:
         model = Team

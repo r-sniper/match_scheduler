@@ -35,6 +35,5 @@ urlpatterns = [
 
     url(r'^register/(?P<ref>.+)$', views.register, name="register"),
 
-    url(r'tournament/register/(?P<tournament_id>[0-9]+)/success', views.registered_tournament, name='registered_tournament')
 
 ]

@@ -635,26 +635,43 @@ def register_tournament(request, tournament_id=-1):
 
     # return HttpResponse("Here")
     if user:
-        if not request.POST.get('tournament_id') == '':
+        print(request)
+        if request.POST.get('tournament_id', 0):
             tournament_id = request.POST.get('tournament_id')
-
+        print(tournament_id)
         tournament = get_object_or_404(Tournament, pk=tournament_id)
         user_obj = User.objects.get(pk=user)
         user_wrapper = user_obj.userwrapper
         team = Team(login=user_wrapper, tournament=tournament)
-        # team.login = user_wrapper
-        # team.tournament = tournament
+
+        if request.POST.get('register_team', 0):
+            # team.team_name = "hjkl"
+            # team.save()
+            team_form = TeamForm(request.POST)
+            # print(team_form.data['team_name'])
+            # print(team_form.data['login'])
+            # print(team_form.data,['tournament'])
+            if team_form.is_valid():
+                a = team_form.save(commit=False)
+                a.login = user_wrapper
+                a.tournament = tournament
+                a.save()
+
+                print(a)
+                return HttpResponse('Saved')
+            else:
+                print(team_form.errors)
+                print(team_form.non_field_errors())
+                print("here")
+                return HttpResponse('Not Valid', team_form.errors)
 
         team_form = TeamForm(instance=team)
         print(user)
-        return render(request, 'home/register_tournament.html', {'team_form': team_form})
+        return render(request, 'home/register_tournament.html',
+                      {'team_form': team_form, 'tournament_id': tournament_id})
     else:
         print('not logged in: register_tournament:else user')
         tournament_id = request.POST.get('tournament_id')
         # return render(request, 'home/register.html', {'ref': '/register/tournament/', 'tournament_id': request.POST.get('tournament_id')})
         return register(request, 'home:register_tournament ' + str(tournament_id),
                         {'ref': 'home:register_tournament ' + str(tournament_id), 'tournament_id': tournament_id})
-
-
-def registered_tournament(request):
-    return None

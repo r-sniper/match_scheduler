@@ -15,7 +15,7 @@
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id"
-          content="1022111364140-frkat5sgrnmo10k6uv3867p7t5k53asm.apps.googleusercontent.com">
+          content="1022111364140-frkat5sgrnmo10k6uv3867p7t5k53asm.apps.googleusercontent.com ">
 
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -92,11 +92,11 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">SpoFit</a>
+        <a class="navbar-brand" href="{% url 'home:home_page' %}">SpoFit</a>
     </div>
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a class="selected" href="#">Home</a></li>
+            <li><a class="selected" href="{% url 'home:home_page' %}">Home</a></li>
             <li><a href="#">Contact Info</a></li>
             {#            {% block navbar_left %}#}
             {% if logged_in %}
