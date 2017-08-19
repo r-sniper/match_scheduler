@@ -135,11 +135,11 @@ def dashboard(request):
         })
 
 
-def register(request, ref='/dashboard/', context={'ref': '/dashboard/'}):
-    print('register function', request.method, ref, context)
+def register(request, ref='/dashboard/', context={}):
+    print('register function', request.method,'ref=', ref,'context=', context)
     if user_logged_in(request):
         return HttpResponseRedirect(ref)
-    if request.method == "POST" and context == {'ref': '/dashboard/'}:
+    if request.method == "POST" and context.get('form',0):
         print("register")
         form = UserForm(data=request.POST)
         if form.is_valid():
@@ -150,13 +150,15 @@ def register(request, ref='/dashboard/', context={'ref': '/dashboard/'}):
             new_user_wrapper.save()
             request.session.set_expiry(10 * 60)
             request.session['user_id'] = new_user.id
+            print('reference = ',ref)
             print(User.objects.get(pk=new_user.pk).first_name)
-            return redirect('home:register_tournament')
+            return redirect(ref)
         else:
             print("Form was not valid because of" + str(form.errors))
     else:
         form = UserForm()
         context['form'] = form
+        context['ref'] = ref
         print(context)
     return render(request, 'home/register.html', context)
 
@@ -343,8 +345,7 @@ def home_page(request):
                 return HttpResponseRedirect(ref)
 
         else:
-            print("Doesn't")
-            return HttpResponse('<h1>First Sign Up for this service</h1>')
+            return render(request, 'home/home_page.html')
 
     else:
         print(request.session.get_expiry_age())
@@ -652,5 +653,5 @@ def register_tournament(request, tournament_id=-1):
         print('not logged in: register_tournament:else user')
         tournament_id = request.POST.get('tournament_id')
         # return render(request, 'home/register.html', {'ref': '/register/tournament/', 'tournament_id': request.POST.get('tournament_id')})
-        return register(request, 'home:register_tournament ' + str(tournament_id),
-                        {'ref': 'home:register_tournament ' + str(tournament_id), 'tournament_id': tournament_id})
+        return register(request, '/tournament/register/' + str(tournament_id),
+                        {'ref': '/tournament/register/' + str(tournament_id), 'tournament_id': tournament_id})
