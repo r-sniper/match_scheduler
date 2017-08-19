@@ -338,7 +338,7 @@ def home_page(request):
             user_obj = User.objects.get(username=user)
             request.session.set_expiry(10 * 60)
             request.session['user_id'] = user_obj.id
-            if not request.POST.get('ref') == '':
+            if request.POST.get('ref',0):
                 ref = request.POST.get('ref')
                 return register_tournament(request, request.POST.get('tournament_id'))
             else:
