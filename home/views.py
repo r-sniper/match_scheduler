@@ -654,3 +654,7 @@ def register_tournament(request, tournament_id=-1):
         # return render(request, 'home/register.html', {'ref': '/register/tournament/', 'tournament_id': request.POST.get('tournament_id')})
         return register(request, 'home:register_tournament ' + str(tournament_id),
                         {'ref': 'home:register_tournament ' + str(tournament_id), 'tournament_id': tournament_id})
+
+
+def registered_tournament(request):
+    return None
