@@ -38,7 +38,7 @@ def get_information(request):
                 tournament.login = user_wrapper
                 print(user_wrapper.user.username)
                 type_of_match = form.cleaned_data.get('match_type')
-                avalaible_hrs = form.cleaned_data.get("available_hrs")
+                avalaible_hrs = form.cleaned_data.get("hr")+ (form.cleaned_data.get("min"))/60
                 match_duration = form.cleaned_data.get("match_duration")
                 break_duration = form.cleaned_data.get("break_duration")
 
@@ -630,8 +630,7 @@ def view_all_tournament(request):
     })
 
 
-
-def register_tournament(request, tournament_id=-1):
+def register_team(request, tournament_id=-1):
     user = user_logged_in(request)
     print("Method123:" + request.method)
 
@@ -655,7 +654,6 @@ def register_tournament(request, tournament_id=-1):
                 team_obj.save()
                 tournament.number_of_team += 1
                 tournament.save()
-
                 print(team_obj)
                 return HttpResponse('Saved')
             else:
@@ -666,7 +664,7 @@ def register_tournament(request, tournament_id=-1):
 
         team_form = TeamForm(instance=team)
         print(user)
-        return render(request, 'home/register_tournament.html',
+        return render(request, 'home/register_team.html',
                       {'team_form': team_form, 'tournament_id': tournament_id})
     else:
         print('not logged in: register_tournament:else user')

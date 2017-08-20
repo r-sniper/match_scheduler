@@ -52,7 +52,9 @@ class UserForm(forms.ModelForm):
 class TournamentForm(forms.ModelForm):
     match_type = forms.ChoiceField(
         choices=[('League Match', 'League Match'), (('Pool Match', 'Pool Match'))])  # , 'Knockout Match'])
-    available_hrs = forms.IntegerField(label='Available Hours')
+    # available_hrs = forms.IntegerField(label='Available Hours')
+    hr = forms.IntegerField(label='Available Hours')
+    min = forms.IntegerField(label='Available Minutes')
     match_duration = forms.IntegerField()
     break_duration = forms.IntegerField()
     sport = forms.ChoiceField(choices=[('Cricket', 'Cricket'),
@@ -67,7 +69,7 @@ class TournamentForm(forms.ModelForm):
 
     class Meta:
         model = Tournament
-        fields = ['available_hrs', 'match_duration', 'break_duration', 'number_of_pool',
+        fields = ['hr','min', 'match_duration', 'break_duration', 'number_of_pool',
                   'available_days', 'sport', 'starting_date', 'registration_ending']
         labels = {
             # 'available_hrs': _('Available hours in a day'),
@@ -80,9 +82,12 @@ class TournamentForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(TournamentForm, self).clean()
-        hrs = cleaned_data.get('available_hrs')
+        hr = cleaned_data.get('hr')
+        min = cleaned_data.get('min')
         md = cleaned_data.get('match_duration')
         bd = cleaned_data.get('break_duration')
+
+        hrs = hr + min/60
 
         if 0 > hrs or hrs > 24:
             msg = 'Available hours should be in between 0 and 24.'
