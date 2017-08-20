@@ -38,9 +38,9 @@ def get_information(request):
                 tournament.login = user_wrapper
                 print(user_wrapper.user.username)
                 type_of_match = form.cleaned_data.get('match_type')
-                avalaible_hrs = form.cleaned_data.get("hr")+ (form.cleaned_data.get("min"))/60
-                match_duration = form.cleaned_data.get("match_duration")
-                break_duration = form.cleaned_data.get("break_duration")
+                avalaible_hrs = form.cleaned_data.get("av_hr")+ (form.cleaned_data.get("av_min"))/60
+                match_duration = form.cleaned_data.get("match_hr") + (form.cleaned_data.get('match_min'))/60
+                break_duration = form.cleaned_data.get("break_hr") + (form.cleaned_data.get('break_min'))/60
 
                 tournament.matches_per_day = (int)(avalaible_hrs / (match_duration + break_duration))
                 print("mathes per day" + str(tournament.matches_per_day))
