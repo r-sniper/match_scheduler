@@ -630,6 +630,7 @@ def view_all_tournament(request):
     })
 
 
+
 def register_tournament(request, tournament_id=-1):
     user = user_logged_in(request)
     print("Method123:" + request.method)
@@ -654,6 +655,7 @@ def register_tournament(request, tournament_id=-1):
                 team_obj.save()
                 tournament.number_of_team += 1
                 tournament.save()
+
                 print(team_obj)
                 return HttpResponse('Saved')
             else:
