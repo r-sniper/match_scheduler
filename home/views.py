@@ -39,9 +39,9 @@ def get_information(request):
                 tournament.login = user_wrapper
                 print(user_wrapper.user.username)
                 type_of_match = form.cleaned_data.get('match_type')
-                avalaible_hrs = form.cleaned_data.get("av_hr")+ (form.cleaned_data.get("av_min"))/60
-                match_duration = form.cleaned_data.get("match_hr") + (form.cleaned_data.get('match_min'))/60
-                break_duration = form.cleaned_data.get("break_hr") + (form.cleaned_data.get('break_min'))/60
+                avalaible_hrs = form.cleaned_data.get("av_hr") + (form.cleaned_data.get("av_min")) / 60
+                match_duration = form.cleaned_data.get("match_hr") + (form.cleaned_data.get('match_min')) / 60
+                break_duration = form.cleaned_data.get("break_hr") + (form.cleaned_data.get('break_min')) / 60
 
                 tournament.matches_per_day = (int)(avalaible_hrs / (match_duration + break_duration))
                 print("mathes per day" + str(tournament.matches_per_day))
@@ -136,11 +136,11 @@ def dashboard(request):
         })
 
 
-def register(request, ref='/dashboard/', context={}):
-    print('register function', request.method,'ref=', ref,'context=', context)
+def register(request, context={'goto':'/dashboard/'}):
+    print('register function', request.method, 'context=', context, context.get('goto'),'request = ', request)
     if user_logged_in(request):
-        return HttpResponseRedirect(ref)
-    if request.method == "POST" and context.get('form',0):
+        return HttpResponseRedirect(context.get('goto'))
+    if request.method == "POST" and request.POST.get('submit',0):
         print("register")
         form = UserForm(data=request.POST)
         if form.is_valid():
@@ -151,15 +151,17 @@ def register(request, ref='/dashboard/', context={}):
             new_user_wrapper.save()
             request.session.set_expiry(10 * 60)
             request.session['user_id'] = new_user.id
-            print('reference = ',ref)
+            # print('reference = ', ref)
             print(User.objects.get(pk=new_user.pk).first_name)
-            return redirect(ref)
+            if request.POST.get('goto', 0):
+                goto = request.POST.get('goto')
+            return HttpResponseRedirect(goto)
         else:
             print("Form was not valid because of" + str(form.errors))
     else:
         form = UserForm()
         context['form'] = form
-        context['ref'] = ref
+        # context['ref'] = ref
         print(context)
     return render(request, 'home/register.html', context)
 
@@ -327,7 +329,7 @@ def test_send_email(request):
 
 # Basic home page(information about spofit)
 def home_page(request):
-    ref = '/dashboard/'
+    goto = '/dashboard/'
     print(request.method)
     # print(request.session.get_expiry_age())
     if request.method == "POST":
@@ -339,14 +341,12 @@ def home_page(request):
             user_obj = User.objects.get(username=user)
             request.session.set_expiry(10 * 60)
             request.session['user_id'] = user_obj.id
-            if request.POST.get('ref',0):
-                ref = request.POST.get('ref')
-                return register_tournament(request, request.POST.get('tournament_id'))
-            else:
-                return HttpResponseRedirect(ref)
+            if request.POST.get('goto', 0):
+                goto = request.POST.get('goto')
+            return HttpResponseRedirect(goto)
 
         else:
-            return render(request, 'home/home_page.html')
+            return render(request, 'home/register.html')
 
     else:
         print(request.session.get_expiry_age())
@@ -626,10 +626,11 @@ def google_sign_in(request):
 
 
 def view_all_tournament(request, error=0):
-        return render(request, 'home/view_tournaments.html', {
-            'all_tournaments': Tournament.objects.all(),
-            'error': error
-        })
+    return render(request, 'home/view_tournaments.html', {
+        'all_tournaments': Tournament.objects.all(),
+        'error': error
+    })
+
 
 def register_team(request, tournament_id=-1):
     user = user_logged_in(request)
@@ -652,7 +653,8 @@ def register_team(request, tournament_id=-1):
                 exists = tournament.team_set.filter(team_name=team_form.cleaned_data['team_name'])
                 if exists:
                     # raise ValidationError('You have already registered for this team. Please Register with another team.')
-                    return view_all_tournament(request, 'You have already registered for this tournament '+tournament_id+'. Please Register with another one.')
+                    return view_all_tournament(request,
+                                               'You have already registered for this tournament ' + tournament_id + '. Please Register with another one.')
                 team_obj = team_form.save(commit=False)
                 team_obj.login = user_wrapper
                 team_obj.tournament = tournament
@@ -675,5 +677,4 @@ def register_team(request, tournament_id=-1):
         print('not logged in: register_tournament:else user')
         tournament_id = request.POST.get('tournament_id')
         # return render(request, 'home/register.html', {'ref': '/register/tournament/', 'tournament_id': request.POST.get('tournament_id')})
-        return register(request, '/tournament/register/' + str(tournament_id),
-                        {'ref': '/tournament/register/' + str(tournament_id), 'tournament_id': tournament_id})
+        return register(request, {'goto': '/view/'})
