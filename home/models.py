@@ -58,6 +58,9 @@ class GoogleUser(models.Model):
 
 
 class Team(models.Model):
-    login = models.OneToOneField(UserWrapper, on_delete=models.CASCADE)
-    tournament = models.OneToOneField(Tournament, on_delete=models.CASCADE)
+    login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE, blank=True)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, blank=True)
     team_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.login) + str(self.tournament) + str(self.team_name)

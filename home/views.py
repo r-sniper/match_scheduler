@@ -37,8 +37,9 @@ def get_information(request):
                 user_wrapper = user_obj.userwrapper
                 tournament.login = user_wrapper
                 print(user_wrapper.user.username)
+
                 type_of_match = form.cleaned_data.get('match_type')
-                avalaible_hrs = form.cleaned_data.get("available_hrs")
+                avalaible_hrs = form.cleaned_data.get("hr")+ (form.cleaned_data.get("min"))/60
                 match_duration = form.cleaned_data.get("match_duration")
                 break_duration = form.cleaned_data.get("break_duration")
 
@@ -630,25 +631,42 @@ def view_all_tournament(request):
     })
 
 
-def register_tournament(request, tournament_id=-1):
+def register_team(request, tournament_id=-1):
     user = user_logged_in(request)
     print("Method123:" + request.method)
 
     # return HttpResponse("Here")
     if user:
-        if not request.POST.get('tournament_id') == '':
+        print(request)
+        if request.POST.get('tournament_id', 0):
             tournament_id = request.POST.get('tournament_id')
-
+        print(tournament_id)
         tournament = get_object_or_404(Tournament, pk=tournament_id)
         user_obj = User.objects.get(pk=user)
         user_wrapper = user_obj.userwrapper
         team = Team(login=user_wrapper, tournament=tournament)
-        # team.login = user_wrapper
-        # team.tournament = tournament
+
+        if request.POST.get('register_team', 0):
+            team_form = TeamForm(request.POST)
+            if team_form.is_valid():
+                team_obj = team_form.save(commit=False)
+                team_obj.login = user_wrapper
+                team_obj.tournament = tournament
+                team_obj.save()
+                tournament.number_of_team += 1
+                tournament.save()
+                print(team_obj)
+                return HttpResponse('Saved')
+            else:
+                print(team_form.errors)
+                print(team_form.non_field_errors())
+                print("here")
+                return HttpResponse('Not Valid', team_form.errors)
 
         team_form = TeamForm(instance=team)
         print(user)
-        return render(request, 'home/register_tournament.html', {'team_form': team_form})
+        return render(request, 'home/register_team.html',
+                      {'team_form': team_form, 'tournament_id': tournament_id})
     else:
         print('not logged in: register_tournament:else user')
         tournament_id = request.POST.get('tournament_id')
