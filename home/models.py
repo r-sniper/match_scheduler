@@ -14,7 +14,7 @@ class UserWrapper(models.Model):
 class Tournament(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE)
     matches_per_day = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
-    number_of_team = models.IntegerField(validators=[MaxValueValidator(50)],default=0)
+    number_of_team = models.IntegerField(validators=[MaxValueValidator(50)], default=0)
     number_of_pool = models.IntegerField(default=1)
     type = models.IntegerField()
     available_days = models.IntegerField()
@@ -64,3 +64,10 @@ class Team(models.Model):
 
     def __str__(self):
         return str(self.login) + str(self.tournament) + str(self.team_name)
+
+
+class Player(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    number = models.BigIntegerField()
+    email = models.EmailField(max_length=100, blank=True, null=True)

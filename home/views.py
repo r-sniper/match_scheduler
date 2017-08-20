@@ -37,7 +37,6 @@ def get_information(request):
                 user_wrapper = user_obj.userwrapper
                 tournament.login = user_wrapper
                 print(user_wrapper.user.username)
-
                 type_of_match = form.cleaned_data.get('match_type')
                 avalaible_hrs = form.cleaned_data.get("hr")+ (form.cleaned_data.get("min"))/60
                 match_duration = form.cleaned_data.get("match_duration")
