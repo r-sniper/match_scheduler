@@ -114,7 +114,7 @@
                 </p>
 
 
-                <form action="{% url 'home:get_information' %}" method="post">
+                <form action="{% url 'home:get_information' %}" method="post" id="get_info">
                     {% csrf_token %}
 
                     {#                    {{ form.as_p }}#}
@@ -126,13 +126,37 @@
                             {{ field| add_class:"form-control" }}
                         </div>
                     {% endfor %}
+                    <input type="text" name="category" placeholder="Category" id="category1">
+                    <input type="submit" name="plus" class="btn" onclick="return addCategory();" value="+">
+                    <br>
+                    <input value="1" type="hidden" id="category_counter">
 
-                    <button type="submit" class="btn btn-primary" name="submit" value="submit"> Schedule</button>
+                    <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
                 </form>
             </div>
 
         </div>
     </div>
+<script>
+    function addCategory() {
+{#        alert("Hi");#}
 
+        counter = document.getElementById('category_counter');
+        if(document.getElementById('category'+ counter.value).value!==''){
+            var newCategory = document.createElement("INPUT");
+            var form = document.getElementById('get_info');
+
+            counter.value+=1;
+
+            newCategory.id = "category" + counter.value;
+            newCategory.type = "text";
+            newCategory.name = "category";
+            newCategory.placeholder = "Category";
+            form.appendChild(newCategory);
+
+        }
+        return false;
+    }
+</script>
 {% endblock %}
 

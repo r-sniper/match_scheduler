@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+
 from .models import Tournament, Team
 
 
@@ -119,3 +120,7 @@ class TeamForm(forms.ModelForm):
     class Meta:
         model = Team
         fields = '__all__'
+        exclude = ('login',)
+
+
+

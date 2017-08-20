@@ -6,6 +6,7 @@ import urllib
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
@@ -624,11 +625,11 @@ def google_sign_in(request):
         #                        return HttpResponse("You need at least 8 teams for pool system")
 
 
-def view_all_tournament(request):
-    return render(request, 'home/view_tournaments.html', {
-        'all_tournaments': Tournament.objects.all()
-    })
-
+def view_all_tournament(request, error=0):
+        return render(request, 'home/view_tournaments.html', {
+            'all_tournaments': Tournament.objects.all(),
+            'error': error
+        })
 
 def register_team(request, tournament_id=-1):
     user = user_logged_in(request)
@@ -648,6 +649,10 @@ def register_team(request, tournament_id=-1):
         if request.POST.get('register_team', 0):
             team_form = TeamForm(request.POST)
             if team_form.is_valid():
+                exists = tournament.team_set.filter(team_name=team_form.cleaned_data['team_name'])
+                if exists:
+                    # raise ValidationError('You have already registered for this team. Please Register with another team.')
+                    return view_all_tournament(request, 'You have already registered for this tournament '+tournament_id+'. Please Register with another one.')
                 team_obj = team_form.save(commit=False)
                 team_obj.login = user_wrapper
                 team_obj.tournament = tournament

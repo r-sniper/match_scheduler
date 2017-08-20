@@ -26,6 +26,11 @@ class Tournament(models.Model):
         return str(self.id) + ' ' + str(self.type)
 
 
+class Category(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    type = models.CharField(max_length=50)
+
+
 class Pool(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     pool_number = models.IntegerField(default=1)

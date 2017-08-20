@@ -3,11 +3,18 @@
 {% block details_active %}active{% endblock %}
 {% block body %}
     {% load staticfiles %}
-    <form action="{% url 'home:register_tournament' 0%}" method="POST">
+    {% if error %}
+    <div class="alert alert-danger">
+        <strong>Error!</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    <form action="{% url 'home:register_team' 0 %}" method="POST">
         {% csrf_token %}
 
 
         <div class="container-fluid main-form">
+
 
             {% if all_tournaments %}
                 <div class="panel panel-default">
@@ -34,9 +41,9 @@
                                 <td>{{ tournament.sport }}</td>
                                 <td>{{ tournament.venue }}</td>
 
-                                {% if tournament.type == 0 %}
+                                {% if tournament.type == 1 %}
                                     <td>League Match</td>
-                                {% elif tournament.type == 1 %}
+                                {% elif tournament.type == 2 %}
                                     <td>Pool Match</td>
                                 {% endif %}
                                 <td>
