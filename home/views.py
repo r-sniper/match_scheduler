@@ -70,7 +70,7 @@ def get_information(request):
                 entered_category = request.POST.getlist('category')
                 print(request.POST)
                 print(entered_category)
-                category = Category(tournament=tournament, category = entered_category)
+                category = Category(tournament=tournament, category=entered_category)
 
                 category.save()
                 print("scheduling")
@@ -142,11 +142,11 @@ def dashboard(request):
         })
 
 
-def register(request, context={'goto':'/dashboard/'}):
-    print('register function', request.method, 'context=', context, context.get('goto'),'request = ', request)
+def register(request, context={'goto': '/dashboard/'}):
+    print('register function', request.method, 'context=', context, context.get('goto'), 'request = ', request)
     if user_logged_in(request):
         return HttpResponseRedirect(context.get('goto'))
-    if request.method == "POST" and request.POST.get('submit',0):
+    if request.method == "POST" and request.POST.get('submit', 0):
         print("register")
         form = UserForm(data=request.POST)
         print(form.errors)
@@ -632,11 +632,11 @@ def google_sign_in(request):
         #                        return HttpResponse("You need at least 8 teams for pool system")
 
 
-def view_all_tournament(request, error=0):
+def view_all_tournament(request, error=''):
     return render(request, 'home/view_tournaments.html', {
         'all_tournaments': Tournament.objects.all(),
         'error': error,
-        'category' : Category.objects.all()
+        'category': Category.objects.all()
     })
 
 
@@ -662,7 +662,8 @@ def register_team(request, tournament_id=-1):
                 if exists:
                     # raise ValidationError('You have already registered for this team. Please Register with another team.')
                     return view_all_tournament(request,
-                                               'You have already registered for this tournament ' + tournament_id + '. Please Register with another one.')
+                                               'You have already registered for this tournament ' + str(
+                                                   tournament_id) + '. Please Register with another one.')
                 team_obj = team_form.save(commit=False)
                 team_obj.login = user_wrapper
                 team_obj.tournament = tournament

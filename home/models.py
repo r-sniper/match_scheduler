@@ -77,3 +77,4 @@ class Player(models.Model):
     number = models.BigIntegerField()
     email = models.EmailField(max_length=100, blank=True, null=True)
 
+
