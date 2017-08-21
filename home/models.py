@@ -77,6 +77,3 @@ class Player(models.Model):
     number = models.BigIntegerField()
     email = models.EmailField(max_length=100, blank=True, null=True)
 
-class Category(models.Model):
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    category = models.TextField(null=True, blank=True)
