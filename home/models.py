@@ -78,3 +78,6 @@ class Player(models.Model):
     email = models.EmailField(max_length=100, blank=True, null=True)
 
 
+class SportSpecification(models.Model):
+    no_of_players = models.PositiveIntegerField()
+    sport = models.CharField(max_length=50)
