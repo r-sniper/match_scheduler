@@ -13,7 +13,7 @@ from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 
 from .forms import TournamentForm, UserForm, TeamForm
-from .models import Tournament, Point, Pool, UserWrapper, GoogleUser, Team
+from .models import Tournament, Point, Pool, UserWrapper, GoogleUser, Team, Category
 
 
 def user_logged_in(request):
@@ -67,6 +67,12 @@ def get_information(request):
                 # 3. Knockout
 
                 # League matches
+                entered_category = request.POST.getlist('category')
+                print(request.POST)
+                print(entered_category)
+                category = Category(tournament=tournament, category = entered_category)
+
+                category.save()
                 print("scheduling")
                 print(type)
 
@@ -143,6 +149,7 @@ def register(request, context={'goto':'/dashboard/'}):
     if request.method == "POST" and request.POST.get('submit',0):
         print("register")
         form = UserForm(data=request.POST)
+        print(form.errors)
         if form.is_valid():
             new_user = form.save()
             new_user.set_password(new_user.password)
@@ -628,7 +635,8 @@ def google_sign_in(request):
 def view_all_tournament(request, error=0):
     return render(request, 'home/view_tournaments.html', {
         'all_tournaments': Tournament.objects.all(),
-        'error': error
+        'error': error,
+        'category' : Category.objects.all()
     })
 
 
