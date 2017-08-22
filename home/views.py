@@ -335,7 +335,7 @@ def home_page(request, ref='/dashboard/'):
 
         else:
             print("Doesn't")
-            return HttpResponse('<h1>First Sign Up for this service</h1>')
+            return HttpResponseRedirect('/')
     elif ref == '/register/tournament/':
         return HttpResponseRedirect(ref)
 
@@ -623,21 +623,21 @@ def view_all_tournament(request):
 
 
 def register_tournament(request):
-    user = user_logged_in(request)
-    print("Method123:"+request.method)
 
+    print("Method123:"+request.method)
+    user_id = request.session.get('user_id', 0)
     # return HttpResponse("Here")
-    if user:
+    if user_id:
         tournament_id = request.POST.get('tournament_id')
         tournament = get_object_or_404(Tournament, pk=tournament_id)
-        user_obj = User.objects.get(pk=user)
+        user_obj = User.objects.get(pk=user_id)
         user_wrapper = user_obj.userwrapper
         team = Team(login=user_wrapper, tournament=tournament)
         # team.login = user_wrapper
         # team.tournament = tournament
 
         team_form = TeamForm(instance=team)
-        print(user)
+        print(user_id)
         return render(request, 'home/register_tournament.html', {'team_form': team_form})
     else:
         print('not logged in: register_tournament:else user')
