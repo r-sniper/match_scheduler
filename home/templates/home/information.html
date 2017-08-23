@@ -126,15 +126,13 @@
                             {{ field| add_class:"form-control" }}
                         </div>
                     {% endfor %}
-                    <input type="text" name="category" placeholder="Category" id="category1">
+                    <input type="text" name="category1" placeholder="Category" id="category1">
                     <input type="submit" name="plus" class="btn" onclick="return addCategory();" value="+">
                     <br>
-                    <input value="1" type="hidden" id="category_counter">
-
+                    <input value="1" type="hidden" id="category_counter" name="category_counter">
                     <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
                 </form>
             </div>
-
         </div>
     </div>
 <script>
@@ -144,14 +142,15 @@
             var newCategory = document.createElement("INPUT");
             var form = document.getElementById('get_info');
 
-            counter.value+=1;
+            var count = counter.value;
+            count++;
+            counter.value=count;
 
             newCategory.id = "category" + counter.value;
             newCategory.type = "text";
-            newCategory.name = "category";
+            newCategory.name = "category" + counter.value;
             newCategory.placeholder = "Category";
             form.appendChild(newCategory);
-
         }
         return false;
     }

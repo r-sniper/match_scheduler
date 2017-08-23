@@ -102,8 +102,10 @@
             {% if logged_in %}
 
                 <li><a href="{% url 'home:get_information' %}">Add</a></li>
+                <li><a href="{% url 'home:view_all_tournament' %}">View Tournaments</a></li>
             {% else %}
                 <li><a href="{% url 'home:register' %}">Registration</a></li>
+                <li><a href="{% url 'home:view_all_tournament' %}">View Tournaments</a></li>
             {% endif %}
 
             {#            {% endblock %}#}

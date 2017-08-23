@@ -8,7 +8,7 @@ class UserWrapper(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
 
     def __str__(self):
-        return self.user.first_name + "-" + self.user.email
+        return ("User First Name: "+self.user.first_name + ", User Email: " + self.user.email)
 
 
 class Tournament(models.Model):
@@ -23,12 +23,15 @@ class Tournament(models.Model):
     sport = models.CharField(max_length=30)
 
     def __str__(self):
-        return str(self.id) + ' ' + str(self.type)
+        return "Tour. ID: "+str(self.id) + ', Type: ' + str(self.type) + ", tour. User: "+ str(self.login)
 
 
 class Category(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     type = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str("Category type: "+self.type+ ", Related Tournament: "+str(self.tournament))
 
 
 class Pool(models.Model):
@@ -68,7 +71,7 @@ class Team(models.Model):
     team_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return str(self.login) + str(self.tournament) + str(self.team_name)
+        return "Related "+str(self.login)+", Related Tournament ID: " + str(self.tournament.id)+", Team Name: " + str(self.team_name)
 
 
 class Player(models.Model):
@@ -77,7 +80,13 @@ class Player(models.Model):
     number = models.BigIntegerField()
     email = models.EmailField(max_length=100, blank=True, null=True)
 
+    def __str__(self):
+        return str("Team: "+ str(self.team)+", Name of Player: "+ self.name)
+
 
 class SportSpecification(models.Model):
     no_of_players = models.PositiveIntegerField()
     sport = models.CharField(max_length=50)
+
+    def __str__(self):
+        return "No. of players: "+self.no_of_players+", sport: "+ self.sport

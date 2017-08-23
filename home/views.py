@@ -12,8 +12,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 
-from .forms import TournamentForm, UserForm, TeamForm
-from .models import Tournament, Point, Pool, UserWrapper, GoogleUser, Team, Category
+from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
+from .models import Tournament, Point, Pool, UserWrapper, GoogleUser, Team, Category, Player
 
 
 def user_logged_in(request):
@@ -30,7 +30,7 @@ def get_information(request):
     # If user exists then he can add tournament
     if user_id:
         if request.method == "POST":
-            print('post in get_information')
+            print('Adding new tournament')
             form = TournamentForm(request.POST)
             if form.is_valid():
                 tournament = form.save(commit=False)
@@ -42,15 +42,21 @@ def get_information(request):
                 avalaible_hrs = form.cleaned_data.get("av_hr") + (form.cleaned_data.get("av_min")) / 60
                 match_duration = form.cleaned_data.get("match_hr") + (form.cleaned_data.get('match_min')) / 60
                 break_duration = form.cleaned_data.get("break_hr") + (form.cleaned_data.get('break_min')) / 60
-
                 tournament.matches_per_day = (int)(avalaible_hrs / (match_duration + break_duration))
                 print("mathes per day" + str(tournament.matches_per_day))
 
+                count = int(request.POST.get("category_counter"))
+                all_categories = []
                 type = 1
                 if type_of_match == 'Pool Match':
                     type = 2
                 tournament.type = type
                 tournament.save()
+                for i in range(count):
+                    all_categories.append(
+                        Category(type=request.POST.get('category' + str(i + 1)), tournament=tournament))
+                Category.objects.bulk_create(all_categories)
+
                 group1 = []
                 group2 = []
                 list1 = []
@@ -69,10 +75,9 @@ def get_information(request):
                 # League matches
                 entered_category = request.POST.getlist('category')
                 print(request.POST)
-                print(entered_category)
-                category = Category(tournament=tournament, category=entered_category)
+                print("entered_category:       ",entered_category)
 
-                category.save()
+                # category.save()
                 print("scheduling")
                 print(type)
 
@@ -143,6 +148,7 @@ def dashboard(request):
 
 
 def register(request, context={'goto': '/dashboard/'}):
+    goto = '/dashboard/'
     print('register function', request.method, 'context=', context, context.get('goto'), 'request = ', request)
     if user_logged_in(request):
         return HttpResponseRedirect(context.get('goto'))
@@ -353,7 +359,7 @@ def home_page(request):
             return HttpResponseRedirect(goto)
 
         else:
-            return render(request, 'home/register.html')
+            return render(request, 'home/register.html', {'form': UserForm()})
 
     else:
         print(request.session.get_expiry_age())
@@ -633,23 +639,24 @@ def google_sign_in(request):
 
 
 def view_all_tournament(request, error=''):
+    print(Tournament.objects.all()[1].category_set.values_list('type', flat=True))
     return render(request, 'home/view_tournaments.html', {
         'all_tournaments': Tournament.objects.all(),
         'error': error,
-        'category': Category.objects.all()
     })
 
 
-def register_team(request, tournament_id=-1):
+def register_team(request):
+    tournament_id = -1
     user = user_logged_in(request)
-    print("Method123:" + request.method)
+    print("Method123:" + str(request))
 
     # return HttpResponse("Here")
     if user:
         print(request)
         if request.POST.get('tournament_id', 0):
             tournament_id = request.POST.get('tournament_id')
-        print(tournament_id)
+            print(tournament_id)
         tournament = get_object_or_404(Tournament, pk=tournament_id)
         user_obj = User.objects.get(pk=user)
         user_wrapper = user_obj.userwrapper
@@ -668,6 +675,21 @@ def register_team(request, tournament_id=-1):
                 team_obj.login = user_wrapper
                 team_obj.tournament = tournament
                 team_obj.save()
+
+                # saving the list of players entered by user
+                count = int(request.POST.get("player_counter"))
+                print("count of players submitted by user", count)
+                all_players = []
+                for i in range(count):
+                    all_players.append(
+                        Player(name=request.POST.get('player_name' + str(i + 1)),
+                               number=request.POST.get('player_number' + str(i + 1)),
+                               email=request.POST.get('player_email' + str(i + 1)),
+                               team=team_obj))
+                Player.objects.bulk_create(all_players)
+
+
+
                 tournament.number_of_team += 1
                 tournament.save()
                 print(team_obj)
@@ -679,9 +701,12 @@ def register_team(request, tournament_id=-1):
                 return HttpResponse('Not Valid', team_form.errors)
 
         team_form = TeamForm(instance=team)
+        player_form = PlayerForm()
         print(user)
         return render(request, 'home/register_team.html',
-                      {'team_form': team_form, 'tournament_id': tournament_id})
+                      {'team_form': team_form,
+                       'player_form': player_form,
+                       'tournament_id': tournament_id})
     else:
         print('not logged in: register_tournament:else user')
         tournament_id = request.POST.get('tournament_id')
