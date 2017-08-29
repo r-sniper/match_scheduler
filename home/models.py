@@ -9,7 +9,7 @@ class UserWrapper(models.Model):
     key = models.CharField(max_length=40)
 
     def __str__(self):
-        return ("User First Name: " + self.user.first_name + ", User Email: " + self.user.email)
+        return "User First Name: " + self.user.first_name + ", User Email: " + self.user.email
 
 
 class Tournament(models.Model):

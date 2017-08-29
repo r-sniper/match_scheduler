@@ -118,7 +118,8 @@
 </div>
 {% if error %}
     <div class="alert alert-danger">
-        <strong>Error!</strong> {{ error }}
+        <strong>Error!</strong>
+        {% autoescape off %}{{ error }} {% endautoescape %}
     </div>
 {% endif %}
 {% block body %}
