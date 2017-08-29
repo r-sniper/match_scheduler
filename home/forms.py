@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-
 from .models import Tournament, Team, Player
 
 
@@ -72,7 +71,7 @@ class TournamentForm(forms.ModelForm):
 
     class Meta:
         model = Tournament
-        fields = ['av_hr','av_min', 'match_hr', 'match_min', 'break_hr', 'break_min', 'number_of_pool',
+        fields = ['av_hr', 'av_min', 'match_hr', 'match_min', 'break_hr', 'break_min', 'number_of_pool',
                   'available_days', 'sport', 'starting_date', 'registration_ending']
         labels = {
             # 'available_hrs': _('Available hours in a day'),
@@ -94,9 +93,9 @@ class TournamentForm(forms.ModelForm):
         md = cleaned_data.get('match_duration')
         bd = cleaned_data.get('break_duration')
 
-        hrs = av_hr + av_min/60
-        md = match_hr + match_min/60
-        bd = break_hr + break_min/60
+        hrs = av_hr + av_min / 60
+        md = match_hr + match_min / 60
+        bd = break_hr + break_min / 60
 
         if 0 > hrs or hrs > 24:
             msg = 'Available hours should be in between 0 and 24.'
@@ -124,7 +123,6 @@ class TeamForm(forms.ModelForm):
 
 
 class PlayerForm(forms.ModelForm):
-
     class Meta:
         model = Player
         fields = '__all__'

@@ -116,6 +116,11 @@
         {% endblock %}
     </div>
 </div>
+{% if error %}
+    <div class="alert alert-danger">
+        <strong>Error!</strong> {{ error }}
+    </div>
+{% endif %}
 {% block body %}
 {% endblock %}
 </body>

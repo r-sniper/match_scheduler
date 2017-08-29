@@ -6,9 +6,10 @@ from django.db import models
 # Create your models here.
 class UserWrapper(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+    key = models.CharField(max_length=40)
 
     def __str__(self):
-        return ("User First Name: "+self.user.first_name + ", User Email: " + self.user.email)
+        return ("User First Name: " + self.user.first_name + ", User Email: " + self.user.email)
 
 
 class Tournament(models.Model):
@@ -23,7 +24,7 @@ class Tournament(models.Model):
     sport = models.CharField(max_length=30)
 
     def __str__(self):
-        return "Tour. ID: "+str(self.id) + ', Type: ' + str(self.type) + ", tour. User: "+ str(self.login)
+        return "Tour. ID: " + str(self.id) + ', Type: ' + str(self.type) + ", tour. User: " + str(self.login)
 
 
 class Category(models.Model):
@@ -31,7 +32,7 @@ class Category(models.Model):
     type = models.CharField(max_length=50)
 
     def __str__(self):
-        return str("Category type: "+self.type+ ", Related Tournament: "+str(self.tournament))
+        return str("Category type: " + self.type + ", Related Tournament: " + str(self.tournament))
 
 
 class Pool(models.Model):
@@ -71,7 +72,8 @@ class Team(models.Model):
     team_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return "Related "+str(self.login)+", Related Tournament ID: " + str(self.tournament.id)+", Team Name: " + str(self.team_name)
+        return "Related " + str(self.login) + ", Related Tournament ID: " + str(
+            self.tournament.id) + ", Team Name: " + str(self.team_name)
 
 
 class Player(models.Model):
@@ -81,7 +83,7 @@ class Player(models.Model):
     email = models.EmailField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return str("Team: "+ str(self.team)+", Name of Player: "+ self.name)
+        return str("Team: " + str(self.team) + ", Name of Player: " + self.name)
 
 
 class SportSpecification(models.Model):
@@ -89,4 +91,4 @@ class SportSpecification(models.Model):
     sport = models.CharField(max_length=50)
 
     def __str__(self):
-        return "No. of players: "+self.no_of_players+", sport: "+ self.sport
+        return "No. of players: " + self.no_of_players + ", sport: " + self.sport

@@ -32,11 +32,11 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends']
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'siddheshkand.pythonanywhere.com', '192.168.1.6', 'localhost']
+EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'siddheshkand123@gmail.com'
-EMAIL_HOST_PASSWORD = 'ignore3186'
-EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'akzarma2@gmail.com'
+EMAIL_HOST_PASSWORD = '5592098292'
 SESSION_COOKIE_AGE = 10
 # Application definition
 
@@ -95,7 +95,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-
 
             ],
         },

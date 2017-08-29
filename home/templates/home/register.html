@@ -71,7 +71,7 @@
 {% endblock %}
 {% block navbar_right %}
     <form action="{% url 'home:home_page' %}" method="post">
-    <input value="{{ goto }}" name="goto" hidden>
+        <input value="{{ goto }}" name="goto" hidden>
         {% csrf_token %}
         <div style="margin-top: 7px;margin-right: 5px;float: right">
             <input type="text" placeholder=" Username" name="uname" required>
@@ -106,8 +106,8 @@
 
 
             <form action="{% url 'home:register' %}" method="post">
-            <input value="{{ goto }}" name="goto" hidden>
-            {{ goto }}
+                <input value="{{ goto }}" name="goto" hidden>
+                {{ goto }}
                 {% csrf_token %}
 
                 {% for field in form %}

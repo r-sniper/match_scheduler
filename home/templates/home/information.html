@@ -135,25 +135,25 @@
             </div>
         </div>
     </div>
-<script>
-    function addCategory() {
-        counter = document.getElementById('category_counter');
-        if(document.getElementById('category'+ counter.value).value!==''){
-            var newCategory = document.createElement("INPUT");
-            var form = document.getElementById('get_info');
+    <script>
+        function addCategory() {
+            counter = document.getElementById('category_counter');
+            if (document.getElementById('category' + counter.value).value !== '') {
+                var newCategory = document.createElement("INPUT");
+                var form = document.getElementById('get_info');
 
-            var count = counter.value;
-            count++;
-            counter.value=count;
+                var count = counter.value;
+                count++;
+                counter.value = count;
 
-            newCategory.id = "category" + counter.value;
-            newCategory.type = "text";
-            newCategory.name = "category" + counter.value;
-            newCategory.placeholder = "Category";
-            form.appendChild(newCategory);
+                newCategory.id = "category" + counter.value;
+                newCategory.type = "text";
+                newCategory.name = "category" + counter.value;
+                newCategory.placeholder = "Category";
+                form.appendChild(newCategory);
+            }
+            return false;
         }
-        return false;
-    }
-</script>
+    </script>
 {% endblock %}
 
