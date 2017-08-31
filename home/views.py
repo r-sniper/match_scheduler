@@ -2,6 +2,7 @@ import hashlib
 import json
 import logging
 import math
+import random
 import urllib
 
 import nexmo
@@ -14,7 +15,7 @@ from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.utils.crypto import get_random_string
 from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
-from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Category, Player
+from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Category, Player, Pool, Match, SportSpecification
 
 logger = logging.getLogger(__name__)
 
@@ -534,11 +535,6 @@ def google_sign_in(request):
         return HttpResponse("true")
 
 
-
-
-
-
-
 def view_all_tournament(request, error=''):
     # logger.debug(Tournament.objects.all()[1].category_set.values_list('type', flat=True))
     return render(request, 'home/view_tournaments.html', {
@@ -581,7 +577,7 @@ def register_team(request):
                     team_obj.save()
 
                     # saving the list of players entered by user
-                    count = int(request.POST.get("player_counter"))
+                    count = SportSpecification.objects.get(sport=tournament.sport).no_of_players
                     logger.debug("count of players submitted by user", count)
                     all_players = []
                     for i in range(count):
@@ -592,12 +588,12 @@ def register_team(request):
                                    team=team_obj))
                     Player.objects.bulk_create(all_players)
 
-                    client = nexmo.Client(key=conf.nexmo_key, secret=conf.nexmo_secret)
+                    # client = nexmo.Client(key=conf.nexmo_key, secret=conf.nexmo_secret)
 
-                    response = client.start_verification({'brand': 'SpoFit', 'number': '917559435851'})
+                    #response = client.start_verification({'brand': 'SpoFit', 'number': '917559435851'})
 
                     # response = response['messages'][0]
-                    logger.debug(response)
+                    # logger.debug(response)
                     # if response['status'] == '0':
                     #     logger.debug('Message sent', response['message-id'],'\nRemaining Balance: ',response['remaining-balance'])
                     # else:
@@ -615,13 +611,16 @@ def register_team(request):
                     logger.debug("here")
                     return HttpResponse('Not Valid', team_form.errors)
 
+            no_of_players = SportSpecification.objects.get(sport=tournament.sport).no_of_players
+
             team_form = TeamForm(instance=team)
             player_form = PlayerForm()
             logger.debug(user)
             return render(request, 'home/register_team.html',
                           {'team_form': team_form,
                            'player_form': player_form,
-                           'tournament_id': tournament_id})
+                           'tournament_id': tournament_id,
+                           'no_of_players': range(no_of_players)})
         else:
             return view_all_tournament(request, 'You have not verified your email. Please verify.')
     else:
@@ -655,164 +654,181 @@ def start_scheduling(request):
     if tournament_id:
         tournament = Tournament.objects.get(pk=tournament_id)
         print(tournament.number_of_team)
-        all_teams = tournament.team_set.all()
+        all_teams = list(tournament.team_set.all())
         number_of_teams = tournament.number_of_team
         matches_per_day = tournament.matches_per_day
         number_of_days = tournament.available_days
+        type = tournament.type
         if type == 1:
             number_of_matches = (number_of_teams * (number_of_teams - 1) / 2)
             minimum_days = int(math.ceil(number_of_matches / matches_per_day))
 
             if number_of_days < minimum_days:
                 return HttpResponse(
-                                    "Sorry Matches cant be schedule in " + str(
-                                    number_of_days) + " days but can be scheduled in " + str(
-                                    minimum_days))
-                odd = False
+                    "Sorry Matches cant be schedule in " + str(
+                        number_of_days) + " days but can be scheduled in " + str(
+                        minimum_days))
+            odd = False
 
-                           # new_user = LoginCredential(user_name=user_name, password=password, matches_per_day=matches_per_day,
-                           #                            number_of_team=number_of_teams, type=type, number_of_pool=1)
-                           # new_user.save()
-                           # new_pool = Pool(login=new_user, pool_number=1)
-                           # new_pool.save()
-                           # user_id = new_user.id
-                           if number_of_teams % 2 == 1:
-                               odd = True
-                               number_of_teams += 1
-                           # group1=["pune warriors india","Mumbai Indian","King X1 punjab","Sunrise Hyderbad"]
-                           # group2=["Rising Pune Supergaints","Chennai king","Kolkalta Kinight rider","Delhi devils"]
-                           for i in range(1, int(number_of_teams / 2) + 1):
-                               group1.append("Team" + str(i))
-                               group2.append("Team" + str(i + int(number_of_teams / 2)))
+            # new_user = LoginCredential(user_name=user_name, password=password, matches_per_day=matches_per_day,
+            #                            number_of_team=number_of_teams, type=type, number_of_pool=1)
+            # new_user.save()
+            # new_pool = Pool(login=new_user, pool_number=1)
+            # new_pool.save()
+            # user_id = new_user.id
+            if number_of_teams % 2 == 1:
+                odd = True
+                number_of_teams += 1
+                all_teams.append('dummy_team')
+                # group1=["pune warriors india","Mumbai Indian","King X1 punjab","Sunrise Hyderbad"]
+                # group2=["Rising Pune Supergaints","Chennai king","Kolkalta Kinight rider","Delhi devils"]
+            random.shuffle(all_teams)
+            # group1 = all_teams[:]
+            group1 = []
+            group2 = []
+            for i in range(0, int(number_of_teams / 2)):
+                group1.append(all_teams[i])
+                group2.append(all_teams[i + int(number_of_teams / 2)])
 
-                           # logger.debug(group1)
-                           # logger.debug(group2)
-                           for i in range(number_of_teams - 1):
-                               list1.extend(group1)
-                               list2.extend(group2)
-                               group1.insert(1, group2[0])
-                               group2.remove(group2[0])
-                               group2.append(group1[int(number_of_teams / 2)])
-                               group1.remove(group1[int(number_of_teams / 2)])
+            print(group1)
+            print(group2)
+            list1 = []
+            list2 = []
+            for i in range(number_of_teams - 1):
+                list1.extend(group1)
+                list2.extend(group2)
+                group1.insert(1, group2[0])
+                group2.remove(group2[0])
+                group2.append(group1[int(number_of_teams / 2)])
+                group1.remove(group1[int(number_of_teams / 2)])
 
-                           all_new_teams = []
-                           pool = Pool(tournament=tournament, number_of_teams=number_of_teams, pool_number=1)
-                           pool.save()
-                           for team in group1:
-                               all_new_teams.append(Point(pool=pool, team=team))
+            all_new_teams = []
+            pool = Pool(tournament=tournament, number_of_teams=number_of_teams, pool_number=1)
+            pool.save()
+            print("GroupssSSSSsss",group1,group2)
+            try:
+                group1.pop(group1.index('dummy_team'))
+            except:
+                {}
+            try:
+                group2.pop(group2.index('dummy_team'))
+            except:
+                {}
+            for team in group1:
+                all_new_teams.append(Point(pool=pool, team=team))
 
-                           for team in group2[:-1]:
-                               all_new_teams.append(Point(team=team, pool=pool))
-                           # Using bulk_create instead of saving team every time
-                           # It uses only one query to save all teams
-                           # Silimarly for all the matches we used save n*(n-1)/2 times but now will use only 1 query
-                           # Very much optimized
-                           Point.objects.bulk_create(all_new_teams)
+            for team in group2:
+                all_new_teams.append(Point(team=team, pool=pool))
+            # Using bulk_create instead of saving team every time
+            # It uses only one query to save all teams
+            # Similarly for all the matches we used save n*(n-1)/2 times but now will use only 1 query
+            # Very much optimized
+            Point.objects.bulk_create(all_new_teams)
 
-                           if not odd:
-                               new_team = Point(team=group2[len(group2) - 1], pool=pool)
-                               new_team.save()
-                           if odd:
-                               index = list1.index("Team" + str(number_of_teams))
-                               while index:
-                                   list1.pop(index)
-                                   list2.pop(index)
-                                   try:
-                                       index = list1.index("Team" + str(number_of_teams))
-                                   except:
-                                       break
+            if not odd:
+                new_team = Point(team=group2[len(group2) - 1], pool=pool)
+                new_team.save()
+            if odd:
+                index = list1.index('dummy_team')
+                while index:
+                    list1.pop(index)
+                    list2.pop(index)
+                    try:
+                        index = list1.index('dummy_team')
+                    except:
+                        break
 
-                               index = list2.index("Team" + str(number_of_teams))
-                               while index:
-                                   list1.pop(index)
-                                   list2.pop(index)
-                                   try:
-                                       index = list2.index("Team" + str(number_of_teams))
-                                   except:
-                                       break
-                           # all_matches = zip(list1,list2)
-                           # logger.debug(minimum_days)
-                           # logger.debug(matches_per_day)
-                           # logger.debug(list1)
-                           # logger.debug(list2)
-                           new_matches = []
-                           for i in range(len(list1)):
-                               new_matches.append(Match(team1=list1[i], team2=list2[i], pool=pool))
-                               # logger.debug(new_matches[i].id)
-                           Match.objects.bulk_create(new_matches)
-                           # match_id_list = list(Match.objects.filter(login=new_user).values_list('id', flat=True))
-                           # logger.debug(match_id_list)
-                           # Set user id for this session
-                           # Acess using (user_id = request.session['user_id'])
-                           match_obj_rows = pool.match_set
-                           match_id_list = match_obj_rows.values_list('id', flat=True)
-                           logger.debug(list1)
-                           return HttpResponseRedirect('/dashboard/')
-                       # Pool system
-                       elif type == 2:
-                           if number_of_teams >= 8:
-                               if number_of_teams % 3 == 0 or number_of_teams % 4 == 0 or number_of_teams % 5 == 0:
+                index = list2.index('dummy_team')
+                while index:
+                    list1.pop(index)
+                    list2.pop(index)
+                    try:
+                        index = list2.index('dummy_team')
+                    except:
+                        break
+            # all_matches = zip(list1,list2)
+            # logger.debug(minimum_days)
+            # logger.debug(matches_per_day)
+            # logger.debug(list1)
+            # logger.debug(list2)
+            new_matches = []
+            for i in range(len(list1)):
+                new_matches.append(Match(team1=list1[i], team2=list2[i], pool=pool))
+                # logger.debug(new_matches[i].id)
+            Match.objects.bulk_create(new_matches)
+            # match_id_list = list(Match.objects.filter(login=new_user).values_list('id', flat=True))
+            # logger.debug(match_id_list)
+            # Set user id for this session
+            # Acess using (user_id = request.session['user_id'])
+            match_obj_rows = pool.match_set
+            match_id_list = match_obj_rows.values_list('id', flat=True)
+            logger.debug(list1)
+            return HttpResponse('/dashboard/')
+            # Pool system
+        elif type == 2:
+            if number_of_teams >= 8:
+                if number_of_teams % 3 == 0 or number_of_teams % 4 == 0 or number_of_teams % 5 == 0:
 
-                                   team_per_pool = int(number_of_teams / number_of_pool)
-                                   # if number_of_teams % 6 == 0:
-                                   #     team_per_pool = 6
-                                   # elif number_of_teams % 5 == 0:
-                                   #     team_per_pool = 5
-                                   # elif number_of_teams % 4 == 0:
-                                   #     team_per_pool = 4
-                                   # elif number_of_teams % 3 == 0:
-                                   #     team_per_pool = 3
-                                   # number_of_pool = int(number_of_teams / team_per_pool)
+                    team_per_pool = int(number_of_teams / number_of_pool)
+                    # if number_of_teams % 6 == 0:
+                    #     team_per_pool = 6
+                    # elif number_of_teams % 5 == 0:
+                    #     team_per_pool = 5
+                    # elif number_of_teams % 4 == 0:
+                    #     team_per_pool = 4
+                    # elif number_of_teams % 3 == 0:
+                    #     team_per_pool = 3
+                    # number_of_pool = int(number_of_teams / team_per_pool)
 
-                                   number_of_matches = int(
-                                       (team_per_pool * (team_per_pool - 1)) / 2) * number_of_pool
-                                   new_pool = []
-                                   new_points_table = []
-                                   for i in range(number_of_pool):
-                                       new_pool += [
-                                           Pool(tournament=tournament, pool_number=i + 1,
-                                                number_of_teams=team_per_pool
-                                                )]
-                                       # logger.debug(new_pool[i].pk)
-                                   Pool.objects.bulk_create(new_pool)
-                                   logger.debug(new_pool)
-                                   all_teams = []
-                                   for i in range(1, number_of_teams + 1):
-                                       all_teams.append("Team" + str(i))
-                                   # all_teams = group1 + group2
-                                   # logger.debug(all_teams)
-                                   all_pool = Pool.objects.filter(tournament=tournament)
-                                   for i in range(number_of_pool):
-                                       for j in range(team_per_pool):
-                                           # logger.debug(new_pool[i].id)
-                                           new_points_table += [Point(pool=all_pool[i], team=all_teams[i * team_per_pool + j])]
-                                           # logger.debug(str(i) + ' ' + all_teams[i * team_per_pool + j])
-                                   Point.objects.bulk_create(new_points_table)
+                    number_of_matches = int(
+                        (team_per_pool * (team_per_pool - 1)) / 2) * number_of_pool
+                    new_pool = []
+                    new_points_table = []
+                    for i in range(number_of_pool):
+                        new_pool += [
+                            Pool(tournament=tournament, pool_number=i + 1,
+                                 number_of_teams=team_per_pool
+                                 )]
+                        # logger.debug(new_pool[i].pk)
+                    Pool.objects.bulk_create(new_pool)
+                    logger.debug(new_pool)
+                    all_teams = []
+                    for i in range(1, number_of_teams + 1):
+                        all_teams.append("Team" + str(i))
+                    # all_teams = group1 + group2
+                    # logger.debug(all_teams)
+                    all_pool = Pool.objects.filter(tournament=tournament)
+                    for i in range(number_of_pool):
+                        for j in range(team_per_pool):
+                            # logger.debug(new_pool[i].id)
+                            new_points_table += [Point(pool=all_pool[i], team=all_teams[i * team_per_pool + j])]
+                            # logger.debug(str(i) + ' ' + all_teams[i * team_per_pool + j])
+                    Point.objects.bulk_create(new_points_table)
 
-                                   new_matches = []
-                                   list1 = []
-                                   list2 = []
-                                   for i in range(number_of_pool):
-                                       zipped_list = round_robin(
-                                           list(Point.objects.filter(pool=all_pool[i]).values_list('team', flat=True)))
-                                       for team1, team2 in zipped_list:
-                                           logger.debug(team1 + "v/s" + team2)
-                                           list1.append(team1)
-                                           list2.append(team2)
-                                           new_matches.append(Match(pool=all_pool[i], team1=team1, team2=team2))
+                    new_matches = []
+                    list1 = []
+                    list2 = []
+                    for i in range(number_of_pool):
+                        zipped_list = round_robin(
+                            list(Point.objects.filter(pool=all_pool[i]).values_list('team', flat=True)))
+                        for team1, team2 in zipped_list:
+                            logger.debug(team1 + "v/s" + team2)
+                            list1.append(team1)
+                            list2.append(team2)
+                            new_matches.append(Match(pool=all_pool[i], team1=team1, team2=team2))
 
-                                   Match.objects.bulk_create(new_matches)
-                                   rows = int(math.floor(number_of_pool / 2))
-                                   extra = 0
-                                   if number_of_pool % 2 == 1:
-                                       extra = number_of_pool - 1
+                    Match.objects.bulk_create(new_matches)
+                    rows = int(math.floor(number_of_pool / 2))
+                    extra = 0
+                    if number_of_pool % 2 == 1:
+                        extra = number_of_pool - 1
 
-                                   return HttpResponseRedirect('/dashboard/')
+                    return HttpResponseRedirect('/dashboard/')
 
-                               else:
-                                   return HttpResponse("Number of teams should be multiple of 3 or 4 or 5")
-                           else:
-                               return HttpResponse("You need at least 8 teams for pool system")
+                else:
+                    return HttpResponse("Number of teams should be multiple of 3 or 4 or 5")
+            else:
+                return HttpResponse("You need at least 8 teams for pool system")
     # Should never go here
     else:
         print('tournament id not found')

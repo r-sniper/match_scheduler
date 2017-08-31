@@ -32,79 +32,16 @@
                 <th>Player Name</th>
                 <th>Player Number</th>
                 <th>Player Email</th>
-                <input type="submit" name="plus" class="btn btn-success" onclick="return addPlayer();" value="+">
-                <br>
-                <input value="1" type="hidden" id="player_counter" name="player_counter">
-
             </tr>
+            {% for i in no_of_players %}
             <tr>
-                <td><input type="text" name="player_name1" placeholder="Player Name" id="player_name1"></td>
-                <td><input type="number" name="player_number1" placeholder="Player Number" id="player_number1"></td>
-                <td><input type="email" name="player_email1" placeholder="Player Email" id="player_email1"></td>
+                <td><input type="text" name="player_name{{ i|add:1 }}" placeholder="Player Name" id="player_name{{ i|add:1 }}" value="name{{ i }}"></td>
+                <td><input type="number" name="player_number{{ i|add:1 }}" placeholder="Player Number" id="player_number{{ i|add:1 }}" value="{{ i }}"></td>
+                <td><input type="email" name="player_email{{ i|add:1 }}" placeholder="Player Email" id="player_email{{ i|add:1 }}" value="email{{ i }}@s.com"></td>
             </tr>
+            {% endfor %}
         </table>
 
     </form>
 
-    <script>
-        function addPlayer() {
-            counter = document.getElementById('player_counter');
-
-
-            var tableRef = document.getElementById('player_table');
-
-// Insert a row in the table at the last row
-            var newRow = tableRef.insertRow(tableRef.rows.length);
-
-// Insert a cell in the row at index 0
-            var newCell0 = newRow.insertCell(0);
-            var newCell1 = newRow.insertCell(1);
-            var newCell2 = newRow.insertCell(2);
-
-            var count = counter.value;
-            count++;
-            counter.value = count;
-
-            var name = document.createElement("INPUT");
-            newCell0.appendChild(name);
-            var number = document.createElement("INPUT");
-            newCell1.appendChild(number);
-            var email = document.createElement("INPUT");
-            newCell2.appendChild(email);
-
-            name.id = "player_name" + counter.value;
-            name.type = "text";
-            name.name = "player_name" + counter.value;
-            name.placeholder = "Player Name";
-
-            number.id = "player_number" + counter.value;
-            number.type = "number";
-            number.min = "0";
-            number.name = "player_number" + counter.value;
-            number.placeholder = "Player Number";
-
-            email.id = "player_email" + counter.value;
-            email.type = "email";
-            email.name = "player_email" + counter.value;
-            email.placeholder = "Player Email";
-
-
-            {#            counter = document.getElementById('player_counter');#}
-            {#            if (document.getElementById('player' + counter.value).value !== '') {#}
-            {#                var newPlayer = document.createElement("INPUT");#}
-            {#                var form = document.getElementById('get_info');#}
-            {##}
-            {#                var count = counter.value;#}
-            {#                count++;#}
-            {#                counter.value = count;#}
-            {##}
-            {#                newPlayer.id = "player" + counter.value;#}
-            {#                newPlayer.type = "text";#}
-            {#                newPlayer.name = "player" + counter.value;#}
-            {#                newPlayer.placeholder = "Player";#}
-            {#                form.appendChild(newPlayer);#}
-            {#            }#}
-            return false;
-        }
-    </script>
 {% endblock body %}

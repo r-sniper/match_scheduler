@@ -72,8 +72,7 @@ class Team(models.Model):
     team_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return "Related " + str(self.login) + ", Related Tournament ID: " + str(
-            self.tournament.id) + ", Team Name: " + str(self.team_name)
+        return str(self.team_name)
 
 
 class Player(models.Model):
@@ -91,4 +90,4 @@ class SportSpecification(models.Model):
     sport = models.CharField(max_length=50)
 
     def __str__(self):
-        return "No. of players: " + self.no_of_players + ", sport: " + self.sport
+        return "No. of players: " + str(self.no_of_players) + ", sport: " + self.sport
