@@ -15,7 +15,7 @@ from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.utils.crypto import get_random_string
 from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
-from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Category, Player, Pool, Match, SportSpecification
+from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportSpecification
 
 logger = logging.getLogger(__name__)
 
@@ -42,49 +42,69 @@ def get_information(request):
 
                 form = TournamentForm(request.POST)
                 if form.is_valid():
-                    tournament = form.save(commit=False)
+
                     user_wrapper = user_obj.userwrapper
-                    tournament.login = user_wrapper
+
                     logger.debug(user_wrapper.user.username)
                     type_of_match = form.cleaned_data.get('match_type')
                     avalaible_hrs = form.cleaned_data.get("av_hr") + (form.cleaned_data.get("av_min")) / 60
                     match_duration = form.cleaned_data.get("match_hr") + (form.cleaned_data.get('match_min')) / 60
                     break_duration = form.cleaned_data.get("break_hr") + (form.cleaned_data.get('break_min')) / 60
-                    tournament.matches_per_day = (int)(avalaible_hrs / (match_duration + break_duration))
-                    logger.debug("mathes per day" + str(tournament.matches_per_day))
-                    tournament.sport = form.cleaned_data.get('sport')
-                    print("asdfghjklasdfghj"+tournament.sport,form.cleaned_data.get('sport'))
-                    count = int(request.POST.get("category_counter"))
-                    all_categories = []
-                    type = 1
-                    if type_of_match == 'Pool Match':
-                        type = 2
-                    tournament.type = type
-                    tournament.save()
-                    for i in range(count):
-                        all_categories.append(
-                            Category(type=request.POST.get('category' + str(i + 1)), tournament=tournament))
-                    Category.objects.bulk_create(all_categories)
 
-                    group1 = []
-                    group2 = []
-                    list1 = []
-                    list2 = []
-                    user_name = user_obj.username
+                    # count = int(request.POST.get("category_counter"))
+                    entered_category = request.POST.getlist('category')
+                    print('Categories:', entered_category)
+                    logger.debug(request.POST)
+                    logger.debug("entered_category:       ", entered_category)
+                    all_tournaments = []
+
+                    for i in entered_category:
+                        tournament = form.save(commit=False)
+                        # tournament.login = user_wrapper
+                        # tournament.matches_per_day = (int)(avalaible_hrs / (match_duration + break_duration))
+                        # logger.debug("mathes per day" + str(tournament.matches_per_day))
+                        # tournament.sport = form.cleaned_data.get('sport')
+                        # print("asdfghjklasdfghj" + tournament.sport, form.cleaned_data.get('sport'))
+                        type = 1
+                        if type_of_match == 'Pool Match':
+                            type = 2
+
+                        all_tournaments.append(Tournament(login=user_wrapper, matches_per_day=(int)(
+                            avalaible_hrs / (match_duration + break_duration)),
+                                                          number_of_team=tournament.number_of_team,
+                                                          number_of_pool=tournament.number_of_pool, type=type,
+                                                          available_days=tournament.available_days,
+                                                          registration_ending=tournament.registration_ending,
+                                                          starting_date=tournament.starting_date,
+                                                          sport=form.cleaned_data.get('sport'), category=i ))
+
+                    print("All:", all_tournaments)
+
+                    Tournament.objects.bulk_create(all_tournaments)
+
+                    # **********************
+                    # for i in range(count):
+                    #     all_categories.append(
+                    #         Category(type=request.POST.get('category' + str(i + 1)), tournament=tournament))
+                    # Category.objects.bulk_create(all_categories)
+                    # ************************
+                    # group1 = []
+                    # group2 = []
+                    # list1 = []
+                    # list2 = []
+                    # user_name = user_obj.username
 
                     # number_of_teams = tournament.number_of_team
-                    number_of_days = tournament.available_days
-                    matches_per_day = tournament.matches_per_day
-                    number_of_pool = tournament.number_of_pool
+                    # number_of_days = tournament.available_days
+                    # matches_per_day = tournament.matches_per_day
+                    # number_of_pool = tournament.number_of_pool
                     # Our conventions
                     # 1. League matches
                     # 2. Pool System
                     # 3. Knockout
 
                     # League matches
-                    entered_category = request.POST.getlist('category')
-                    logger.debug(request.POST)
-                    logger.debug("entered_category:       ", entered_category)
+
 
                     # category.save()
                     logger.debug("scheduling")
@@ -316,7 +336,7 @@ def schedule(request, tournament_number, pool_number=1):
             list1 = list(match_obj_rows.values_list('team1', flat=True))
             list2 = list(match_obj_rows.values_list('team2', flat=True))
             logger.debug(list1)
-            print("Schedule:Minimum Days",minimum_days,"numberofmatches",number_of_matches)
+            print("Schedule:Minimum Days", minimum_days, "numberofmatches", number_of_matches)
             logger.debug(number_of_teams)
             return render(request, 'home/schedule.html/',
                           {
@@ -592,7 +612,7 @@ def register_team(request):
 
                     # client = nexmo.Client(key=conf.nexmo_key, secret=conf.nexmo_secret)
 
-                    #response = client.start_verification({'brand': 'SpoFit', 'number': '917559435851'})
+                    # response = client.start_verification({'brand': 'SpoFit', 'number': '917559435851'})
 
                     # response = response['messages'][0]
                     # logger.debug(response)
@@ -707,7 +727,7 @@ def start_scheduling(request):
             all_new_teams = []
             pool = Pool(tournament=tournament, number_of_teams=tournament.number_of_team, pool_number=1)
             pool.save()
-            print("GroupssSSSSsss",group1,group2)
+            print("GroupssSSSSsss", group1, group2)
             try:
                 group1.pop(group1.index('dummy_team'))
             except:

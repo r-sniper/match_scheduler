@@ -6,3 +6,4 @@
 **      Logger for django or python
 ***     Category
 ***
+** Login with google and facebook

@@ -22,17 +22,11 @@ class Tournament(models.Model):
     registration_ending = models.DateField()
     starting_date = models.DateField()
     sport = models.CharField(max_length=30)
+    category = models.CharField(max_length=20,default="Open to all")
 
     def __str__(self):
-        return "Tour. ID: " + str(self.id) + ', Type: ' + str(self.type) + ", tour. User: " + str(self.login)
+        return "Tour. ID: " + str(self.id) + ', Type: ' + str(self.type) + ", tour. User: " + str(self.login) + ",tour.Category:" + (self.category)
 
-
-class Category(models.Model):
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    type = models.CharField(max_length=50)
-
-    def __str__(self):
-        return str("Category type: " + self.type + ", Related Tournament: " + str(self.tournament))
 
 
 class Pool(models.Model):
