@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Tournament, Team, Player#, SportSpecification
+from .models import Tournament, Team, Player, SportSpecification
 
 
 class UserForm(forms.ModelForm):
@@ -21,7 +21,7 @@ class UserForm(forms.ModelForm):
             'last_name': _('Last Name')
         }
 
-    # def clean(self):
+        # def clean(self):
         # recaptcha_response = self.data.get('g-recaptcha-response')
         # data = {
         #     'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
@@ -48,7 +48,10 @@ class UserForm(forms.ModelForm):
         # A user was found with this as a username, raise an error.
         raise forms.ValidationError('This email address is already in use.')
 
+
 sport_dict = []
+
+
 class TournamentForm(forms.ModelForm):
     match_type = forms.ChoiceField(
         choices=[('League Match', 'League Match'), (('Pool Match', 'Pool Match'))])  # , 'Knockout Match'])
@@ -60,9 +63,9 @@ class TournamentForm(forms.ModelForm):
     break_hr = forms.IntegerField(label='Break Hours')
     break_min = forms.IntegerField(label='Break Minutes')
 
-    # for i in SportSpecification.objects.all().values_list('sport', flat=True):
-    #     sport_dict.append(i)
-    sport = forms.ChoiceField(choices=[(i,sport_dict[i]) for i in range(len(sport_dict))])
+    for i in SportSpecification.objects.all().values_list('sport', flat=True):
+        sport_dict.append(i)
+    sport = forms.ChoiceField(choices=[(sport_dict[i], sport_dict[i]) for i in range(len(sport_dict))])
     widgets = {
         'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
         'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})

@@ -52,7 +52,8 @@ def get_information(request):
                     break_duration = form.cleaned_data.get("break_hr") + (form.cleaned_data.get('break_min')) / 60
                     tournament.matches_per_day = (int)(avalaible_hrs / (match_duration + break_duration))
                     logger.debug("mathes per day" + str(tournament.matches_per_day))
-
+                    tournament.sport = form.cleaned_data.get('sport')
+                    print("asdfghjklasdfghj"+tournament.sport,form.cleaned_data.get('sport'))
                     count = int(request.POST.get("category_counter"))
                     all_categories = []
                     type = 1
@@ -181,10 +182,10 @@ def register(request, context={'goto': '/dashboard/'}):
             new_user_wrapper.key = generate_activation_key()
             link = conf.site_initial_link + '/verification/email/' + new_user_wrapper.key + \
                    '/' + new_user.username
-            send_mail('SpoFit Email Verification',
-                      link,
-                      'akzarma2@gmail.com',
-                      [new_user.email], fail_silently=False)
+            # send_mail('SpoFit Email Verification',
+            #           link,
+            #           'akzarma2@gmail.com',
+            #           [new_user.email], fail_silently=False)
 
             new_user_wrapper.save()
             request.session.set_expiry(10 * 60)
@@ -315,6 +316,7 @@ def schedule(request, tournament_number, pool_number=1):
             list1 = list(match_obj_rows.values_list('team1', flat=True))
             list2 = list(match_obj_rows.values_list('team2', flat=True))
             logger.debug(list1)
+            print("Schedule:Minimum Days",minimum_days,"numberofmatches",number_of_matches)
             logger.debug(number_of_teams)
             return render(request, 'home/schedule.html/',
                           {
@@ -703,7 +705,7 @@ def start_scheduling(request):
                 group1.remove(group1[int(number_of_teams / 2)])
 
             all_new_teams = []
-            pool = Pool(tournament=tournament, number_of_teams=number_of_teams, pool_number=1)
+            pool = Pool(tournament=tournament, number_of_teams=tournament.number_of_team, pool_number=1)
             pool.save()
             print("GroupssSSSSsss",group1,group2)
             try:
