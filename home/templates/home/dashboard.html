@@ -68,6 +68,28 @@
     </style>
     <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <script>
+        function schedule(obj) {
+            var tournament_id = obj.value;
+            alert(tournament_id);
+            $.ajax({
+                    type: "POST",
+                    url: '/start_scheduling/',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'tournament_id': tournament_id
+                    },
+                    success: function (data) {
+                        // grab the inner html of the returned div
+                        // so you don't nest a new div#refresh-this-div on every call
+                        //var html = $(data).filter('#refresh-this-div').html();
+                        //$('#refresh_winner').html(data);
+                        alert(data);
+{#                        snackbar_show(data)#}
+                    }
+                });
+        }
+    </script>
+    <script>
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
@@ -120,9 +142,21 @@
         <div id="main">
             <div class="col-md-8">
                 <!--Toggle for sidebar nav-->
-                {% if tournament %}
-                    {% for each in tournament %}
-                        <a href="{% url 'home:pool_schedule' forloop.counter0 0 %}">Tournament {{ forloop.counter }}</a>
+
+                {% if hosted_tournament %}
+                    <h4>Hosted Tournament</h4>
+                    {% for each in hosted_tournament %}
+                        <a href="{% url 'home:pool_schedule' forloop.counter0 0 %}">Tournament {{ each.sport }}</a>
+                        {{ each.number_of_team }}
+                        <button class="btn btn-danger" onclick="schedule(this)" value={{ each.pk }}>Start</button>
+                        <br>
+                        <br>
+                    {% endfor %}
+                {% endif %}
+                {% if participated %}
+                    <h4><b>Participated</b></h4>
+                    {% for each in participated %}
+                        {{ each.tournament.sport }}
                     {% endfor %}
                 {% endif %}
                 <p class="visible-xs">

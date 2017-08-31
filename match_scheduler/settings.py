@@ -27,16 +27,16 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'G7vXan0PgA0glooTLOjnrc0V'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1369639759757936'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '56224fdfe22ae5009ec70af0849748de'  # akzarma fb key
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email','user_friends']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'siddheshkand.pythonanywhere.com', '192.168.1.6', 'localhost']
+EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'siddheshkand123@gmail.com'
-EMAIL_HOST_PASSWORD = 'ignore3186'
-EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'akzarma2@gmail.com'
+EMAIL_HOST_PASSWORD = '5592098292'
 SESSION_COOKIE_AGE = 10
 # Application definition
 
@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'social_django'
+    'social_django',
+
 ]
 
 MIDDLEWARE = [

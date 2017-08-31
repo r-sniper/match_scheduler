@@ -1,11 +1,9 @@
-***     Add more tournament
-**      Google and facebook
+**      Facebook
 **      UI bugs
 **      change password
-**      2 way verification
-*       Points table
-*       Dashboard
-***     Register(Add more fields)
-***     Show winner is selected
+******* Show winner is selected
 *       Validations in forms.py
 **      Logger for django or python
+***     Category
+***
+** Login with google and facebook
