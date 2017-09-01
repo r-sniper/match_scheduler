@@ -146,7 +146,7 @@
                 {% if hosted_tournament %}
                     <h4>Hosted Tournament</h4>
                     {% for each in hosted_tournament %}
-                        <a href="{% url 'home:pool_schedule' forloop.counter0 0 %}">Tournament {{ each.sport }}</a>
+                        <a href="{% url 'home:pool_schedule' forloop.counter0 0 %}">Tournament {{ each.sport }} {{ each.category }}</a>
                         {{ each.number_of_team }}
                         <button class="btn btn-danger" onclick="schedule(this)" value={{ each.pk }}>Start</button>
                         <br>
