@@ -156,7 +156,7 @@
                 {% if participated %}
                     <h4><b>Participated</b></h4>
                     {% for each in participated %}
-                        {{ each.tournament.sport }}
+                        {{ each.tournament.sport }}-{{ each.tournament.category }}
                     {% endfor %}
                 {% endif %}
                 <p class="visible-xs">
