@@ -34,15 +34,7 @@
                                 <td>{{ tournament.starting_date }}</td>
                                 <td>{{ tournament.registration_ending }}</td>
                                 <td>{{ tournament.sport }}</td>
-                                <td>
-                                    <select>
-
-                                        {% for each_category in tournament.category_set.all %}
-
-                                            <option value="{{ each_category.type }}">{{ each_category.type }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
+                                <td>{{ tournament.category }}</td>
                                 <td>{{ tournament.venue }}</td>
                                 <td>
                                     {% if tournament.type == 1 %}

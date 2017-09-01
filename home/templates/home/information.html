@@ -126,7 +126,7 @@
                             {{ field| add_class:"form-control" }}
                         </div>
                     {% endfor %}
-                    <input type="text" name="category1" placeholder="Category" id="category1">
+                    <input type="text" name="category" placeholder="Category" id="category1">
                     <input type="submit" name="plus" class="btn" onclick="return addCategory();" value="+">
                     <br>
                     <input value="1" type="hidden" id="category_counter" name="category_counter">
@@ -148,7 +148,7 @@
 
                 newCategory.id = "category" + counter.value;
                 newCategory.type = "text";
-                newCategory.name = "category" + counter.value;
+                newCategory.name = "category";
                 newCategory.placeholder = "Category";
                 form.appendChild(newCategory);
             }
