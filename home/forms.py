@@ -63,9 +63,9 @@ class TournamentForm(forms.ModelForm):
     break_hr = forms.IntegerField(label='Break Hours')
     break_min = forms.IntegerField(label='Break Minutes')
 
-    # for i in SportSpecification.objects.all().values_list('sport', flat=True):
-    #     sport_dict.append(i)
-    # sport = forms.ChoiceField(choices=[(sport_dict[i], sport_dict[i]) for i in range(len(sport_dict))])
+    for i in SportSpecification.objects.all().values_list('sport', flat=True):
+        sport_dict.append(i)
+    sport = forms.ChoiceField(choices=[(sport_dict[i], sport_dict[i]) for i in range(len(sport_dict))])
     widgets = {
         'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
         'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})
