@@ -15,7 +15,7 @@ from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.utils.crypto import get_random_string
 from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
-from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match,SportsSpecification
+from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +76,7 @@ def get_information(request):
                                                           available_days=tournament.available_days,
                                                           registration_ending=tournament.registration_ending,
                                                           starting_date=tournament.starting_date,
-                                                          sport=form.cleaned_data.get('sport'), category=i ))
+                                                          sport=form.cleaned_data.get('sport'), category=i))
 
                     print("All:", all_tournaments)
 
@@ -107,8 +107,8 @@ def get_information(request):
 
 
                     # category.save()
-                    logger.debug("scheduling")
-                    logger.debug(type)
+                    print("scheduling")
+                    # logger.debug(type)
 
                     # logger.debug(Pool.objects.filter(login=user_wrapper))
                     # logger.debug(user_wrapper.pool_set.all()   )
