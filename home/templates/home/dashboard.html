@@ -72,21 +72,21 @@
             var tournament_id = obj.value;
             alert(tournament_id);
             $.ajax({
-                    type: "POST",
-                    url: '/start_scheduling/',
-                    data: {
-                        'csrfmiddlewaretoken': '{{ csrf_token }}',
-                        'tournament_id': tournament_id
-                    },
-                    success: function (data) {
-                        // grab the inner html of the returned div
-                        // so you don't nest a new div#refresh-this-div on every call
-                        //var html = $(data).filter('#refresh-this-div').html();
-                        //$('#refresh_winner').html(data);
-                        alert(data);
-{#                        snackbar_show(data)#}
-                    }
-                });
+                type: "POST",
+                url: '/start_scheduling/',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'tournament_id': tournament_id
+                },
+                success: function (data) {
+                    // grab the inner html of the returned div
+                    // so you don't nest a new div#refresh-this-div on every call
+                    //var html = $(data).filter('#refresh-this-div').html();
+                    //$('#refresh_winner').html(data);
+                    alert(data);
+                    {#                        snackbar_show(data)#}
+                }
+            });
         }
     </script>
     <script>
@@ -156,7 +156,7 @@
                 {% if participated %}
                     <h4><b>Participated</b></h4>
                     {% for each in participated %}
-                        {{ each.tournament.sport }}
+                        {{ each.tournament.sport }}-{{ each.tournament.category }}
                     {% endfor %}
                 {% endif %}
                 <p class="visible-xs">

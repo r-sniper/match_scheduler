@@ -247,7 +247,7 @@ def schedule(request, tournament_number, pool_number=1):
     # For when winner is selected
     if request.is_ajax():
         logger.debug('HeLlO')
-        text = request.POST.get('winner_name').split(' ')
+        text = request.POST.get('winner_name').split(':')
         match_id = text[1]
         winner = text[0]
         user_id = request.session['user_id']
@@ -644,7 +644,7 @@ def register_team(request):
                            'tournament_id': tournament_id,
                            'no_of_players': range(no_of_players)})
         else:
-            return view_all_tournament(request, 'You have not verified your email. Please verify.')
+            return view_all_tournament(request, conf.email_verification_error)
     else:
         logger.debug('not logged in: register_tournament:else user')
         tournament_id = request.POST.get('tournament_id')
