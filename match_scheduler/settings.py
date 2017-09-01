@@ -22,8 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_ya1q#cy0*b7w+efh9%o3$=#$6yb!m%61@fjf6lszb)lf_z09y'
 GOOGLE_RECAPTCHA_SECRET_KEY = '6LfZjCkUAAAAAKWzeuc1dcnJEdE9I5nXMXzgs7RX'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1022111364140-frkat5sgrnmo10k6uv3867p7t5k53asm.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'G7vXan0PgA0glooTLOjnrc0V'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1022111364140-8uhtr1q4rr4r194rbtrfb5iftto8d2mn.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'RJihMhoD6Y2rYzUBZIvOXabH'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1369639759757936'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '56224fdfe22ae5009ec70af0849748de'  # akzarma fb key

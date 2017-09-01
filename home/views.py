@@ -15,7 +15,7 @@ from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.utils.crypto import get_random_string
 from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
-from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportSpecification
+from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match,SportsSpecification
 
 logger = logging.getLogger(__name__)
 
@@ -599,7 +599,7 @@ def register_team(request):
                     team_obj.save()
 
                     # saving the list of players entered by user
-                    count = SportSpecification.objects.get(sport=tournament.sport).no_of_players
+                    count = SportsSpecification.objects.get(sport=tournament.sport).no_of_players
                     logger.debug("count of players submitted by user", count)
                     all_players = []
                     for i in range(count):
@@ -633,7 +633,7 @@ def register_team(request):
                     logger.debug("here")
                     return HttpResponse('Not Valid', team_form.errors)
 
-            no_of_players = SportSpecification.objects.get(sport=tournament.sport).no_of_players
+            no_of_players = SportsSpecification.objects.get(sport=tournament.sport).no_of_players
 
             team_form = TeamForm(instance=team)
             player_form = PlayerForm()

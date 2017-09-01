@@ -79,7 +79,7 @@ class Player(models.Model):
         return str("Team: " + str(self.team) + ", Name of Player: " + self.name)
 
 
-class SportSpecification(models.Model):
+class SportsSpecification(models.Model):
     no_of_players = models.PositiveIntegerField()
     sport = models.CharField(max_length=50)
 
