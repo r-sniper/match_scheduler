@@ -417,7 +417,7 @@ def home_page(request):
             return HttpResponseRedirect(goto)
 
         else:
-            return render(request, 'home/register.html', {'form': UserForm()})
+            return render(request, 'home/register.html', {'form': UserForm(), 'error':'Username and Password mismatch.'})
 
     else:
         logger.debug(request.session.get_expiry_age())
@@ -537,7 +537,7 @@ def google_sign_in(request):
             google_user.save()
         request.session.set_expiry(10 * 60)
         request.session['user_id'] = user.id
-        return HttpResponseRedirect("/dashboard/")
+        return HttpResponse("/dashboard/")
 
 
 def view_all_tournament(request, error=''):
