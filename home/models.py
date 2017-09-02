@@ -59,10 +59,12 @@ class GoogleUser(models.Model):
     google_id = models.CharField(max_length=100)
     image_url = models.CharField(max_length=200)
 
+
 class FacebookUser(models.Model):
     user_wrapper = models.ForeignKey(UserWrapper)
     fb_id = models.CharField(max_length=100)
     image_url = models.CharField(max_length=200)
+
 
 class Team(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE, blank=True)
