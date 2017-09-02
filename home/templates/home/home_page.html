@@ -84,8 +84,18 @@
             display: block;
         }
 
-        #submit {
+        #submit, #signup {
             border-radius: 0;
+        }
+
+        .modal-content {
+            padding: 8px;
+        }
+
+        .glyphicon-adjust {
+            font-size: 1em;
+            margin: 0;
+            color: #2aabd2;
         }
     </style>
 </head>
@@ -121,6 +131,11 @@
             <div class="collapse navbar-collapse nav-collapse">
                 <div class="menu-container">
                     <ul class="nav navbar-nav navbar-nav-right">
+
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
+                                                            href="{% url 'home:view_all_tournament' %}">All
+                            Tournaments</a>
+                        </li>
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="#about">About
                             us</a>
                         </li>
@@ -454,23 +469,33 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">X</button>
                     <h4 class="modal-title">Login or SignUp</h4>
                 </div>
                 <div class="modal-body">
                     <form action="{% url 'home:home_page' %}" method="post">
-
                         {% csrf_token %}
-                        <div>
+                        <div class="row">
                             <input id="username" type="text" placeholder=" Username" name="uname" required><br>
                             <input id="password" type="password" placeholder=" Password" name="pass" required><br>
-                            <button id="submit" type="submit" name="login" value="login" class="btn btn-primary">Login
+
+                            <button id="submit" type="submit" name="login" value="login" class="btn btn-primary">
+                                Login
                             </button>
+                            <button id="signup" class="btn btn-success">Sign Up</button>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div>
+                    <hr>
+                    <h4>Or sign in with:</h4>
+                    <a href="#" class="btn btn-default"><img
+                            src="https://maxcdn.icons8.com/Share/icon/Logos//google_logo1600.png" width="30px"
+                            height="30px">Google</a>
+                    <a href="#" class="btn btn-default"><img
+                            src="https://cdn.worldvectorlogo.com/logos/facebook-3.svg" width="30px"
+                            height="30px"> Facebook</a>
+
                 </div>
             </div>
 
