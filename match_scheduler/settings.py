@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.conf.global_settings import SESSION_COOKIE_SECURE
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -28,6 +30,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'RJihMhoD6Y2rYzUBZIvOXabH'
 SOCIAL_AUTH_FACEBOOK_KEY = '1369639759757936'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '56224fdfe22ae5009ec70af0849748de'  # akzarma fb key
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends']
+
+SESSION_COOKIE_SECURE = False # Facebook redirection error for non https redirection! change it to true after testing!
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -160,4 +165,4 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home:dashboard'
+LOGIN_REDIRECT_URL = 'home:facebook_sign_in'

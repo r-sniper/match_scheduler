@@ -1,4 +1,4 @@
-$(window).load(function(){
+$(window).load(function () {
     // Swiper Clients
     var swiper = new Swiper('.swiper-clients', {
         slidesPerView: 5,

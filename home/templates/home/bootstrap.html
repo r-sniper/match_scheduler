@@ -14,7 +14,7 @@
     <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id"
-          content="1022111364140-frkat5sgrnmo10k6uv3867p7t5k53asm.apps.googleusercontent.com ">
+          content="1022111364140-8uhtr1q4rr4r194rbtrfb5iftto8d2mn.apps.googleusercontent.com">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -114,6 +114,16 @@
     <div class="alert alert-danger">
         <strong>Error!</strong>
         {% autoescape off %}{{ error }} {% endautoescape %}
+    </div>
+{% endif %}
+{% if info %}
+    <div class="alert alert-info">
+        {% autoescape off %}{{ info }} {% endautoescape %}
+    </div>
+{% endif %}
+{% if success %}
+    <div class="alert alert-success">
+        {% autoescape off %}{{ success }} {% endautoescape %}
     </div>
 {% endif %}
 {% block body %}
