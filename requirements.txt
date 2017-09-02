@@ -3,3 +3,4 @@ requests
 django-widget-tweaks
 social-auth-app-django
 nexmo
+facebook-sdk

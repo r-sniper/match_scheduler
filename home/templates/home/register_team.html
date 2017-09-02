@@ -34,11 +34,14 @@
                 <th>Player Email</th>
             </tr>
             {% for i in no_of_players %}
-            <tr>
-                <td><input type="text" name="player_name{{ i|add:1 }}" placeholder="Player Name" id="player_name{{ i|add:1 }}" value="name{{ i }}"></td>
-                <td><input type="number" name="player_number{{ i|add:1 }}" placeholder="Player Number" id="player_number{{ i|add:1 }}" value="{{ i }}"></td>
-                <td><input type="email" name="player_email{{ i|add:1 }}" placeholder="Player Email" id="player_email{{ i|add:1 }}" value="email{{ i }}@s.com"></td>
-            </tr>
+                <tr>
+                    <td><input type="text" name="player_name{{ i|add:1 }}" placeholder="Player Name"
+                               id="player_name{{ i|add:1 }}" value="name{{ i }}"></td>
+                    <td><input type="number" name="player_number{{ i|add:1 }}" placeholder="Player Number"
+                               id="player_number{{ i|add:1 }}" value="{{ i }}"></td>
+                    <td><input type="email" name="player_email{{ i|add:1 }}" placeholder="Player Email"
+                               id="player_email{{ i|add:1 }}" value="email{{ i }}@s.com"></td>
+                </tr>
             {% endfor %}
         </table>
 
