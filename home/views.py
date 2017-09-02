@@ -169,7 +169,6 @@ def dashboard(request):
 
 
 def register(request, context={'goto': '/dashboard/'}):
-    return HttpResponse(datetime.datetime.now())
     goto = '/dashboard/'
     logger.debug('register function', request.method, 'context=', context, context.get('goto'), 'request = ', request)
     user_id = request.session.get('user_id', 0)
