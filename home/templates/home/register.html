@@ -136,18 +136,19 @@
             <p><strong>-- OR --</strong></p>
             {#            <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>#}
             {#            <div class="g-signin2" data-onsuccess="onSignIn"></div>#}
+        <div class="g-signin2" data-onsuccess="onSignIn">
             <a href="#" class="btn btn-default"><img
                     src="https://maxcdn.icons8.com/Share/icon/Logos//google_logo1600.png" width="30px"
                     height="30px">Google</a>
-            <a href="#" class="btn btn-default"><img
+        </div>
+
+            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-default"><img
                     src="https://cdn.worldvectorlogo.com/logos/facebook-3.svg" width="30px"
                     height="30px"> Facebook</a>
         </div>
 
     </div>
-    {#    </div>#}
 
-<<<<<<< HEAD
     <script>
         function onSignIn(googleUser) {
             var profile = googleUser.getBasi
@@ -177,36 +178,7 @@
             });
         }
     </script>
-=======
-        <script>
-            function onSignIn(googleUser) {
-                var profile = googleUser.getBasicProfile();
-                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-                console.log('Name: ' + profile.getName());
-                console.log('Image URL: ' + profile.getImageUrl());
-                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-                var id = profile.getId();
-                var name = profile.getName();
-                var image = profile.getImageUrl();
-                var email = profile.getEmail();
-                $.ajax({
-                    type: "POST",
-                    url: {% url 'home:google_sign_in' %},
-                    data: {
-                        'csrfmiddlewaretoken': '{{ csrf_token }}',
-                        'id': id,
-                        'name': name,
-                        'image': image,
-                        'email': email
-                    },
-                    success: function (data) {
-                        alert(data);
-                        location.reload();
-                    }
-                });
-            }
-        </script>
->>>>>>> 0a1532ffa359a9da2f3f9a724b56fbab5e85749d
+
 
 
 {% endblock %}

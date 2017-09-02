@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 import json
 import logging
@@ -17,7 +18,7 @@ from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
 from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification, \
     FacebookUser
-
+import datetime
 logger = logging.getLogger(__name__)
 
 
@@ -613,7 +614,7 @@ def register_team(request):
                     tournament.number_of_team += 1
                     tournament.save()
                     logger.debug(team_obj)
-                    return HttpResponse('Saved')
+                    return HttpResponseRedirect('/dashboard/')
                 else:
                     logger.debug(team_form.errors)
                     logger.debug(team_form.non_field_errors())
