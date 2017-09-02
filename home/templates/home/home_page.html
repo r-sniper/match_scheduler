@@ -175,7 +175,7 @@
             <p class="promo-block-text">Play Hard.Stay Fit. </p>
         </div>
 
-{#        <div class=""><button href="{ }}" </div>#}
+        {#        <div class=""><button href="{ }}" </div>#}
         <!--<a class="js_popup-youtube btn-theme btn-theme-md btn-white-bg text-uppercase"-->
         <!--href="#" title="Intro Video"><i-->
         <!--class="btn-icon icon-control-play"></i>Promotional Video  </a>-->
@@ -475,18 +475,22 @@
                     <h4 class="modal-title">Login or SignUp</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{% url 'home:home_page' %}" method="post">
-                        {% csrf_token %}
-                        <div class="row">
+                    <div class="row">
+                        <form action="{% url 'home:home_page' %}" method="post">
+                            {% csrf_token %}
+
                             <input id="username" type="text" placeholder=" Username" name="uname" required><br>
                             <input id="password" type="password" placeholder=" Password" name="pass" required><br>
 
                             <button id="submit" type="submit" name="login" value="login" class="btn btn-primary">
                                 Login
                             </button>
-                            <button id="signup" class="btn btn-success">Sign Up</button>
-                        </div>
-                    </form>
+
+
+                        </form>
+
+                        <button id="signup" class="btn btn-success">Sign Up</button>
+                    </div>
                 </div>
                 <div>
                     <hr>
