@@ -330,7 +330,8 @@ def schedule(request, tournament_number, pool_number=1):
                               'number_of_pool': number_of_pool,
                               'pool_number': pool_number,
                               'tournament_number': tournament_number,
-                              'logged_in': True
+                              'logged_in': True,
+                              'pool_id': current_pool.id
                           })
         # Show all pools
         else:
@@ -353,7 +354,8 @@ def schedule(request, tournament_number, pool_number=1):
                 'team_per_pool': range(team_per_pool),
                 'extra': extra,
                 'tournament_number': tournament_number,
-                'logged_in': True
+                'logged_in': True,
+                'pool_id': pool_obj.pk
             })
 
 
@@ -529,7 +531,7 @@ def google_sign_in(request):
         user = User.objects.filter(email=email).first()
         if not user:
             logger.debug('user doesnt exist')
-            user = User(username= id, first_name=name, email=email)
+            user = User(username=id, first_name=name, email=email)
             user.save()
             user_wrapper = UserWrapper(user=user)
             user_wrapper.key = 'verified'
@@ -723,7 +725,7 @@ def start_scheduling(request):
             except:
                 {}
             for team in group1:
-                print('Start Scheduling:',all_new_teams)
+                print('Start Scheduling:', all_new_teams)
                 all_new_teams.append(Point(pool=pool, team=team))
 
             for team in group2:
@@ -734,12 +736,12 @@ def start_scheduling(request):
             # Very much optimized
             Point.objects.bulk_create(all_new_teams)
 
-            if not odd:
-                new_team = Point(team=group2[len(group2) - 1], pool=pool)
-                new_team.save()
+            # if not odd:
+            #     new_team = Point(team=group2[len(group2) - 1], pool=pool)
+            #     new_team.save()
             if odd:
                 index = list1.index('dummy_team')
-                while index:
+                while index or index == 0:
                     list1.pop(index)
                     list2.pop(index)
                     try:
@@ -748,7 +750,7 @@ def start_scheduling(request):
                         break
 
                 index = list2.index('dummy_team')
-                while index:
+                while index or index == 0:
                     list1.pop(index)
                     list2.pop(index)
                     try:

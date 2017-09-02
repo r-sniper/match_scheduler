@@ -44,7 +44,7 @@ class Point(models.Model):
     wins = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.team + "-" + str(self.wins)
+        return str(self.team) + "-" + str(self.wins)
 
 
 class Match(models.Model):
