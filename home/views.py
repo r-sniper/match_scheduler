@@ -4,7 +4,7 @@ import logging
 import math
 import random
 import urllib
-
+import facebook
 import nexmo
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -15,7 +15,8 @@ from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.utils.crypto import get_random_string
 from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
-from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification
+from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification, \
+    FacebookUser
 
 logger = logging.getLogger(__name__)
 
@@ -116,11 +117,12 @@ def get_information(request):
                 else:
                     logger.debug("else " + str(form.errors))
 
-            return render(request, 'home/information.html', {
-                'form': form,
-                'logged_in': True,
-                'error': conf.email_verification_error
-            })
+            else:
+                return render(request, 'home/information.html', {
+                    'form': form,
+                    'logged_in': True,
+                    'error': conf.email_verification_error
+                })
 
         else:
             form = TournamentForm()
@@ -136,6 +138,10 @@ def get_information(request):
 
 
 def dashboard(request):
+    # print(request.user)
+    # if str(request.user) == 'AnonymousUser':
+    #     return render(request, 'home/register.html', {'form': UserForm, 'info': 'Please Log in First.'})
+
     user_id = user_logged_in(request)
     logger.debug('dashboard', request.session.get('user', 0))
     if user_id:
@@ -154,34 +160,10 @@ def dashboard(request):
             'participated': participated
         })
     else:
-        social_user = request.user.social_auth.filter(
-            provider='facebook',
-        ).first()
-        logger.debug(social_user)
-        if social_user:
-            # url = "http://graph.facebook.com/" + social_user.uid + "/picture?type=large" % response['id']
-            url = u'https://graph.facebook.com/{0}/' \
-                  u'?fields=id,name,location,picture,email' \
-                  u'&access_token={1}'.format(
-                social_user.uid,
-                social_user.extra_data['access_token'],
-            )
-            # response = urlopen(url)
-            logger.debug(social_user.uid)
-            logger.debug(social_user.extra_data['access_token'])
-            # logger.debug(response)
-            logger.debug(social_user.extra_data)
-            response = urllib.request.Request(url)
-            logger.debug(response)
-            user = str(urllib.urlopen(response).read(), 'utf-8')
-            logger.debug(user)
-            user_to_json = json.loads(user)
-            name = user_to_json['name']
-            email = user_to_json['email']
-            id = user_to_json['id']
-            return HttpResponse("here")
-        return render(request, 'home/home_page.html', {
-            'logged_in': False
+        return render(request, 'home/register.html', {
+            'logged_in': False,
+            'form': UserForm,
+            'info': 'Please Log in First.'
         })
 
 
@@ -546,15 +528,16 @@ def google_sign_in(request):
         user = User.objects.filter(email=email).first()
         if not user:
             logger.debug('user doesnt exist')
-            user = User(first_name=name, email=email)
+            user = User(username= id, first_name=name, email=email)
             user.save()
             user_wrapper = UserWrapper(user=user)
+            user_wrapper.key = 'verified'
             user_wrapper.save()
             google_user = GoogleUser(google_id=id, user_wrapper=user_wrapper, image_url=image)
             google_user.save()
         request.session.set_expiry(10 * 60)
         request.session['user_id'] = user.id
-        return HttpResponse("true")
+        return HttpResponseRedirect("/dashboard/")
 
 
 def view_all_tournament(request, error=''):
@@ -855,3 +838,55 @@ def start_scheduling(request):
     else:
         print('tournament id not found')
     return HttpResponse('Done scheduling')
+
+
+def facebook_sign_in(request):
+    print(request.user)
+    if str(request.user) == 'AnonymousUser':
+        return render(request, 'home/register.html', {'form': UserForm, 'info': 'Please Log in First.'})
+
+    social_user = request.user.social_auth.filter(
+        provider='facebook',
+    ).first()
+    logger.debug(social_user)
+    if social_user:
+        # url = "http://graph.facebook.com/" + social_user.uid + "/picture?type=large" % response['id']
+        url = u'https://graph.facebook.com/{0}/' \
+              u'?fields=id,name,location,picture,email' \
+              u'&access_token={1}'.format(
+            social_user.uid,
+            social_user.extra_data['access_token'],
+        )
+        # response = urlopen(url)
+
+        logger.debug(social_user.uid)
+        logger.debug(social_user.extra_data['access_token'])
+        # logger.debug(response)
+
+        graph = facebook.GraphAPI(social_user.extra_data['access_token'])
+
+        fields = graph.get_object(id='me?fields=email,id,name,picture')
+
+        name = fields.get('name')
+        email = fields.get('email')
+        id = fields.get('id')
+
+        image_url = 'http://graph.facebook.com/' + id + '/picture'
+
+        print("from facebook: ", name, email, id, image_url)
+
+        user = User.objects.filter(email=email).first()
+        if not user:
+            print('user doesnt exist for this facebook id, creating new...')
+            user = User(username=id, first_name=name, email=email)
+            user.save()
+            user_wrapper = UserWrapper(user=user)
+            user_wrapper.key = 'verified'
+            user_wrapper.save()
+            fb_user = FacebookUser(fb_id=id, user_wrapper=user_wrapper, image_url=image_url)
+            fb_user.save()
+        request.session.set_expiry(10 * 60)
+        request.session['user_id'] = user.id
+        return HttpResponseRedirect("/dashboard/")
+
+    return None

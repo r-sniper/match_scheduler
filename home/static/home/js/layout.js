@@ -1,8 +1,8 @@
 var Layout = function () {
-    
+
     // detect mobile device
-    var isMobileDevice = function() {
-        return  ((
+    var isMobileDevice = function () {
+        return ((
             navigator.userAgent.match(/Android/i) ||
             navigator.userAgent.match(/BlackBerry/i) ||
             navigator.userAgent.match(/iPhone|iPad|iPod/i) ||
@@ -12,7 +12,7 @@ var Layout = function () {
     }
 
     // handle on page scroll
-    var handleHeaderOnScroll = function() {
+    var handleHeaderOnScroll = function () {
         if ($(window).scrollTop() > 60) {
             $("body").addClass("page-on-scroll");
         } else {
@@ -21,12 +21,12 @@ var Layout = function () {
     }
 
     // Handle Header
-    var handleOnePageHeader = function() {
+    var handleOnePageHeader = function () {
         // jQuery to collapse the navbar on scroll
         if ($('.navbar').offset().top > 150) {
             $('.navbar-fixed-top').addClass('top-nav-collapse');
         }
-        $(window).scroll(function() {
+        $(window).scroll(function () {
             if ($('.navbar').offset().top > 150) {
                 $('.navbar-fixed-top').addClass('top-nav-collapse');
             } else {
@@ -35,10 +35,10 @@ var Layout = function () {
         });
 
         var $offset = 0;
-        $offset = $(".navbar-fixed-top").height()-20;
-        
+        $offset = $(".navbar-fixed-top").height() - 20;
+
         // jQuery for page scrolling feature - requires jQuery Easing plugin
-        $('.js_nav-item a').bind('click', function(event) {
+        $('.js_nav-item a').bind('click', function (event) {
             var $position = $($(this).attr('href')).offset().top;
             $('html, body').stop().animate({
                 scrollTop: $position - $offset
@@ -46,48 +46,48 @@ var Layout = function () {
             event.preventDefault();
         });
 
-        var $scrollspy = $('body').scrollspy({target: '.navbar-fixed-top', offset: $offset+2});
+        var $scrollspy = $('body').scrollspy({target: '.navbar-fixed-top', offset: $offset + 2});
 
         // Collapse Navbar When It's Clickicked
-        $(window).scroll(function() {
+        $(window).scroll(function () {
             $('.navbar-collapse.in').collapse('hide');
         });
     }
 
     // handle carousel
-    var handleCarousel = function() {
-        var $item = $('.carousel .item'); 
+    var handleCarousel = function () {
+        var $item = $('.carousel .item');
         var $wHeight = $(window).height();
         $item.eq(0).addClass('active');
-        $item.height($wHeight); 
+        $item.height($wHeight);
         $item.addClass('full-screen');
 
-        $('.carousel img').each(function() {
+        $('.carousel img').each(function () {
             var $src = $(this).attr('src');
             var $color = $(this).attr('data-color');
             $(this).parent().css({
-                'background-image' : 'url(' + $src + ')',
-                'background-color' : $color
+                'background-image': 'url(' + $src + ')',
+                'background-color': $color
             });
             $(this).remove();
         });
 
-        $(window).on('resize', function (){
+        $(window).on('resize', function () {
             $wHeight = $(window).height();
             $item.height($wHeight);
         });
     }
 
     // handle group element heights
-    var handleHeight = function() {
-       $('[data-auto-height]').each(function() {
+    var handleHeight = function () {
+        $('[data-auto-height]').each(function () {
             var parent = $(this);
             var items = $('[data-height]', parent);
             var height = 0;
             var mode = parent.attr('data-mode');
             var offset = parseInt(parent.attr('data-offset') ? parent.attr('data-offset') : 0);
 
-            items.each(function() {
+            items.each(function () {
                 if ($(this).attr('data-height') == "height") {
                     $(this).css('height', '');
                 } else {
@@ -102,7 +102,7 @@ var Layout = function () {
 
             height = height + offset;
 
-            items.each(function() {
+            items.each(function () {
                 if ($(this).attr('data-height') == "height") {
                     $(this).css('height', height);
                 } else {
@@ -110,24 +110,24 @@ var Layout = function () {
                 }
             });
 
-            if(parent.attr('data-related')) {
+            if (parent.attr('data-related')) {
                 $(parent.attr('data-related')).css('height', parent.height());
             }
-       });
+        });
     }
 
     // Handle Work Popup
-    var handleWorkPopup = function() {
+    var handleWorkPopup = function () {
         var overlay = $('.work-popup-overlay'),
             close = $('.work-popup-close'),
             trigger = $('.work-popup-trigger');
 
-        trigger.on('click', function() {
+        trigger.on('click', function () {
             $(this).find('.work-popup-overlay').removeClass('work-popup-overlay-show');
             $(this).find('.work-popup-overlay').addClass('work-popup-overlay-show');
         });
 
-        close.on('click', function(e) {
+        close.on('click', function (e) {
             e.stopPropagation();
             overlay.removeClass('work-popup-overlay-show');
         });
@@ -141,15 +141,15 @@ var Layout = function () {
             handleCarousel(); // initial setup for carousel
             handleHeight(); // initial setup for group element height
             handleWorkPopup(); // initial setup for group work popup
-            
+
             // handle minimized header on page scroll
-            $(window).scroll(function() {
+            $(window).scroll(function () {
                 handleHeaderOnScroll();
             });
         },
 
         // To get the correct viewport width based on  http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
-        getViewPort: function() {
+        getViewPort: function () {
             var e = window,
                 a = 'inner';
             if (!('innerWidth' in window)) {
@@ -165,6 +165,6 @@ var Layout = function () {
     };
 }();
 
-$(document).ready(function() {
+$(document).ready(function () {
     Layout.init();
 });
