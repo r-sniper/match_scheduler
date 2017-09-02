@@ -160,6 +160,7 @@ def dashboard(request):
             'participated': participated
         })
     else:
+
         return render(request, 'home/register.html', {
             'logged_in': False,
             'form': UserForm,
@@ -445,11 +446,14 @@ def points_table(request, tournament_number, pool_number):
         user_wrapper = user_obj.userwrapper
         tournament_obj = user_wrapper.tournament_set.all()
         current_tournament = tournament_obj[tournament_number]
+        print("Points Table: Current tournament",current_tournament)
+        print("Points Table: Pool_Number", pool_number)
         pool_obj = current_tournament.pool_set.get(pool_number=pool_number)
         logger.debug("Hello")
         logger.debug(pool_obj.pool_number)
         number_of_pool = current_tournament.number_of_pool
         full_table = pool_obj.point_set.order_by('-wins').all
+        print(full_table)
         logger.debug(full_table)
         return render(request, 'home/points_table.html', {
             'full_table': full_table,
@@ -517,8 +521,8 @@ def round_robin(all_teams):
 
 
 def google_sign_in(request):
-    if request.is_ajax:
-        logger.debug("Got google data")
+    if request.is_asiddheshkand.pythonanywhere.comjax:
+        print("Got google data")
         id = request.POST.get('id')
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -537,7 +541,9 @@ def google_sign_in(request):
             google_user.save()
         request.session.set_expiry(10 * 60)
         request.session['user_id'] = user.id
-        return HttpResponseRedirect("/dashboard/")
+        return HttpResponse("/dashboard/")
+    else:
+        print("should never go here")
 
 
 def view_all_tournament(request, error=''):
@@ -720,6 +726,7 @@ def start_scheduling(request):
             except:
                 {}
             for team in group1:
+                print('Start Scheduling:',all_new_teams)
                 all_new_teams.append(Point(pool=pool, team=team))
 
             for team in group2:
