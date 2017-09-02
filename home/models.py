@@ -22,11 +22,11 @@ class Tournament(models.Model):
     registration_ending = models.DateField()
     starting_date = models.DateField()
     sport = models.CharField(max_length=30)
-    category = models.CharField(max_length=20,default="Open to all")
+    category = models.CharField(max_length=20, default="Open to all")
 
     def __str__(self):
-        return "Tour. ID: " + str(self.id) + ', Type: ' + str(self.type) + ", tour. User: " + str(self.login) + ",tour.Category:" + (self.category)
-
+        return "Tour. ID: " + str(self.id) + ', Type: ' + str(self.type) + ", tour. User: " + str(
+            self.login) + ",tour.Category:" + (self.category)
 
 
 class Pool(models.Model):
@@ -59,6 +59,10 @@ class GoogleUser(models.Model):
     google_id = models.CharField(max_length=100)
     image_url = models.CharField(max_length=200)
 
+class FacebookUser(models.Model):
+    user_wrapper = models.ForeignKey(UserWrapper)
+    fb_id = models.CharField(max_length=100)
+    image_url = models.CharField(max_length=200)
 
 class Team(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE, blank=True)
