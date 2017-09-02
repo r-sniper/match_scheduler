@@ -1,11 +1,11 @@
 // Magnific Popup
-var MagnificPopup = function() {
+var MagnificPopup = function () {
     "use strict";
 
     // Handle Magnific Popup
-    var handleMagnificPopup = function() {
+    var handleMagnificPopup = function () {
         // Image popup - vertical fit
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js_image-popup-vertical-fit').magnificPopup({
                 type: 'image',
                 closeOnContentClick: true,
@@ -17,7 +17,7 @@ var MagnificPopup = function() {
         });
 
         // Popup gallery
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js_popup-gallery').magnificPopup({
                 delegate: 'a.js_popup-gallery-child',
                 type: 'image',
@@ -34,7 +34,7 @@ var MagnificPopup = function() {
         });
 
         // Multiple Galleries with a single popup
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js_popup-multiple-image').magnificPopup({
                 type: 'image',
                 tLoading: 'Loading image #%curr%...',
@@ -43,13 +43,13 @@ var MagnificPopup = function() {
                     enabled: true,
                     navigateByImgClick: true,
                     arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',
-                    preload: [0,1], // Will preload 0 - before current, and 1 after the current image
+                    preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
                 }
             });
         });
 
         // Video iframes
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js_popup-youtube, .js_popup-vimeo').magnificPopup({
                 disableOn: 700,
                 type: 'iframe',
@@ -62,12 +62,12 @@ var MagnificPopup = function() {
     }
 
     return {
-        init: function() {
+        init: function () {
             handleMagnificPopup(); // initial setup for search box
         }
     }
 }();
 
-$(document).ready(function() {
+$(document).ready(function () {
     MagnificPopup.init();
 });

@@ -40,6 +40,8 @@ urlpatterns = [
 
     url(r'^verification/resend/$', views.resend_mail, name='resend_mail'),
 
-    url(r'^start_scheduling/$', views.start_scheduling, name='start_scheduling')
+    url(r'^start_scheduling/$', views.start_scheduling, name='start_scheduling'),
+
+    url(r'^facebook_sign_in/$', views.facebook_sign_in, name='facebook_sign_in')
 
 ]
