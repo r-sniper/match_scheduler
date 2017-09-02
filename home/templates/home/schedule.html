@@ -240,14 +240,22 @@
                                                  data-toggle="modal"
                                                  data-target="#exampleModalLong"
                                                  onclick="contentDecider('{% lookup list1 i j matches_per_day %}','{% lookup list2 i j matches_per_day %}','{% lookup match_id i j matches_per_day %}')">
-                                                <div class="well white">
-                                                    {#                                                    <p class="text-center" style="">Team A <br><b>V/S</b><br> Team B#}
-                                                    {#                                                    </p>#}
-                                                    <div class="">{% lookup list1 i j matches_per_day %} </div>
-                                                    <strong>V/s</strong>
-                                                    <div class="">{% lookup list2 i j matches_per_day %}</div>
+                                                {% selected_winner list1 list2 i j pool_id matches_per_day as selected %}
+                                                {% if selected %}
+                                                    <div class="well white">
+                                                        <b>Winner Already Selected</b>
+                                                        <div class="">{% lookup list1 i j matches_per_day %} </div>
+                                                        <strong>V/s</strong>
+                                                        <div class="">{% lookup list2 i j matches_per_day %}</div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="well white">
+                                                        <div class="">{% lookup list1 i j matches_per_day %} </div>
+                                                        <strong>V/s</strong>
+                                                        <div class="">{% lookup list2 i j matches_per_day %}</div>
 
-                                                </div>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         {% endif %}
                                     {% endfor %}
