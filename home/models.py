@@ -34,6 +34,9 @@ class Pool(models.Model):
     pool_number = models.IntegerField(default=1)
     number_of_teams = models.IntegerField()
 
+    def __str__(self):
+        return str(self.tournament) + str(self.pool_number)
+
 
 class Point(models.Model):
     pool = models.ForeignKey(Pool, on_delete=models.CASCADE, default=None)

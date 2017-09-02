@@ -417,7 +417,7 @@ def home_page(request):
             return HttpResponseRedirect(goto)
 
         else:
-            return render(request, 'home/register.html', {'form': UserForm(), 'error':'Username and Password mismatch.'})
+            return render(request, 'home/register.html', {'form': UserForm()})
 
     else:
         logger.debug(request.session.get_expiry_age())
@@ -518,7 +518,7 @@ def round_robin(all_teams):
 
 def google_sign_in(request):
     if request.is_ajax:
-        logger.debug("Got google data")
+        print("Got google data")
         id = request.POST.get('id')
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -538,6 +538,8 @@ def google_sign_in(request):
         request.session.set_expiry(10 * 60)
         request.session['user_id'] = user.id
         return HttpResponse("/dashboard/")
+    else:
+        print("should never go here")
 
 
 def view_all_tournament(request, error=''):
@@ -720,6 +722,7 @@ def start_scheduling(request):
             except:
                 {}
             for team in group1:
+                print('Start Scheduling:',all_new_teams)
                 all_new_teams.append(Point(pool=pool, team=team))
 
             for team in group2:
