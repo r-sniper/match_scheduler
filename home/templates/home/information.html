@@ -66,6 +66,13 @@
             padding-top: 5px;
         }
 
+        #main {
+            padding: 15px;
+        }
+
+        #category > input {
+            margin: 5px;
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -126,10 +133,11 @@
                             {{ field| add_class:"form-control" }}
                         </div>
                     {% endfor %}
-                    <input type="text" name="category" placeholder="Category" id="category1">
+                    <div id="category"><input type="text" name="category" placeholder="Category" id="category1"></div>
                     <input type="submit" name="plus" class="btn" onclick="return addCategory();" value="+">
-                    <br>
                     <input value="1" type="hidden" id="category_counter" name="category_counter">
+                    <br>
+                    <br>
                     <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
                 </form>
             </div>
@@ -140,7 +148,7 @@
             counter = document.getElementById('category_counter');
             if (document.getElementById('category' + counter.value).value !== '') {
                 var newCategory = document.createElement("INPUT");
-                var form = document.getElementById('get_info');
+                var form = document.getElementById('category');
 
                 var count = counter.value;
                 count++;

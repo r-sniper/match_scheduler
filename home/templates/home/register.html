@@ -65,6 +65,16 @@
             padding-top: 5px;
         }
 
+        .col-md-8 {
+            padding: 15px;
+        }
+
+        .btn {
+            border-radius: 0;
+        }
+    input{
+        padding: 5px;
+    }
     </style>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
@@ -76,7 +86,7 @@
         <div style="margin-top: 7px;margin-right: 5px;float: right">
             <input type="text" placeholder=" Username" name="uname" required>
             <input type="password" placeholder=" Password" name="pass" required>
-            <button type="submit" name="login" value="login">Login</button>
+            <button type="submit" name="login" class="btn btn-danger" value="login">Login</button>
         </div>
     </form>
 
@@ -117,24 +127,57 @@
                         {{ field| add_class:"form-control" | attr:"required:true" }}
                     </div>
                 {% endfor %}
-
                 <div class="g-recaptcha" data-sitekey="6LfZjCkUAAAAALhxb7Jg80EDXCriyrn0fMdG3EAc"></div>
-
-
+                <br>
                 <button type="submit" class="btn btn-primary" name="submit" value="submit">Register</button>
-
-
             </form>
 
             <br>
             <p><strong>-- OR --</strong></p>
-                        <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
-                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            {#            <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>#}
+            {#            <div class="g-signin2" data-onsuccess="onSignIn"></div>#}
+            <a href="#" class="btn btn-default"><img
+                    src="https://maxcdn.icons8.com/Share/icon/Logos//google_logo1600.png" width="30px"
+                    height="30px">Google</a>
+            <a href="#" class="btn btn-default"><img
+                    src="https://cdn.worldvectorlogo.com/logos/facebook-3.svg" width="30px"
+                    height="30px"> Facebook</a>
         </div>
 
     </div>
     {#    </div>#}
 
+<<<<<<< HEAD
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasi
+            cProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            var id = profile.getId();
+            var name = profile.getName();
+            var image = profile.getImageUrl();
+            var email = profile.getEmail();
+            $.ajax({
+                type: "POST",
+                url: {% url 'home:google_sign_in' %},
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'id': id,
+                    'name': name,
+                    'image': image,
+                    'email': email
+                },
+                success: function (data) {
+                    alert(data);
+                    location.reload();
+                }
+            });
+        }
+    </script>
+=======
         <script>
             function onSignIn(googleUser) {
                 var profile = googleUser.getBasicProfile();
@@ -163,6 +206,7 @@
                 });
             }
         </script>
+>>>>>>> 0a1532ffa359a9da2f3f9a724b56fbab5e85749d
 
 
 {% endblock %}
