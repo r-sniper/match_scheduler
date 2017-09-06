@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# from django.conf.global_settings import SESSION_COOKIE_SECURE
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -22,22 +24,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_ya1q#cy0*b7w+efh9%o3$=#$6yb!m%61@fjf6lszb)lf_z09y'
 GOOGLE_RECAPTCHA_SECRET_KEY = '6LfZjCkUAAAAAKWzeuc1dcnJEdE9I5nXMXzgs7RX'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1022111364140-frkat5sgrnmo10k6uv3867p7t5k53asm.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'G7vXan0PgA0glooTLOjnrc0V'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1022111364140-8uhtr1q4rr4r194rbtrfb5iftto8d2mn.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'RJihMhoD6Y2rYzUBZIvOXabH'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1369639759757936'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '56224fdfe22ae5009ec70af0849748de'  # akzarma fb key
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends']
+
+SESSION_COOKIE_SECURE = False # Facebook redirection error for non https redirection! change it to true after testing!
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'siddheshkand.pythonanywhere.com', '192.168.1.6', 'localhost']
+EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'siddheshkand123@gmail.com'
-EMAIL_HOST_PASSWORD = 'ignore3186'
-EMAIL_PORT = '587'
-SESSION_COOKIE_AGE = 10
+EMAIL_HOST_USER = 'akzarma2@gmail.com'
+EMAIL_HOST_PASSWORD = '5592098292'
+# SESSION_COOKIE_AGE = 10
 # Application definition
 
 INSTALLED_APPS = [
@@ -96,7 +101,6 @@ TEMPLATES = [
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
 
-
             ],
         },
     },
@@ -146,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -161,4 +165,4 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home:dashboard'
+LOGIN_REDIRECT_URL = 'home:facebook_sign_in'

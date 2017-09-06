@@ -3,15 +3,10 @@
 {% block details_active %}active{% endblock %}
 {% block body %}
     {% load staticfiles %}
-    {% if error %}
-        <div class="alert alert-danger">
-            <strong>Error!</strong> {{ error }}
-        </div>
-    {% endif %}
+
 
     <form action="{% url 'home:register_team' %}" method="POST">
         {% csrf_token %}
-
 
         <div class="container-fluid main-form">
 
@@ -24,7 +19,7 @@
 
                     <!-- Table -->
                     <table class="table">
-                        <th>Tournaments</th>
+                        <th>Sr. No</th>
                         <th>Tournament Date</th>
                         <th>Registration Closing Date</th>
                         <th>Sports</th>
@@ -34,33 +29,25 @@
                         <th>Register</th>
                         <input name="ref" value="view_tournament" hidden>
                         {% for tournament in all_tournaments %}
-                            {% for category in category %}
-                                {% if categories.tournament == tournament %}
-                                    <tr data-toggle="modal" data-target="#mymodal" class="tournament"
-                                        style="cursor:pointer">
-                                        <td>Tournament {{ forloop.counter }}</td>
-                                        <td>{{ tournament.starting_date }}</td>
-                                        <td>{{ tournament.registration_ending }}</td>
-                                        <td>{{ tournament.sport }}</td>
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ tournament.starting_date }}</td>
+                                <td>{{ tournament.registration_ending }}</td>
+                                <td>{{ tournament.sport }}</td>
+                                <td>{{ tournament.category }}</td>
+                                <td>{{ tournament.venue }}</td>
+                                <td>
+                                    {% if tournament.type == 1 %}
+                                        League Match
+                                    {% elif tournament.type == 2 %}
+                                        Pool Match
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button name="tournament_id" value="{{ tournament.id }}">Register</button>
+                                </td>
 
-                                        <td>{{ category.category }}</td>
-
-                                        <td>{{ tournament.venue }}</td>
-
-                                        {% if tournament.type == 1 %}
-                                            <td>League Match</td>
-                                        {% elif tournament.type == 2 %}
-                                            <td>Pool Match</td>
-                                        {% endif %}
-                                        <td>
-                                            <button value="{{ tournament.id }}" type="submit" name="tournament_id">
-                                                Register
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-
+                            </tr>
                         {% endfor %}
                     </table>
                 </div>
@@ -92,8 +79,6 @@
                     </div>
                 </div>
 
-
-                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
 
             {% endif %}
 

@@ -65,18 +65,29 @@
             padding-top: 5px;
         }
 
+        .col-md-8 {
+            padding: 15px;
+        }
+
+        .btn {
+            border-radius: 0;
+        }
+
+        input {
+            padding: 5px;
+        }
     </style>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
 {% endblock %}
 {% block navbar_right %}
     <form action="{% url 'home:home_page' %}" method="post">
-    <input value="{{ goto }}" name="goto" hidden>
+        <input value="{{ goto }}" name="goto" hidden>
         {% csrf_token %}
         <div style="margin-top: 7px;margin-right: 5px;float: right">
             <input type="text" placeholder=" Username" name="uname" required>
             <input type="password" placeholder=" Password" name="pass" required>
-            <button type="submit" name="login" value="login">Login</button>
+            <button type="submit" name="login" class="btn btn-danger" value="login">Login</button>
         </div>
     </form>
 
@@ -106,8 +117,8 @@
 
 
             <form action="{% url 'home:register' %}" method="post">
-            <input value="{{ goto }}" name="goto" hidden>
-            {{ goto }}
+                <input value="{{ goto }}" name="goto" hidden>
+                {{ goto }}
                 {% csrf_token %}
 
                 {% for field in form %}
@@ -117,31 +128,40 @@
                         {{ field| add_class:"form-control" | attr:"required:true" }}
                     </div>
                 {% endfor %}
-
                 <div class="g-recaptcha" data-sitekey="6LfZjCkUAAAAALhxb7Jg80EDXCriyrn0fMdG3EAc"></div>
-
-
+                <br>
                 <button type="submit" class="btn btn-primary" name="submit" value="submit">Register</button>
-
-
             </form>
 
             <br>
             <p><strong>-- OR --</strong></p>
-            <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            {#            <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>#}
+            {#            <div class="g-signin2" data-onsuccess="onSignIn"></div>#}
+
+            <div class="row">
+                {#            <a href="#" class="btn btn-default"><img#}
+                {#                    src="https://maxcdn.icons8.com/Share/icon/Logos//google_logo1600.png" width="30px"#}
+                {#                    height="30px">Google</a>#}
+                <div class="col-md-2">
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-default"><img
+                            src="https://cdn.worldvectorlogo.com/logos/facebook-3.svg" width="20px"
+                            height="20px"> Facebook</a>
+                </div>
+            </div>
         </div>
 
     </div>
-    {#    </div>#}
 
     <script>
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
-            {#            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.#}
-            {#            console.log('Name: ' + profile.getName());#}
-            {#            console.log('Image URL: ' + profile.getImageUrl());#}
-            {#            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.#}
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
             var id = profile.getId();
             var name = profile.getName();
             var image = profile.getImageUrl();
@@ -163,6 +183,7 @@
             });
         }
     </script>
+
 
 
 {% endblock %}

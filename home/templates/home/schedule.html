@@ -240,14 +240,22 @@
                                                  data-toggle="modal"
                                                  data-target="#exampleModalLong"
                                                  onclick="contentDecider('{% lookup list1 i j matches_per_day %}','{% lookup list2 i j matches_per_day %}','{% lookup match_id i j matches_per_day %}')">
-                                                <div class="well white">
-                                                    {#                                                    <p class="text-center" style="">Team A <br><b>V/S</b><br> Team B#}
-                                                    {#                                                    </p>#}
-                                                    <div class="">{% lookup list1 i j matches_per_day %} </div>
-                                                    <strong>V/s</strong>
-                                                    <div class="">{% lookup list2 i j matches_per_day %}</div>
+                                                {% selected_winner list1 list2 i j pool_id matches_per_day as selected %}
+                                                {% if selected %}
+                                                    <div class="well white">
+                                                        <b>Winner Already Selected</b>
+                                                        <div class="">{% lookup list1 i j matches_per_day %} </div>
+                                                        <strong>V/s</strong>
+                                                        <div class="">{% lookup list2 i j matches_per_day %}</div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="well white">
+                                                        <div class="">{% lookup list1 i j matches_per_day %} </div>
+                                                        <strong>V/s</strong>
+                                                        <div class="">{% lookup list2 i j matches_per_day %}</div>
 
-                                                </div>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         {% endif %}
                                     {% endfor %}
@@ -273,10 +281,10 @@
                         </button>
                     </div>
 
-             <div class="modal-body" style="text-align: center;">
+                    <div class="modal-body" style="text-align: center;">
                         <input id="radioTeamA" type="radio" name="winner">
                         <label id="opponent1" name="opponent1" for="radioTeamA"></label><br>
-                        <strong>V/S</strong><br>           <input id="radioTeamB" type="radio" name="winner">
+                        <strong>V/S</strong><br> <input id="radioTeamB" type="radio" name="winner">
                         <label id="opponent2" name="opponent2" for="radioTeamB"></label>
                     </div>
                     <div class="modal-footer">
@@ -301,12 +309,12 @@
             var opponent1_value = document.getElementById('radioTeamA');
             opponent1_value.checked = false;
             opponent1.innerHTML = teamA;
-            opponent1_value.value = teamA + ' ' + matchId.toString();
+            opponent1_value.value = teamA + ':' + matchId.toString();
             var opponent2 = document.getElementById("opponent2");
             var opponent2_value = document.getElementById('radioTeamB');
             opponent2_value.checked = false;
             opponent2.innerHTML = teamB;
-            opponent2_value.value = teamB + ' ' + matchId.toString();
+            opponent2_value.value = teamB + ':' + matchId.toString();
         }
     </script>
     <script type="text/javascript">
@@ -346,7 +354,7 @@
     <script>
         function snackbar_show(data) {
             // Get the snackbar DIV
-            var x = document.getElementById("snackbar")
+            var x = document.getElementById("snackbar");
             //alert(data)
             // Add the "show" class to DIV
             //x.innerHTML(data)

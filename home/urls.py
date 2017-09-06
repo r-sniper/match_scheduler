@@ -35,5 +35,13 @@ urlpatterns = [
 
     url(r'^register/(?P<ref>.+)$', views.register, name="register"),
 
+    url(r'^verification/email/(?P<key>[\w]+)/(?P<username>[\w]+)', views.verification_process,
+        name="verification_process"),
+
+    url(r'^verification/resend/$', views.resend_mail, name='resend_mail'),
+
+    url(r'^start_scheduling/$', views.start_scheduling, name='start_scheduling'),
+
+    url(r'^facebook_sign_in/$', views.facebook_sign_in, name='facebook_sign_in')
 
 ]

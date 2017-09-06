@@ -6,9 +6,10 @@ from django.db import models
 # Create your models here.
 class UserWrapper(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+    key = models.CharField(max_length=40)
 
     def __str__(self):
-        return self.user.first_name + "-" + self.user.email
+        return "User First Name: " + self.user.first_name + ", User Email: " + self.user.email
 
 
 class Tournament(models.Model):
@@ -21,20 +22,20 @@ class Tournament(models.Model):
     registration_ending = models.DateField()
     starting_date = models.DateField()
     sport = models.CharField(max_length=30)
+    category = models.CharField(max_length=20, default="Open to all")
 
     def __str__(self):
-        return str(self.id) + ' ' + str(self.type)
-
-
-class Category(models.Model):
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    type = models.CharField(max_length=50)
+        return "Tour. ID: " + str(self.id) + ', Type: ' + str(self.type) + ", tour. User: " + str(
+            self.login) + ",tour.Category:" + (self.category)
 
 
 class Pool(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     pool_number = models.IntegerField(default=1)
     number_of_teams = models.IntegerField()
+
+    def __str__(self):
+        return str(self.tournament) + str(self.pool_number)
 
 
 class Point(models.Model):
@@ -43,7 +44,7 @@ class Point(models.Model):
     wins = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.team + "-" + str(self.wins)
+        return str(self.team) + "-" + str(self.wins)
 
 
 class Match(models.Model):
@@ -62,13 +63,19 @@ class GoogleUser(models.Model):
     image_url = models.CharField(max_length=200)
 
 
+class FacebookUser(models.Model):
+    user_wrapper = models.ForeignKey(UserWrapper)
+    fb_id = models.CharField(max_length=100)
+    image_url = models.CharField(max_length=200)
+
+
 class Team(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE, blank=True)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, blank=True)
     team_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return str(self.login) + str(self.tournament) + str(self.team_name)
+        return str(self.team_name)
 
 
 class Player(models.Model):
@@ -77,7 +84,13 @@ class Player(models.Model):
     number = models.BigIntegerField()
     email = models.EmailField(max_length=100, blank=True, null=True)
 
+    def __str__(self):
+        return str("Team: " + str(self.team) + ", Name of Player: " + self.name)
 
-class SportSpecification(models.Model):
+
+class SportsSpecification(models.Model):
     no_of_players = models.PositiveIntegerField()
     sport = models.CharField(max_length=50)
+
+    def __str__(self):
+        return "No. of players: " + str(self.no_of_players) + ", sport: " + self.sport
