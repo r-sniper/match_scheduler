@@ -67,6 +67,19 @@
 
     </style>
     <script src='https://www.google.com/recaptcha/api.js'></script>
+
+{% endblock %}
+{% block navbar_right %}
+    <form action="{% url 'home:home_page' %}" method="post">
+    <input value="{{ goto }}" name="goto" hidden>
+        {% csrf_token %}
+        <div style="margin-top: 7px;margin-right: 5px;float: right">
+            <input type="text" placeholder=" Username" name="uname" required>
+            <input type="password" placeholder=" Password" name="pass" required>
+            <button type="submit" name="login" value="login">Login</button>
+        </div>
+    </form>
+
 {% endblock %}
 {% block body %}
 
@@ -93,6 +106,8 @@
 
 
             <form action="{% url 'home:register' %}" method="post">
+            <input value="{{ goto }}" name="goto" hidden>
+            {{ goto }}
                 {% csrf_token %}
 
                 {% for field in form %}
@@ -123,29 +138,29 @@
     <script>
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
-{#            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.#}
-{#            console.log('Name: ' + profile.getName());#}
-{#            console.log('Image URL: ' + profile.getImageUrl());#}
-{#            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.#}
+            {#            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.#}
+            {#            console.log('Name: ' + profile.getName());#}
+            {#            console.log('Image URL: ' + profile.getImageUrl());#}
+            {#            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.#}
             var id = profile.getId();
             var name = profile.getName();
             var image = profile.getImageUrl();
             var email = profile.getEmail();
             $.ajax({
-                    type: "POST",
-                    url: {% url 'home:google_sign_in' %},
-                    data: {
-                        'csrfmiddlewaretoken': '{{ csrf_token }}',
-                        'id': id,
-                        'name': name,
-                        'image': image,
-                        'email': email
-                    },
-                    success: function (data) {
-                       alert(data);
-                       location.reload();
-                    }
-                });
+                type: "POST",
+                url: {% url 'home:google_sign_in' %},
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'id': id,
+                    'name': name,
+                    'image': image,
+                    'email': email
+                },
+                success: function (data) {
+                    alert(data);
+                    location.reload();
+                }
+            });
         }
     </script>
 

@@ -27,7 +27,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'G7vXan0PgA0glooTLOjnrc0V'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1369639759757936'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '56224fdfe22ae5009ec70af0849748de'  # akzarma fb key
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email','user_friends']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'social_django'
+    'social_django',
+
 ]
 
 MIDDLEWARE = [
@@ -94,6 +95,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+
 
             ],
         },

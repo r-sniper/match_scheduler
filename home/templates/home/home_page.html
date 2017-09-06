@@ -47,6 +47,7 @@
 {% endblock %}
 {% block navbar_right %}
     <form action="{% url 'home:home_page' %}" method="post">
+
         {% csrf_token %}
         <div style="margin-top: 7px;margin-right: 5px;float: right">
             <input type="text" placeholder=" Username" name="uname" required>

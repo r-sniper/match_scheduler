@@ -2,6 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block head %}
+
     <style>
         body, html, .row-offcanvas {
             height: 100%;
@@ -66,6 +67,23 @@
         }
 
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-50:+0"
+                // You can put more options here.
+
+            });
+        });
+    </script>
+
 {% endblock %}
 {% block body %}
 
@@ -77,10 +95,10 @@
         <div id="sidebar" class="sidebar-offcanvas">
             <div class="col-md-12 back">
                 <ul class="nav nav-pills nav-stacked">
-                    <li><a href="{% url 'home:dashboard' %}">Dashboard</a></li>
-                    <li><a href="#">Result</a></li>
-                    <li><a href="#">Section</a></li>
-                    <li><a href="#">F.A.Q</a></li>
+                    <li><a href="{% url 'home:dashboard' %}"> Dashboard </a></li>
+                    <li><a href="#"> Result </a></li>
+                    <li><a href="#"> Section </a></li>
+                    <li><a href="#"> F.A.Q </a></li>
 
                 </ul>
             </div>
@@ -91,12 +109,12 @@
                 <!--Toggle for sidebar nav-->
                 <p class="visible-xs">
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="offcanvas">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        <i class="glyphicon glyphicon-chevron-left"> </i>
                     </button>
                 </p>
 
 
-                <form action="{% url 'home:get_information' %}" method="post">
+                <form action="{% url 'home:get_information' %}" method="post" id="get_info">
                     {% csrf_token %}
 
                     {#                    {{ form.as_p }}#}
@@ -108,6 +126,10 @@
                             {{ field| add_class:"form-control" }}
                         </div>
                     {% endfor %}
+                    <input type="text" name="category" placeholder="Category" id="category1">
+                    <input type="submit" name="plus" class="btn" onclick="return addCategory();" value="+">
+                    <br>
+                    <input value="1" type="hidden" id="category_counter">
 
                     <button type="submit" class="btn btn-primary" name="submit" value="submit">Schedule</button>
                 </form>
@@ -115,6 +137,24 @@
 
         </div>
     </div>
+<script>
+    function addCategory() {
+        counter = document.getElementById('category_counter');
+        if(document.getElementById('category'+ counter.value).value!==''){
+            var newCategory = document.createElement("INPUT");
+            var form = document.getElementById('get_info');
 
+            counter.value+=1;
+
+            newCategory.id = "category" + counter.value;
+            newCategory.type = "text";
+            newCategory.name = "category";
+            newCategory.placeholder = "Category";
+            form.appendChild(newCategory);
+
+        }
+        return false;
+    }
+</script>
 {% endblock %}
 

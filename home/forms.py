@@ -4,7 +4,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Tournament, Team
+
+from .models import Tournament, Team, Player
 
 
 class UserForm(forms.ModelForm):
@@ -52,14 +53,27 @@ class UserForm(forms.ModelForm):
 class TournamentForm(forms.ModelForm):
     match_type = forms.ChoiceField(
         choices=[('League Match', 'League Match'), (('Pool Match', 'Pool Match'))])  # , 'Knockout Match'])
-    available_hrs = forms.IntegerField(label='Available Hours')
-    match_duration = forms.IntegerField()
-    break_duration = forms.IntegerField()
+    # available_hrs = forms.IntegerField(label='Available Hours')
+    av_hr = forms.IntegerField(label='Available Hours')
+    av_min = forms.IntegerField(label='Available Minutes')
+    match_hr = forms.IntegerField(label='Match Hours')
+    match_min = forms.IntegerField(label='Match Minutes')
+    break_hr = forms.IntegerField(label='Break Hours')
+    break_min = forms.IntegerField(label='Break Minutes')
+    sport = forms.ChoiceField(choices=[('Cricket', 'Cricket'),
+                                       ('Football', 'Football'),
+                                       ('BasketBall', 'BasketBall'),
+                                       ('Tennis', 'Tennis'),
+                                       ('Lawn Tennis', 'Lawn Tennis')])
+    widgets = {
+        'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
+        'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})
+    }
 
     class Meta:
         model = Tournament
-        fields = ['available_hrs', 'match_duration', 'break_duration', 'number_of_team', 'number_of_pool',
-                  'available_days']
+        fields = ['av_hr','av_min', 'match_hr', 'match_min', 'break_hr', 'break_min', 'number_of_pool',
+                  'available_days', 'sport', 'starting_date', 'registration_ending']
         labels = {
             # 'available_hrs': _('Available hours in a day'),
             'match_duration': _('Match Duration'),
@@ -71,9 +85,18 @@ class TournamentForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(TournamentForm, self).clean()
-        hrs = cleaned_data.get('available_hrs')
+        av_hr = cleaned_data.get('av_hr')
+        av_min = cleaned_data.get('av_min')
+        match_hr = cleaned_data.get('match_hr')
+        match_min = cleaned_data.get('match_min')
+        break_hr = cleaned_data.get('break_hr')
+        break_min = cleaned_data.get('break_min')
         md = cleaned_data.get('match_duration')
         bd = cleaned_data.get('break_duration')
+
+        hrs = av_hr + av_min/60
+        md = match_hr + match_min/60
+        bd = break_hr + break_min/60
 
         if 0 > hrs or hrs > 24:
             msg = 'Available hours should be in between 0 and 24.'
@@ -91,7 +114,17 @@ class TournamentForm(forms.ModelForm):
 
 
 class TeamForm(forms.ModelForm):
+    # tournament = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    # login = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
 
     class Meta:
         model = Team
+        fields = '__all__'
+        exclude = ('login',)
+
+
+class PlayerForm(forms.ModelForm):
+
+    class Meta:
+        model = Player
         fields = '__all__'

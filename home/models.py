@@ -14,13 +14,21 @@ class UserWrapper(models.Model):
 class Tournament(models.Model):
     login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE)
     matches_per_day = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
-    number_of_team = models.IntegerField(validators=[MaxValueValidator(50)])
+    number_of_team = models.IntegerField(validators=[MaxValueValidator(50)], default=0)
     number_of_pool = models.IntegerField(default=1)
     type = models.IntegerField()
     available_days = models.IntegerField()
+    registration_ending = models.DateField()
+    starting_date = models.DateField()
+    sport = models.CharField(max_length=30)
 
     def __str__(self):
         return str(self.id) + ' ' + str(self.type)
+
+
+class Category(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    type = models.CharField(max_length=50)
 
 
 class Pool(models.Model):
@@ -55,6 +63,21 @@ class GoogleUser(models.Model):
 
 
 class Team(models.Model):
-    login = models.OneToOneField(UserWrapper, on_delete=models.CASCADE)
-    tournament = models.OneToOneField(Tournament, on_delete=models.CASCADE)
+    login = models.ForeignKey(UserWrapper, on_delete=models.CASCADE, blank=True)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, blank=True)
     team_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.login) + str(self.tournament) + str(self.team_name)
+
+
+class Player(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    number = models.BigIntegerField()
+    email = models.EmailField(max_length=100, blank=True, null=True)
+
+
+class SportSpecification(models.Model):
+    no_of_players = models.PositiveIntegerField()
+    sport = models.CharField(max_length=50)
