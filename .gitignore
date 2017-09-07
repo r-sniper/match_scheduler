@@ -1,3 +1,4 @@
 .idea/*
 db.sqlite3
 .idea/
+match_scheduler/__pycache__/settings.cpython-35.pyc
