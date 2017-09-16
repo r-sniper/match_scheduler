@@ -19,8 +19,8 @@ from django.utils.crypto import get_random_string
 from home.conf import email_sending_service_enabled
 from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
-from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification, \
-    FacebookUser
+from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, \
+    FacebookUser#, SportsSpecification
 import datetime
 
 logger = logging.getLogger(__name__)
@@ -603,16 +603,16 @@ def register_team(request):
                     team_obj.save()
 
                     # saving the list of players entered by user
-                    count = SportsSpecification.objects.get(sport=tournament.sport).no_of_players
-                    logger.debug("count of players submitted by user", count)
-                    all_players = []
-                    for i in range(count):
-                        all_players.append(
-                            Player(name=request.POST.get('player_name' + str(i + 1)),
-                                   number=request.POST.get('player_number' + str(i + 1)),
-                                   email=request.POST.get('player_email' + str(i + 1)),
-                                   team=team_obj))
-                    Player.objects.bulk_create(all_players)
+                    # count = SportsSpecification.objects.get(sport=tournament.sport).no_of_players
+                    # logger.debug("count of players submitted by user", count)
+                    # all_players = []
+                    # for i in range(count):
+                    #     all_players.append(
+                    #         Player(name=request.POST.get('player_name' + str(i + 1)),
+                    #                number=request.POST.get('player_number' + str(i + 1)),
+                    #                email=request.POST.get('player_email' + str(i + 1)),
+                    #                team=team_obj))
+                    # Player.objects.bulk_create(all_players)
 
                     # client = nexmo.Client(key=conf.nexmo_key, secret=conf.nexmo_secret)
 
@@ -637,7 +637,7 @@ def register_team(request):
                     logger.debug("here")
                     return HttpResponse('Not Valid', team_form.errors)
 
-            no_of_players = SportsSpecification.objects.get(sport=tournament.sport).no_of_players
+            # no_of_players = SportsSpecification.objects.get(sport=tournament.sport).no_of_players
 
             team_form = TeamForm(instance=team)
             player_form = PlayerForm()
@@ -646,7 +646,8 @@ def register_team(request):
                           {'team_form': team_form,
                            'player_form': player_form,
                            'tournament_id': tournament_id,
-                           'no_of_players': range(no_of_players)})
+                           # 'no_of_players': range(no_of_players)
+            })
         else:
             return view_all_tournament(request, conf.email_verification_error)
     else:
