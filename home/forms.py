@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Tournament, Team, Player#, SportsSpecification
+from .models import Tournament, Team, Player, SportsSpecification
 
 
 class UserForm(forms.ModelForm):
@@ -66,8 +66,8 @@ class TournamentForm(forms.ModelForm):
     break_hr = forms.IntegerField(label='Break Hours')
     break_min = forms.IntegerField(label='Break Minutes')
 
-    # for i in SportsSpecification.objects.all().values_list('sport', flat=True):
-    #     sport_dict.append(i)
+    for i in SportsSpecification.objects.all().values_list('sport', flat=True):
+        sport_dict.append(i)
     sport = forms.ChoiceField(choices=[(sport_dict[i], sport_dict[i]) for i in range(len(sport_dict))])
     widgets = {
         'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
