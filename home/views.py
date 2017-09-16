@@ -13,8 +13,10 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.utils.crypto import get_random_string
+
+from home.conf import email_sending_service_enabled
 from . import conf
 from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
 from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification, \
@@ -187,10 +189,11 @@ def register(request, context={'goto': '/dashboard/'}):
             new_user_wrapper.key = generate_activation_key()
             link = conf.site_initial_link + '/verification/email/' + new_user_wrapper.key + \
                    '/' + new_user.username
-            # send_mail('SpoFit Email Verification',
-            #           link,
-            #           'akzarma2@gmail.com',
-            #           [new_user.email], fail_silently=False)
+            if email_sending_service_enabled:
+                send_mail('SpoFit Email Verification',
+                          link,
+                          'akzarma2@gmail.com',
+                          [new_user.email], fail_silently=False)
 
             new_user_wrapper.save()
             request.session.set_expiry(10 * 60)
@@ -380,7 +383,9 @@ def test_send_email(request):
     # 'raunak3434@gmail.com',
     # 'omkarsarkate22@gmail.com',
     # 'shibashismallik@gmail.com',
-    send_mail(subject, message, from_email, to_email, fail_silently=False)
+
+    if email_sending_service_enabled:
+        send_mail(subject, message, from_email, to_email, fail_silently=False)
 
     return HttpResponse("Successfully sent")
 
@@ -393,11 +398,14 @@ def resend_mail(request):
         user = User.objects.get(pk=user_id)
         link = conf.site_initial_link + '/verification/email/' + user.userwrapper.key + \
                '/' + user.username
-        send_mail('SpoFit Email Verification',
-                  link,
-                  'siddheshkand123@gmail.com',
-                  [user.email], fail_silently=False)
-        error = 'Successfully Sent.'
+        if email_sending_service_enabled:
+            send_mail('SpoFit Email Verification',
+                      link,
+                      'siddheshkand123@gmail.com',
+                      [user.email], fail_silently=False)
+            success = 'Successfully Sent.'
+        else:
+            error = 'Mail not Sent.'
     return dashboard(request)
 
 
@@ -888,19 +896,18 @@ def facebook_sign_in(request):
         user = User.objects.filter(email=email).first()
         if not user:
             print('user doesnt exist for this facebook id, creating new...')
-        user = User(username=id, first_name=name, email=email)
-        user.save()
-        user_wrapper = UserWrapper(user=user)
-        user_wrapper.key = 'verified'
-        user_wrapper.save()
-        fb_user = FacebookUser(fb_id=id, user_wrapper=user_wrapper, image_url=image_url)
-        fb_user.save()
-    request.session.set_expiry(10 * 60)
-    request.session['user_id'] = user.id
-    return HttpResponseRedirect("/dashboard/")
+            user = User(username=id, first_name=name, email=email)
+            user.save()
+            user_wrapper = UserWrapper(user=user)
+            user_wrapper.key = 'verified'
+            user_wrapper.save()
+            fb_user = FacebookUser(fb_id=id, user_wrapper=user_wrapper, image_url=image_url)
+            fb_user.save()
+        request.session.set_expiry(10 * 60)
+        request.session['user_id'] = user.id
+        return HttpResponseRedirect("/dashboard/")
 
-
-    # return None
+    return None
 
 
 def delete_tournament(request, id=0):
@@ -912,3 +919,71 @@ def delete_tournament(request, id=0):
             return HttpResponseRedirect('/dashboard/')
         else:
             return HttpResponse('Should not go here')
+
+
+def change_password(request):
+    user = user_logged_in(request)
+    if user:
+        if request.method == 'POST':
+            old = request.POST.get('old_pwd')
+            new = request.POST.get('new_pwd')
+            cnf = request.POST.get('cnf_pwd')
+            # print("user:",User.objects.get(pk=user).username)
+
+            n_user = authenticate(username=User.objects.get(pk=user).username, password=old)
+            if n_user is None:
+                return render(request, 'home/change_password.html', {
+                    'error': "Invalid Old Password.",
+                })
+            else:
+                if new != cnf:
+                    print('new !=cnf')
+                    return render(request, 'home/change_password.html', {
+                        'error': "Confirm Password didn't match new Password!",
+                    })
+                else:
+                    n_user.set_password(new)
+                    n_user.save()
+                    return render(request, 'home/dashboard.html', {
+                        'success': "Password is successfully changed",
+                    })
+        else:
+            return render(request, 'home/change_password.html')
+
+
+    else:
+        return register(request, {'goto': '/change_password/'})
+        # return redirect('home:register', ref='/change_password/')
+
+
+#
+def forgot_password(request):
+    user = user_logged_in(request)
+    if not user:
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return render(request, 'home/forgot_password.html', {'error': 'No User exist with ' + email})
+            new_user_wrapper = UserWrapper(user=user)
+            print(user.email)
+            new_user_wrapper.key = generate_activation_key()
+            link = conf.site_initial_link + '/verification/email/' + new_user_wrapper.key + \
+                   '/' + user.username
+            if email_sending_service_enabled:
+                send_mail('SpoFit Email Verification',
+                          link,
+                          'akzarma2@gmail.com',
+                          [user.email], fail_silently=False)
+                return render(request, 'home/register.html',
+                              {'success': 'Mail has been successfully sent to ' + email,
+                               'form': UserForm})
+            else:
+                return render(request, 'home/forgot_password.html',
+                              {'error': 'Mail service is temporarily out of coverage.'})
+
+        else:
+            return render(request, 'home/forgot_password.html')
+    else:
+        return HttpResponseRedirect('/dashboard/')

@@ -44,6 +44,11 @@ urlpatterns = [
 
     url(r'^facebook_sign_in/$', views.facebook_sign_in, name='facebook_sign_in'),
 
-    url(r'delete_tournament/(?P<id>[0-9]+)$',views.delete_tournament,name='delete_tournament'),
+    url(r'delete_tournament/(?P<id>[0-9]+)$', views.delete_tournament, name='delete_tournament'),
+    url(r'^facebook_sign_in/$', views.facebook_sign_in, name='facebook_sign_in'),
+
+    url(r'^change_password/$', views.change_password, name='change_password'),
+
+    url(r'^forgot_password$', views.forgot_password, name='forgot_password'),
 
 ]

@@ -534,6 +534,7 @@
         };
         s.preloadImages = function () {
             s.imagesToLoad = s.container.find('img');
+
             function _onReady() {
                 if (typeof s === 'undefined' || s === null) return;
                 if (s.imagesLoaded !== undefined) s.imagesLoaded++;
@@ -554,6 +555,7 @@
         s.autoplayTimeoutId = undefined;
         s.autoplaying = false;
         s.autoplayPaused = false;
+
         function autoplay() {
             s.autoplayTimeoutId = setTimeout(function () {
                 if (s.params.loop) {
@@ -1085,6 +1087,7 @@
             if (s.params.scrollbar && s.scrollbar) {
                 s.scrollbar.set();
             }
+
             function forceSetTranslate() {
                 newTranslate = Math.min(Math.max(s.translate, s.maxTranslate()), s.minTranslate());
                 s.setWrapperTranslate(newTranslate);
@@ -2128,6 +2131,7 @@
          Observer
          ===========================*/
         s.observers = [];
+
         function initObserver(target, options) {
             options = options || {};
             // create an observer instance
@@ -3145,6 +3149,7 @@
                 s.mousewheel.event = 'DOMMouseScroll';
             }
         }
+
         function handleMousewheel(e) {
             if (e.originalEvent) e = e.originalEvent; //jquery fix
             var we = s.mousewheel.event;
@@ -3938,6 +3943,7 @@
                     listener = arguments[1];
                     capture = arguments[2];
                 }
+
                 function proxy(e) {
                     listener(e);
                     dom.off(eventName, targetSelector, proxy, capture);

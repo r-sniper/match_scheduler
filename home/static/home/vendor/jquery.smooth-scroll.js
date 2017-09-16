@@ -114,7 +114,7 @@
          */
         else if (scrollHeight > windowHeight &&
             (body.offsetHeight <= windowHeight ||
-            html.offsetHeight <= windowHeight)) {
+                html.offsetHeight <= windowHeight)) {
 
             // DOMChange (throttle): fix height
             var pending = false;
@@ -470,8 +470,8 @@
         deltaBuffer.shift();
         clearTimeout(deltaBufferTimer);
         var allDivisable = (isDivisible(deltaBuffer[0], 120) &&
-        isDivisible(deltaBuffer[1], 120) &&
-        isDivisible(deltaBuffer[2], 120));
+            isDivisible(deltaBuffer[1], 120) &&
+            isDivisible(deltaBuffer[2], 120));
         return !allDivisable;
     }
 
