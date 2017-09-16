@@ -9,7 +9,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -78,8 +77,10 @@ class Migration(migrations.Migration):
             name='Tournament',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('matches_per_day', models.PositiveIntegerField(validators=[django.core.validators.MaxValueValidator(100)])),
-                ('number_of_team', models.IntegerField(default=0, validators=[django.core.validators.MaxValueValidator(50)])),
+                ('matches_per_day',
+                 models.PositiveIntegerField(validators=[django.core.validators.MaxValueValidator(100)])),
+                ('number_of_team',
+                 models.IntegerField(default=0, validators=[django.core.validators.MaxValueValidator(50)])),
                 ('number_of_pool', models.IntegerField(default=1)),
                 ('type', models.IntegerField()),
                 ('available_days', models.IntegerField()),
@@ -94,7 +95,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('key', models.CharField(max_length=40)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                'user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(

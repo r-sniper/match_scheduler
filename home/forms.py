@@ -74,6 +74,7 @@ class TournamentForm(forms.ModelForm):
         'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})
     }
     print(sport_dict)
+
     class Meta:
         model = Tournament
         fields = ['av_hr', 'av_min', 'match_hr', 'match_min', 'break_hr', 'break_min', 'number_of_pool',
@@ -104,7 +105,7 @@ class TournamentForm(forms.ModelForm):
         print(starting_date, registration_ending)
 
         current_date = datetime.datetime.now().date()
-        print("form:starting date",starting_date)
+        print("form:starting date", starting_date)
 
         if starting_date < current_date:
             msg = 'Tournament start date should be greater than or equal to current date.'

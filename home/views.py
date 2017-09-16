@@ -22,6 +22,7 @@ from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
 from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification, \
     FacebookUser
 import datetime
+
 logger = logging.getLogger(__name__)
 
 
@@ -350,7 +351,7 @@ def schedule(request, tournament_number, pool_number=1):
             print("Number of teams(Points table):" + str(pool_obj[0].number_of_teams))
             team_per_pool = int(number_of_teams / number_of_pool)
             all_teams = []
-            print('all_pool',pool_obj)
+            print('all_pool', pool_obj)
             for pool in pool_obj:
                 all_teams += pool.point_set.values_list('team', flat=True)
             print(all_teams)
@@ -914,6 +915,17 @@ def facebook_sign_in(request):
     return None
 
 
+def delete_tournament(request, id=0):
+    if id:
+        if request.method == 'GET':
+            print(id)
+            tournament = Tournament.objects.get(id=id)
+            tournament.delete()
+            return HttpResponseRedirect('/dashboard/')
+        else:
+            return HttpResponse('Should not go here')
+
+
 def change_password(request):
     user = user_logged_in(request)
     if user:
@@ -923,7 +935,7 @@ def change_password(request):
             cnf = request.POST.get('cnf_pwd')
             # print("user:",User.objects.get(pk=user).username)
 
-            n_user = authenticate(username = User.objects.get(pk=user).username , password = old )
+            n_user = authenticate(username=User.objects.get(pk=user).username, password=old)
             if n_user is None:
                 return render(request, 'home/change_password.html', {
                     'error': "Invalid Old Password.",
@@ -948,6 +960,7 @@ def change_password(request):
         return register(request, {'goto': '/change_password/'})
         # return redirect('home:register', ref='/change_password/')
 
+
 #
 def forgot_password(request):
     user = user_logged_in(request)
@@ -957,7 +970,7 @@ def forgot_password(request):
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
-                return render(request, 'home/forgot_password.html', {'error': 'No User exist with '+email})
+                return render(request, 'home/forgot_password.html', {'error': 'No User exist with ' + email})
             new_user_wrapper = UserWrapper(user=user)
             print(user.email)
             new_user_wrapper.key = generate_activation_key()
@@ -969,10 +982,11 @@ def forgot_password(request):
                           'akzarma2@gmail.com',
                           [user.email], fail_silently=False)
                 return render(request, 'home/register.html',
-                              {'success':'Mail has been successfully sent to '+email,
-                               'form':UserForm})
+                              {'success': 'Mail has been successfully sent to ' + email,
+                               'form': UserForm})
             else:
-                return render(request, 'home/forgot_password.html', {'error': 'Mail service is temporarily out of coverage.'})
+                return render(request, 'home/forgot_password.html',
+                              {'error': 'Mail service is temporarily out of coverage.'})
 
         else:
             return render(request, 'home/forgot_password.html')

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Match, Point, Pool, Tournament, UserWrapper, Team, Player,FacebookUser,GoogleUser, SportsSpecification
+from .models import Match, Point, Pool, Tournament, UserWrapper, Team, Player, FacebookUser, GoogleUser, \
+    SportsSpecification
 
 admin.site.register(UserWrapper)
 admin.site.register(Point)
