@@ -1,7 +1,10 @@
+import datetime
+import pytz
 import requests
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Tournament, Team, Player, SportsSpecification
@@ -70,7 +73,7 @@ class TournamentForm(forms.ModelForm):
         'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
         'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})
     }
-
+    print(sport_dict)
     class Meta:
         model = Tournament
         fields = ['av_hr', 'av_min', 'match_hr', 'match_min', 'break_hr', 'break_min', 'number_of_pool',
@@ -95,23 +98,45 @@ class TournamentForm(forms.ModelForm):
         md = cleaned_data.get('match_duration')
         bd = cleaned_data.get('break_duration')
 
+        starting_date = datetime.datetime.strptime(str(cleaned_data.get('starting_date')), "%Y-%m-%d").date()
+        registration_ending = datetime.datetime.strptime(str(cleaned_data.get('registration_ending')),
+                                                         "%Y-%m-%d").date()
+        print(starting_date, registration_ending)
+
+        current_date = datetime.datetime.now().date()
+        print("form:starting date",starting_date)
+
+        if starting_date < current_date:
+            msg = 'Tournament start date should be greater than or equal to current date.'
+            self._errors['starting_date'] = self.error_class([msg])
+            del cleaned_data['starting_date']
+        if registration_ending < current_date:
+            msg = 'Registration ending date should be greater than or equal to current date.'
+            self._errors['registration_ending'] = self.error_class([msg])
+            del cleaned_data['registration_ending']
+        if registration_ending > starting_date:
+            msg = 'Registration ending date should be less than or equal to starting date.'
+            self._errors['registration_ending'] = self.error_class([msg])
+            del cleaned_data['registration_ending']
+
         hrs = av_hr + av_min / 60
         md = match_hr + match_min / 60
         bd = break_hr + break_min / 60
+        print(hrs)
 
         if 0 > hrs or hrs > 24:
             msg = 'Available hours should be in between 0 and 24.'
-            self._errors['available_hrs'] = self.error_class([msg])
-            del cleaned_data['available_hrs']
+            self._errors['av_hr'] = self.error_class([msg])
+            del cleaned_data['av_hr']
         if md > hrs:
             msg = 'Match duration should be less than available hours.'
-            self._errors['match_duration'] = self.error_class([msg])
-            del cleaned_data['match_duration']
+            self._errors['match_hr'] = self.error_class([msg])
+            del cleaned_data['match_hr']
 
         if bd > hrs:
             msg = 'Break duration should be less than available hours.'
-            self._errors['break_duration'] = self.error_class([msg])
-            del cleaned_data['break_duration']
+            self._errors['break_hr'] = self.error_class([msg])
+            del cleaned_data['break_hr']
 
 
 class TeamForm(forms.ModelForm):

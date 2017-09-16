@@ -72,9 +72,10 @@
         .btn {
             border-radius: 0;
         }
-    input{
-        padding: 5px;
-    }
+
+        input {
+            padding: 5px;
+        }
     </style>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
@@ -136,23 +137,27 @@
             <p><strong>-- OR --</strong></p>
             {#            <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>#}
             {#            <div class="g-signin2" data-onsuccess="onSignIn"></div>#}
-        <div class="g-signin2" data-onsuccess="onSignIn">
-            <a href="#" class="btn btn-default"><img
-                    src="https://maxcdn.icons8.com/Share/icon/Logos//google_logo1600.png" width="30px"
-                    height="30px">Google</a>
-        </div>
 
-            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-default"><img
-                    src="https://cdn.worldvectorlogo.com/logos/facebook-3.svg" width="30px"
-                    height="30px"> Facebook</a>
+            <div class="row">
+                {#            <a href="#" class="btn btn-default"><img#}
+                {#                    src="https://maxcdn.icons8.com/Share/icon/Logos//google_logo1600.png" width="30px"#}
+                {#                    height="30px">Google</a>#}
+                <div class="col-md-2">
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-default"><img
+                            src="https://cdn.worldvectorlogo.com/logos/facebook-3.svg" width="20px"
+                            height="20px"> Facebook</a>
+                </div>
+            </div>
         </div>
 
     </div>
 
     <script>
         function onSignIn(googleUser) {
-            var profile = googleUser.getBasi
-            cProfile();
+            var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
             console.log('Name: ' + profile.getName());
             console.log('Image URL: ' + profile.getImageUrl());
