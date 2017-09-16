@@ -230,7 +230,7 @@
                 {% for i in number_of_days %}
                     <div class="wrap">
                         <div class="row ">
-                            <div class="col-md-1 bolder">Day {{ forloop.counter }}</div>
+                            <div class="col-md-1 bolder">{% lookup_match_id days i %}</div>
                             <div class="col-md-11">
                                 <div class="row left-border">
                                     {% for j in matches_per_day_list %}

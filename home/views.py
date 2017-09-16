@@ -324,6 +324,10 @@ def schedule(request, tournament_number, pool_number=1):
             list2 = list(match_obj_rows.values_list('team2', flat=True))
             logger.debug(list1)
             print("Schedule:Minimum Days", minimum_days, "numberofmatches", number_of_matches)
+            date_list = []
+            for i in range(minimum_days):
+                date_list.append(current_tournament.starting_date + datetime.timedelta(days=1))
+            print(date_list)
             logger.debug(number_of_teams)
             return render(request, 'home/schedule.html/',
                           {
@@ -335,7 +339,8 @@ def schedule(request, tournament_number, pool_number=1):
                               'pool_number': pool_number,
                               'tournament_number': tournament_number,
                               'logged_in': True,
-                              'pool_id': current_pool.id
+                              'pool_id': current_pool.id,
+                              'days':date_list
                           })
         # Show all pools
         else:
