@@ -20,6 +20,7 @@ from .forms import TournamentForm, UserForm, TeamForm, PlayerForm
 from .models import Tournament, Point, UserWrapper, GoogleUser, Team, Player, Pool, Match, SportsSpecification, \
     FacebookUser
 import datetime
+
 logger = logging.getLogger(__name__)
 
 
@@ -342,7 +343,7 @@ def schedule(request, tournament_number, pool_number=1):
             print("Number of teams(Points table):" + str(pool_obj[0].number_of_teams))
             team_per_pool = int(number_of_teams / number_of_pool)
             all_teams = []
-            print('all_pool',pool_obj)
+            print('all_pool', pool_obj)
             for pool in pool_obj:
                 all_teams += pool.point_set.values_list('team', flat=True)
             print(all_teams)
@@ -887,15 +888,27 @@ def facebook_sign_in(request):
         user = User.objects.filter(email=email).first()
         if not user:
             print('user doesnt exist for this facebook id, creating new...')
-            user = User(username=id, first_name=name, email=email)
-            user.save()
-            user_wrapper = UserWrapper(user=user)
-            user_wrapper.key = 'verified'
-            user_wrapper.save()
-            fb_user = FacebookUser(fb_id=id, user_wrapper=user_wrapper, image_url=image_url)
-            fb_user.save()
-        request.session.set_expiry(10 * 60)
-        request.session['user_id'] = user.id
-        return HttpResponseRedirect("/dashboard/")
+        user = User(username=id, first_name=name, email=email)
+        user.save()
+        user_wrapper = UserWrapper(user=user)
+        user_wrapper.key = 'verified'
+        user_wrapper.save()
+        fb_user = FacebookUser(fb_id=id, user_wrapper=user_wrapper, image_url=image_url)
+        fb_user.save()
+    request.session.set_expiry(10 * 60)
+    request.session['user_id'] = user.id
+    return HttpResponseRedirect("/dashboard/")
 
-    return None
+
+    # return None
+
+
+def delete_tournament(request, id=0):
+    if id:
+        if request.method == 'GET':
+            print(id)
+            tournament = Tournament.objects.get(id=id)
+            tournament.delete()
+            return HttpResponseRedirect('/dashboard/')
+        else:
+            return HttpResponse('Should not go here')

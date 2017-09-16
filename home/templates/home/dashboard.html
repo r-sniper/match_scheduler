@@ -149,6 +149,9 @@
                         <a href="{% url 'home:pool_schedule' forloop.counter0 0 %}">Tournament {{ each.sport }} {{ each.category }}</a>
                         {{ each.number_of_team }}
                         <button class="btn btn-danger" onclick="schedule(this)" value={{ each.pk }}>Start</button>
+                        <a href="{% url 'home:delete_tournament' each.pk %}">
+                            <button class="btn btn-danger" value={{ each.pk }}>Delete</button>
+                        </a>
                         <br>
                         <br>
                     {% endfor %}

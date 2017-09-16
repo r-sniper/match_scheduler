@@ -42,6 +42,8 @@ urlpatterns = [
 
     url(r'^start_scheduling/$', views.start_scheduling, name='start_scheduling'),
 
-    url(r'^facebook_sign_in/$', views.facebook_sign_in, name='facebook_sign_in')
+    url(r'^facebook_sign_in/$', views.facebook_sign_in, name='facebook_sign_in'),
+
+    url(r'delete_tournament/(?P<id>[0-9]+)$',views.delete_tournament,name='delete_tournament'),
 
 ]
