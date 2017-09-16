@@ -11,6 +11,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.utils.crypto import get_random_string
@@ -339,14 +340,15 @@ def schedule(request, tournament_number, pool_number=1):
         # Show all pools
         else:
             rows = int(math.floor(number_of_pool / 2))
-            logger.debug("Number of teams(Points table):" + str(number_of_teams))
-            logger.debug("Number of pool(Points table):" + str(number_of_pool))
-            logger.debug("Number of teams(Points table):" + str(pool_obj[0].number_of_teams))
+            print("Number of teams(Points table):" + str(number_of_teams))
+            print("Number of pool(Points table):" + str(number_of_pool))
+            print("Number of teams(Points table):" + str(pool_obj[0].number_of_teams))
             team_per_pool = int(number_of_teams / number_of_pool)
             all_teams = []
+            print('all_pool',pool_obj)
             for pool in pool_obj:
                 all_teams += pool.point_set.values_list('team', flat=True)
-            logger.debug(all_teams)
+            print(all_teams)
             extra = 0
             if number_of_pool % 2 == 1:
                 extra = number_of_pool - 1
@@ -358,12 +360,12 @@ def schedule(request, tournament_number, pool_number=1):
                 'extra': extra,
                 'tournament_number': tournament_number,
                 'logged_in': True,
-                'pool_id': pool_obj.pk
+
             })
 
 
 #
-# return HttpResponse(
+# return HttpResponse(fa7673d5f7c63d8c88377c8480823ad15ad0e19be1d36a70649d795b8fe919e9
 #     "Something seriously went wrong."
 #     "Please mail at 'rshahshah2890@gmail.com when you get this error,"
 #     "also explain the situation when you got this error'")
@@ -556,7 +558,7 @@ def google_sign_in(request):
 def view_all_tournament(request, error=''):
     # logger.debug(Tournament.objects.all()[1].category_set.values_list('type', flat=True))
     return render(request, 'home/view_tournaments.html', {
-        'all_tournaments': Tournament.objects.all(),
+        'all_tournaments': Tournament.objects.filter(registration_ending__gte=datetime.datetime.now().date()),
         'error': error,
     })
 
@@ -786,11 +788,12 @@ def start_scheduling(request):
             # Pool system
         elif type == 2:
             if number_of_teams >= 8:
+                number_of_pool = tournament.number_of_pool
                 if number_of_teams % 3 == 0 or number_of_teams % 4 == 0 or number_of_teams % 5 == 0:
 
                     team_per_pool = int(number_of_teams / number_of_pool)
                     # if number_of_teams % 6 == 0:
-                    #     team_per_pool = 6
+                    #     team_per_pool = 6`
                     # elif number_of_teams % 5 == 0:
                     #     team_per_pool = 5
                     # elif number_of_teams % 4 == 0:
@@ -811,9 +814,9 @@ def start_scheduling(request):
                         # logger.debug(new_pool[i].pk)
                     Pool.objects.bulk_create(new_pool)
                     logger.debug(new_pool)
-                    all_teams = []
-                    for i in range(1, number_of_teams + 1):
-                        all_teams.append("Team" + str(i))
+                    # all_teams = []
+                    # for i in range(1, number_of_teams + 1):
+                    #     all_teams.append("Team" + str(i))
                     # all_teams = group1 + group2
                     # logger.debug(all_teams)
                     all_pool = Pool.objects.filter(tournament=tournament)

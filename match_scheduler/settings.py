@@ -36,7 +36,7 @@ SESSION_COOKIE_SECURE = False # Facebook redirection error for non https redirec
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'siddheshkand.pythonanywhere.com', '192.168.1.6', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'siddheshkand.pythonanywhere.com', '192.168.1.6', 'localhost','192.168.0.103']
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'

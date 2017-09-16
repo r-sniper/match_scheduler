@@ -475,22 +475,18 @@
                     <h4 class="modal-title">Login or SignUp</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <form action="{% url 'home:home_page' %}" method="post">
-                            {% csrf_token %}
-
+                    <form action="{% url 'home:home_page' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
                             <input id="username" type="text" placeholder=" Username" name="uname" required><br>
                             <input id="password" type="password" placeholder=" Password" name="pass" required><br>
 
                             <button id="submit" type="submit" name="login" value="login" class="btn btn-primary">
                                 Login
                             </button>
-
-
-                        </form>
-
-                        <button id="signup" class="btn btn-success">Sign Up</button>
-                    </div>
+                            <button id="signup" class="btn btn-success">Sign Up</button>
+                        </div>
+                    </form>
                 </div>
                 <div>
                     <hr>
