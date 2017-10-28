@@ -105,11 +105,15 @@
     </script>
 {% endblock %}
 {% block navbar_right %}
-    <a href="{% url 'home:change_password' %}">Change Password</a>
+
     <form action="{% url 'home:logout' %}" method="post">
+
         {% csrf_token %}
-        <div style="margin-top: 7px;margin-right: 5px;float: right">
-            <button type="submit" name="logout" value="logout" onclick="signOut()">Logout</button>
+        <div style="margin-top: 15px;margin-right: 5px;float: right">
+            <a href="{% url 'home:change_password' %}" style="color: white;text-decoration: none">Change Password</a>
+            <button type="submit" name="logout" value="logout" onclick="signOut()"
+                    style="color: white;background: none;border: none"><i class="glyphicon glyphicon-user"></i> Logout
+            </button>
         </div>
     </form>
 

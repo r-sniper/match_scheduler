@@ -73,24 +73,29 @@
         #category > input {
             margin: 5px;
         }
+
+        /*Django generated form id. Don't mess with it.  */
+        .hidden {
+            visibility: hidden;
+        }
+
+        .wickedpicker {
+            width: 51% !important;
+        }
+
+        .ui-widget-header {
+            background: #f1f1f1;
+        }
+
     </style>
+    <link rel="stylesheet" href="{% static 'home/css/timepicker.min.css' %}">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-        $(function () {
-            $(".datepicker").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                yearRange: "-50:+0"
-                // You can put more options here.
-
-            });
-        });
-    </script>
-
+    <script src="{% static 'home/js/timepicker.min.js' %}"></script>
 {% endblock %}
 {% block body %}
 
@@ -119,13 +124,22 @@
                         <i class="glyphicon glyphicon-chevron-left"> </i>
                     </button>
                 </p>
-
-
                 <form action="{% url 'home:get_information' %}" method="post" id="get_info">
                     {% csrf_token %}
 
-                    {#                    {{ form.as_p }}#}
-
+                    <div class="form-group">
+                        <label for="a_time">Available Time</label>
+                        <input type="text" name="time" id="a_time" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="m_time">Match Time</label>
+                        <input type="text" name="time" id="m_time" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="b_time">Break Time</label>
+                        <input type="text" name="time" id="b_time" class="form-control"/>
+                    </div>
+                    {#{{ form.as_p }}#}
                     {% for field in form %}
                         <div class="form-group">
                             {{ field.errors }}
@@ -162,6 +176,26 @@
             }
             return false;
         }
+
+        $(function () {
+            $(".datepicker").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-0:+10",
+                    dateFormat: 'dd-mm-yy'
+                    // You can put more options here.
+
+                }
+            )
+            ;
+        });
+
+        $('#a_time').timepicker();
+        $('#b_time').timepicker();
+        $('#m_time').timepicker();
+
     </script>
+
+
 {% endblock %}
 

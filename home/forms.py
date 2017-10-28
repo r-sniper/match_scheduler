@@ -65,14 +65,15 @@ class TournamentForm(forms.ModelForm):
     match_min = forms.IntegerField(label='Match Minutes')
     break_hr = forms.IntegerField(label='Break Hours')
     break_min = forms.IntegerField(label='Break Minutes')
-
+    starting_date = forms.CharField(widget=forms.TextInput(attrs={'class': 'datepicker'}))
+    registration_ending = forms.CharField(widget=forms.TextInput(attrs={'class': 'datepicker'}))
     for i in SportsSpecification.objects.all().values_list('sport', flat=True):
         sport_dict.append(i)
     sport = forms.ChoiceField(choices=[(sport_dict[i], sport_dict[i]) for i in range(len(sport_dict))])
-    widgets = {
-        'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
-        'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})
-    }
+    # widgets = {
+    #     'starting_date': forms.DateInput(attrs={'class': 'datepicker'}),
+    #     'registration_ending': forms.DateInput(attrs={'class': 'datepicker'})
+    # }
     print(sport_dict)
 
     class Meta:
